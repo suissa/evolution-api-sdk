@@ -31,7 +31,7 @@ export class ApiService {
 	): Promise<T> {
 		const { init, params } = this.makeInit(options);
 		const url = new URL(
-			`/${path}/${this.options.instance}?${params}`,
+			`/${path}/${this.options.instance}/?${params}`,
 			this.options.serverUrl,
 		);
 
@@ -46,21 +46,23 @@ export class ApiService {
 	}
 
 	private makeInit(options: APIRequestInit) {
-		const paramsObject =
-			options.params &&
-			Object.fromEntries(
-				Object.entries(options.params)
-					.filter(([, value]) => Boolean(value))
-					.map(([key, value]) => [key, String(value)]),
-			);
-		const params = new URLSearchParams(paramsObject);
 		const { params: _, headers, body, ...rest } = options;
-		const init: RequestInit = {
+
+		const paramsInit =
+			options.params &&
+			Object.entries(options.params)
+				.filter(([, value]) => Boolean(value))
+				.map(([key, value]) => [key, String(value)]);
+		const params = new URLSearchParams(paramsInit);
+
+		const init: RequestInit & { headers: Record<string, string> } = {
 			...rest,
 			headers: { ...(headers || {}), apikey: this.options.token },
 		};
 
 		if (body) {
+			init.headers["Content-Type"] =
+				body instanceof FormData ? "multipart/form-data" : "application/json";
 			init.body = body instanceof FormData ? body : JSON.stringify(body);
 		}
 
