@@ -1,9 +1,8 @@
-import { isValidPhoneNumber } from "libphonenumber-js";
+import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
 import { z } from "zod";
 
-export const zodPhoneNumber = z.custom(
-	(value) => isValidPhoneNumber(value),
-	"Invalid phone number",
-);
+export const phoneNumberSchema = z
+	.custom<string>((value) => isValidPhoneNumber(value), "Invalid phone number")
+	.transform((phoneNumber) => parsePhoneNumber(phoneNumber).number);
 
-export const zodMedia = z.union([z.string().url(), z.string().base64()]);
+export const mediaSchema = z.union([z.string().url(), z.string().base64()]);
