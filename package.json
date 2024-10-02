@@ -3,5 +3,27 @@
 	"private": false,
   "version": "0.0.1",
   "description": "Unofficial SDK for Evolution Whatsapp API",
+  "engines": {
+		"node": ">=18.0.0"
+	},
+  "keywords": [
+    "evolution",
+    "api",
+    "whatsapp",
+    "baileys",
+    "zap"
+  ],
+  "author": {
+		"name": "João Gabriel Tonaco",
+		"url": "https://github.com/joaotonaco"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/solufyapp/evolution-sdk.git"
+	},
+	"bugs": {
+		"url": "https://github.com/solufyapp/evolution-sdk/issues"
+	},
+	"homepage": "https://github.com/solufyapp/evolution-sdk#readme",
   "license": "MIT"
 }
