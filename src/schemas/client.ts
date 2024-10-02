@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const clientOptionsSchema = z.object({
+export const ClientOptionsSchema = z.object({
 	serverUrl: z.string().url(),
 	/**
 	 * Your instance token or global API key
@@ -12,4 +12,4 @@ export const clientOptionsSchema = z.object({
 	instance: z.string(),
 });
 
-export type ClientOptions = z.infer<typeof clientOptionsSchema>;
+export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
