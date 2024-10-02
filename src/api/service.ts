@@ -1,5 +1,5 @@
-import type { ClientOptions } from "../schemas/client";
-import type { APIRequestInit } from "../types/api";
+import type { ClientOptions } from "@/schemas/client";
+import type { APIRequestInit } from "@/types/api";
 import { EvolutionApiError } from "./error";
 
 export class ApiService {
