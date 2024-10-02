@@ -1,0 +1,7 @@
+{
+  "name": "@solufy/evolution-sdk",
+	"private": false,
+  "version": "0.0.1",
+  "description": "Unofficial SDK for Evolution Whatsapp API",
+  "license": "MIT"
+}
