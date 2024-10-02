@@ -1,19 +1,30 @@
 {
-  "name": "@solufy/evolution-sdk",
+	"name": "@solufy/evolution-sdk",
 	"private": false,
-  "version": "0.0.1",
-  "description": "Unofficial SDK for Evolution Whatsapp API",
-  "engines": {
+	"version": "0.0.1",
+	"description": "Unofficial SDK for Evolution Whatsapp API",
+  "main": "lib/index.js",
+	"types": "lib/index.d.ts",
+	"module": "lib/index.mjs",
+  "scripts": {
+		"build:ts": "tsup ./src"
+  },
+	"engines": {
 		"node": ">=18.0.0"
 	},
-  "keywords": [
-    "evolution",
-    "api",
-    "whatsapp",
-    "baileys",
-    "zap"
-  ],
-  "author": {
+	"devDependencies": {
+		"@types/node": "^22.7.4",
+		"tsup": "^8.3.0",
+		"typescript": "^5.6.2"
+	},
+	"keywords": [
+		"evolution",
+		"api",
+		"whatsapp",
+		"baileys",
+		"zap"
+	],
+	"author": {
 		"name": "João Gabriel Tonaco",
 		"url": "https://github.com/joaotonaco"
 	},
@@ -25,5 +36,5 @@
 		"url": "https://github.com/solufyapp/evolution-sdk/issues"
 	},
 	"homepage": "https://github.com/solufyapp/evolution-sdk#readme",
-  "license": "MIT"
+	"license": "MIT"
 }
