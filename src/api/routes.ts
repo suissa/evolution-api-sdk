@@ -8,4 +8,9 @@ export const Routes = {
 		SendContact: "message/sendContact",
 		SendPoll: "message/sendPoll",
 	},
+	Chats: {
+		Check: "chat/whatsappNumbers",
+		Find: "chat/findChats",
+		SendPresence: "chat/sendPresence",
+	},
 };
