@@ -17,3 +17,11 @@ export class EvolutionClient {
 		this.messages = new MessagesModule(this.api);
 	}
 }
+
+export { EvolutionApiError } from "./api/error";
+export { ChatId, Jid, MessageId } from "./types/tags";
+export { phoneNumberFromJid } from "./utils/phone-numer-from-jid";
+
+export type * from "./modules/chats/schemas";
+export type * from "./modules/messages/schemas";
+export type { ClientOptions };
