@@ -1,12 +1,12 @@
 import { z } from "zod";
 
-import { phoneNumberSchema } from "@/schemas/common";
+import { apiNumberSchema } from "@/schemas/common";
 
 export const PresenceOptionsSchema = z.object({
 	/**
-	 * Chat number to receve the presence
+	 * Chat number or JID to receve the presence
 	 */
-	number: phoneNumberSchema,
+	number: apiNumberSchema,
 	/**
 	 * Duration of the presence in millisseconds
 	 */
