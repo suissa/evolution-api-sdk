@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { Jid, MessageId } from "@/types/common";
+import { Jid, MessageId } from "@/types/tags";
 import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
 import { BaseMessageOptionsSchema } from "./base";
 
@@ -46,7 +46,7 @@ export const PollMessageResponseSchema = z
 	.transform((data) => ({
 		receiver: {
 			phoneNumber: phoneNumberFromJid(data.key.remoteJid),
-			jid: data.key.remoteJid as Jid,
+			jid: Jid(data.key.remoteJid),
 		},
 		poll: {
 			name: data.message.pollCreationMessageV3.name,
@@ -55,7 +55,7 @@ export const PollMessageResponseSchema = z
 			),
 			multiple: data.message.pollCreationMessageV3.selectableOptionsCount > 1,
 		},
-		id: data.key.id as MessageId,
+		id: MessageId(data.key.id),
 		timestamp: data.messageTimestamp,
 	}));
 

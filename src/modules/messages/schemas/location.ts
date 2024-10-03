@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { Jid, MessageId } from "@/types/common";
+import { Jid, MessageId } from "@/types/tags";
 import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
 import { BaseMessageOptionsSchema } from "./base";
 
@@ -44,7 +44,7 @@ export const LocationMessageResponseSchema = z
 	.transform((data) => ({
 		receiver: {
 			phoneNumber: phoneNumberFromJid(data.key.remoteJid),
-			jid: data.key.remoteJid as Jid,
+			jid: Jid(data.key.remoteJid),
 		},
 		location: {
 			latitude: data.message.locationMessage.degreesLatitude,
@@ -52,7 +52,7 @@ export const LocationMessageResponseSchema = z
 			name: data.message.locationMessage.name,
 			address: data.message.locationMessage.address,
 		},
-		id: data.key.id as MessageId,
+		id: MessageId(data.key.id),
 		timestamp: data.messageTimestamp,
 	}));
 

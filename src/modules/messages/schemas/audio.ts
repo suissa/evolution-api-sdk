@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { mediaSchema } from "@/schemas/common";
-import type { Jid, MessageId } from "@/types/common";
+import { Jid, MessageId } from "@/types/tags";
 import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
 import { BaseMessageOptionsSchema } from "./base";
 
@@ -44,7 +44,7 @@ export const AudioMessageResponseSchema = z
 	.transform((data) => ({
 		receiver: {
 			phoneNumber: phoneNumberFromJid(data.key.remoteJid),
-			jid: data.key.remoteJid as Jid,
+			jid: Jid(data.key.remoteJid),
 		},
 		media: {
 			url: data.message.audioMessage.url,
@@ -57,7 +57,7 @@ export const AudioMessageResponseSchema = z
 			key: data.message.audioMessage.mediaKey,
 			keyTimestamp: data.message.audioMessage.mediaKeyTimestamp,
 		},
-		id: data.key.id as MessageId,
+		id: MessageId(data.key.id),
 		timestamp: data.messageTimestamp,
 	}));
 
