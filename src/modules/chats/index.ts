@@ -9,19 +9,12 @@ export class ChatsModule {
 	constructor(private readonly api: ApiService) {}
 
 	async check(
-		number: Extract<Check.CheckOptions, string>,
-	): Promise<Check.CheckResponse[number]>;
-	async check(
-		numbers: Extract<Check.CheckOptions, string[]>,
-	): Promise<Check.CheckResponse>;
-	async check(
-		numbers: Check.CheckOptions,
-	): Promise<Check.CheckResponse | Check.CheckResponse[number]> {
-		const body = Check.CheckBodySchema.parse(numbers);
+		...numbers: Check.CheckOptions | Check.CheckOptions[]
+	): Promise<Check.CheckResponse> {
+		const body = Check.CheckBodySchema.parse(numbers.flat());
 		const response = await this.api.post(Routes.Chats.Check, { body });
-		const data = Check.CheckResponseSchema.parse(response);
 
-		return Array.isArray(numbers) ? data : data[0];
+		return Check.CheckResponseSchema.parse(response);
 	}
 
 	async findAll(): Promise<FindAll.FindAllChatsResponse> {

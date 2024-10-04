@@ -4,10 +4,7 @@ import { z } from "zod";
 import { PhoneNumberSchema } from "@/schemas/common";
 import { Jid } from "@/types/tags";
 
-export const CheckOptionsSchema = z.union([
-	PhoneNumberSchema,
-	z.array(PhoneNumberSchema),
-]);
+export const CheckOptionsSchema = z.array(PhoneNumberSchema);
 
 export const CheckBodySchema = CheckOptionsSchema.transform((data) => ({
 	numbers: Array.isArray(data) ? data : [data],
