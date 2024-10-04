@@ -1,7 +1,7 @@
 import { parsePhoneNumber } from "libphonenumber-js";
 import { z } from "zod";
 
-import { phoneNumberSchema } from "@/schemas/common";
+import { PhoneNumberSchema } from "@/schemas/common";
 import { Jid, MessageId } from "@/types/tags";
 import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
 import { BaseMessageOptionsSchema } from "./base";
@@ -19,7 +19,7 @@ export const ContactMessageOptionsSchema = BaseMessageOptionsSchema.extend({
 			/**
 			 * Contact phone number
 			 */
-			phoneNumber: phoneNumberSchema,
+			phoneNumber: PhoneNumberSchema,
 			/**
 			 * Contact organization
 			 */

@@ -1,12 +1,12 @@
 import { parsePhoneNumber } from "libphonenumber-js";
 import { z } from "zod";
 
-import { phoneNumberSchema } from "@/schemas/common";
+import { PhoneNumberSchema } from "@/schemas/common";
 import { Jid } from "@/types/tags";
 
 export const CheckOptionsSchema = z.union([
-	phoneNumberSchema,
-	z.array(phoneNumberSchema),
+	PhoneNumberSchema,
+	z.array(PhoneNumberSchema),
 ]);
 
 export const CheckBodySchema = CheckOptionsSchema.transform((data) => ({

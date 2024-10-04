@@ -1,12 +1,12 @@
 import { z } from "zod";
 
-import { apiNumberSchema } from "@/schemas/common";
+import { ApiNumberSchema } from "@/schemas/common";
 
 export const BaseMessageOptionsSchema = z.object({
 	/**
 	 * Number (with country code) or JID to receive the message
 	 */
-	number: apiNumberSchema,
+	number: ApiNumberSchema,
 	/**
 	 * Time in milliseconds before sending message
 	 */
