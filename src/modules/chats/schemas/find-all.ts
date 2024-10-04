@@ -1,6 +1,6 @@
-import { ChatId, GroupJid, Jid } from "@/types/tags";
 import { z } from "zod";
 
+import { ChatId, GroupJid, Jid } from "@/types/tags";
 import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
 
 export const FindAllChatsResponseSchema = z
