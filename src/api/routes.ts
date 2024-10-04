@@ -10,7 +10,7 @@ export const Routes = {
 	},
 	Chats: {
 		Check: "chat/whatsappNumbers",
-		Find: "chat/findChats",
+		FindAll: "chat/findChats",
 		SendPresence: "chat/sendPresence",
 	},
 };

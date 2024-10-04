@@ -2,7 +2,7 @@ import { Routes } from "@/api/routes";
 import type { ApiService } from "@/api/service";
 
 import * as Check from "./schemas/check";
-import * as Find from "./schemas/find";
+import * as FindAll from "./schemas/find-all";
 import * as Presence from "./schemas/presence";
 
 export class ChatsModule {
@@ -24,10 +24,10 @@ export class ChatsModule {
 		return Array.isArray(numbers) ? data : data[0];
 	}
 
-	async find(): Promise<Find.FindChatsResponse> {
-		const response = await this.api.post(Routes.Chats.Find);
+	async findAll(): Promise<FindAll.FindAllChatsResponse> {
+		const response = await this.api.post(Routes.Chats.FindAll);
 
-		return Find.ResponseSchema.parse(response);
+		return FindAll.ResponseSchema.parse(response);
 	}
 
 	async sendPresence(options: Presence.PresenceOptions) {

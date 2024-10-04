@@ -1,18 +1,19 @@
 import { ChatId, GroupJid, Jid } from "@/types/tags";
-import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
 import { z } from "zod";
 
-export const FindChatsResponseSchema = z
+import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
+
+export const FindAllChatsResponseSchema = z
 	.array(
 		z.object({
 			id: z.string(),
 			remoteJid: z.string(),
-			name: z.string().nullable(),
-			labels: z.array(z.string()).nullable(),
+			name: z.string().nullish(),
+			labels: z.array(z.string()).nullish(),
 			createdAt: z.coerce.date(),
 			updatedAt: z.coerce.date(),
-			pushName: z.string().nullable(),
-			profilePicUrl: z.string().url().nullable(),
+			pushName: z.string().nullish(),
+			profilePicUrl: z.string().url().nullish(),
 		}),
 	)
 	.transform((chats) =>
@@ -31,6 +32,6 @@ export const FindChatsResponseSchema = z
 		})),
 	);
 
-export type FindChatsResponse = z.infer<typeof FindChatsResponseSchema>;
+export type FindAllChatsResponse = z.infer<typeof FindAllChatsResponseSchema>;
 
-export { FindChatsResponseSchema as ResponseSchema };
+export { FindAllChatsResponseSchema as ResponseSchema };
