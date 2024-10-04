@@ -9,9 +9,7 @@
 	"module": "lib/index.mjs",
 	"scripts": {
 		"release": "pnpm build && changeset publish",
-		"build": "run-s build:*",
-		"build:ts": "tsup ./src",
-		"build:lint": "biome check",
+		"build": "tsup ./src",
 		"lint": "biome check --fix",
 		"lint:staged": "biome check --staged --no-errors-on-unmatched",
 		"prepare": "husky"
@@ -28,11 +26,16 @@
 		"@changesets/cli": "^2.27.8",
 		"@types/node": "^22.7.4",
 		"husky": "^9.1.6",
-		"npm-run-all": "^4.1.5",
 		"tsup": "^8.3.0",
 		"typescript": "^5.6.2"
 	},
-	"keywords": ["evolution", "api", "whatsapp", "baileys", "zap"],
+	"keywords": [
+		"evolution",
+		"api",
+		"whatsapp",
+		"baileys",
+		"zap"
+	],
 	"author": {
 		"name": "João Gabriel Tonaco",
 		"url": "https://github.com/joaotonaco"
