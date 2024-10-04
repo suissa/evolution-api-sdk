@@ -13,4 +13,9 @@ export const Routes = {
 		FindAll: "chat/findChats",
 		SendPresence: "chat/sendPresence",
 	},
+	Groups: {
+		FindAll: "group/fetchAllGroups",
+		FindByJid: "group/findGroupInfos",
+		FindByInviteCode: "group/inviteInfo",
+	},
 };
