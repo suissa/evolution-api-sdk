@@ -10,8 +10,9 @@
 		"release": "pnpm build && changeset publish",
 		"build": "run-s build:*",
 		"build:ts": "tsup ./src",
-		"build:lint": "biome check .",
-		"lint": "biome check --fix .",
+		"build:lint": "biome check",
+		"lint": "biome check --fix",
+		"lint:staged": "biome check --staged --no-errors-on-unmatched",
 		"prepare": "husky"
 	},
 	"engines": {
