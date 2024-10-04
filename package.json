@@ -2,7 +2,7 @@
 	"name": "@solufy/evolution-sdk",
 	"private": false,
 	"version": "0.0.1",
-	"description": "Unofficial SDK for Evolution Whatsapp API",
+	"description": "Unofficial SDK for the Evolution Whatsapp API v2",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
 	"module": "lib/index.mjs",
