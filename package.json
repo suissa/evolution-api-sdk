@@ -3,6 +3,7 @@
 	"private": false,
 	"version": "0.0.1",
 	"description": "Unofficial SDK for the Evolution Whatsapp API v2",
+	"packageManager": "pnpm@9.10.0",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
 	"module": "lib/index.mjs",
