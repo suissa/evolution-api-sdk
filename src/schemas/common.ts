@@ -1,4 +1,4 @@
-import type { GroudJid, Jid } from "@/types/tags";
+import type { GroupJid, Jid } from "@/types/tags";
 import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
 import { z } from "zod";
 
@@ -12,7 +12,7 @@ export const jidSchema = z
 
 export const groupJidSchema = z
 	.string()
-	.endsWith("@g.us") as z.ZodType<GroudJid>;
+	.endsWith("@g.us") as z.ZodType<GroupJid>;
 
 export const apiNumberSchema = z.union([
 	phoneNumberSchema,

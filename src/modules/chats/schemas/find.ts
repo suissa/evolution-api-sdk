@@ -1,4 +1,4 @@
-import { ChatId, Jid } from "@/types/tags";
+import { ChatId, GroupJid, Jid } from "@/types/tags";
 import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
 import { z } from "zod";
 
@@ -18,7 +18,9 @@ export const FindChatsResponseSchema = z
 	.transform((chats) =>
 		chats.map((chat) => ({
 			id: ChatId(chat.id),
-			jid: Jid(chat.remoteJid),
+			jid: chat.remoteJid.endsWith("@g.us")
+				? GroupJid(chat.remoteJid)
+				: Jid(chat.remoteJid),
 			phoneNumber: phoneNumberFromJid(chat.remoteJid),
 			name: chat.name || undefined,
 			labels: chat.labels || undefined,

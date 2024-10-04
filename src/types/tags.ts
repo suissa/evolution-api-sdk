@@ -1,8 +1,8 @@
 export type Jid = `${string}@s.whatsapp.net`;
 export const Jid = (jid: string) => jid as Jid;
 
-export type GroudJid = `${string}@g.us`;
-export const GroudJid = (jid: string) => jid as GroudJid;
+export type GroupJid = `${string}@g.us`;
+export const GroupJid = (jid: string) => jid as GroupJid;
 
 export type MessageId = string & { __tag: "MessageId" };
 export const MessageId = (id: string) => id as MessageId;
