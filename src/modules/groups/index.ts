@@ -12,6 +12,10 @@ import * as FindByJid from "./schemas/find-by-jid";
 export class GroupsModule {
 	constructor(private readonly api: ApiService) {}
 
+	/**
+	 * Gets all groups
+	 * @param getParticipants - Whether to get participants
+	 */
 	async findAll(getParticipants: false): Promise<FindAll.FindAllGroupsResponse>;
 	async findAll(
 		getParticipants: true,
@@ -32,6 +36,10 @@ export class GroupsModule {
 		return FindAll.ResponseSchema.parse(response);
 	}
 
+	/**
+	 * Gets a group by invite code
+	 * @param inviteCode - The group invite code (not the URL)
+	 */
 	async findByInviteCode(
 		inviteCode: string | GroupInviteCode,
 	): Promise<FindByInviteCode.FindGroupByInviteCodeResponse> {
@@ -42,6 +50,10 @@ export class GroupsModule {
 		return FindByInviteCode.ResponseSchema.parse(response);
 	}
 
+	/**
+	 * Gets a group by JID
+	 * @param groupJid - The group JID terminated with \@g.us
+	 */
 	async findByJid(
 		groupJid: string | GroupJid,
 	): Promise<FindByJid.FindGroupByJidResponse> {

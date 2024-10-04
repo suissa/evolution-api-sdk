@@ -14,6 +14,10 @@ import * as Voice from "./schemas/voice";
 export class MessagesModule {
 	constructor(private readonly api: ApiService) {}
 
+	/**
+	 * Sends a text message
+	 * @param options - Text message options
+	 */
 	async sendText(
 		options: Text.TextMessageOptions,
 	): Promise<Text.TextMessageResponse> {
@@ -23,6 +27,10 @@ export class MessagesModule {
 		return Text.ResponseSchema.parse(response);
 	}
 
+	/**
+	 * Sends an image
+	 * @param options - Image message options
+	 */
 	async sendImage(
 		options: Image.ImageMessageOptions,
 	): Promise<Image.ImageMessageResponse> {
@@ -32,6 +40,10 @@ export class MessagesModule {
 		return Image.ResponseSchema.parse(response);
 	}
 
+	/**
+	 * Sends a video
+	 * @param options - Video message options
+	 */
 	async sendVideo(
 		options: Video.VideoMessageOptions,
 	): Promise<Video.VideoMessageResponse> {
@@ -41,6 +53,10 @@ export class MessagesModule {
 		return Video.ResponseSchema.parse(response);
 	}
 
+	/**
+	 * Sends a document
+	 * @param options - Document message options
+	 */
 	async sendDocument(
 		options: Document.DocumentMessageOptions,
 	): Promise<Document.DocumentMessageResponse> {
@@ -50,6 +66,10 @@ export class MessagesModule {
 		return Document.ResponseSchema.parse(response);
 	}
 
+	/**
+	 * Sends an audio
+	 * @param options - Audio message options
+	 */
 	async sendAudio(
 		options: Audio.AudioMessageOptions,
 	): Promise<Audio.AudioMessageResponse> {
@@ -59,6 +79,10 @@ export class MessagesModule {
 		return Audio.ResponseSchema.parse(response);
 	}
 
+	/**
+	 * Sends a voice message
+	 * @param options - Voice message options
+	 */
 	async sendVoice(
 		options: Voice.VoiceMessageOptions,
 	): Promise<Voice.VoiceMessageResponse> {
@@ -68,6 +92,10 @@ export class MessagesModule {
 		return Voice.ResponseSchema.parse(response);
 	}
 
+	/**
+	 * Sends a sticker
+	 * @param options - Sticker message options
+	 */
 	async sendSticker(
 		options: Sticker.StickerMessageOptions,
 	): Promise<Sticker.StickerMessageResponse> {
@@ -77,6 +105,10 @@ export class MessagesModule {
 		return Sticker.ResponseSchema.parse(response);
 	}
 
+	/**
+	 * Sends a location
+	 * @param options - Location message options
+	 */
 	async sendLocation(
 		options: Location.LocationMessageOptions,
 	): Promise<Location.LocationMessageResponse> {
@@ -86,6 +118,10 @@ export class MessagesModule {
 		return Location.ResponseSchema.parse(response);
 	}
 
+	/**
+	 * Sends a contact
+	 * @param options - Contact message options
+	 */
 	async sendContact(
 		options: Contact.ContactMessageOptions,
 	): Promise<Contact.ContactMessageResponse> {

@@ -5,12 +5,28 @@ import { MessagesModule } from "./modules/messages";
 import { type ClientOptions, ClientOptionsSchema } from "./schemas/client";
 
 export class EvolutionClient {
+	/**
+	 * API service for directly interacting with the Evolution API (no specific typings)
+	 */
 	public readonly api: ApiService;
 
+	/**
+	 * Find and manage chats, send presences and check numbers
+	 */
 	public readonly chats: ChatsModule;
+	/**
+	 * Find and manage groups
+	 */
 	public readonly groups: GroupsModule;
+	/**
+	 * Send messages
+	 */
 	public readonly messages: MessagesModule;
 
+	/**
+	 * Evolution Client - API client for interacting with the Evolution API
+	 * @param options - Client options
+	 */
 	constructor(public readonly options: ClientOptions) {
 		ClientOptionsSchema.parse(options);
 
