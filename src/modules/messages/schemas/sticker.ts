@@ -29,7 +29,9 @@ export const StickerMessageResponseSchema = z
 				mimetype: z.string().optional(),
 				directPath: z.string(),
 				fileLength: z.coerce.number(),
-				mediaKeyTimestamp: z.coerce.date(),
+				mediaKeyTimestamp: z.coerce
+					.number()
+					.transform((value) => new Date(value)),
 			}),
 		}),
 		messageTimestamp: z.coerce.date(),

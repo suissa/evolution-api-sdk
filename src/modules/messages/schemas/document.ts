@@ -55,7 +55,9 @@ export const DocumentMessageResponseSchema = z
 				fileName: z.string(),
 				fileEncSha256: z.string().base64(),
 				directPath: z.string(),
-				mediaKeyTimestamp: z.coerce.date(),
+				mediaKeyTimestamp: z.coerce
+					.number()
+					.transform((value) => new Date(value)),
 			}),
 		}),
 		messageTimestamp: z.coerce.date(),

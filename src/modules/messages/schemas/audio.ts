@@ -36,7 +36,9 @@ export const AudioMessageResponseSchema = z
 				mediaKey: z.string().base64(),
 				fileEncSha256: z.string().base64(),
 				directPath: z.string(),
-				mediaKeyTimestamp: z.coerce.date(),
+				mediaKeyTimestamp: z.coerce
+					.number()
+					.transform((value) => new Date(value)),
 			}),
 		}),
 		messageTimestamp: z.coerce.date(),
