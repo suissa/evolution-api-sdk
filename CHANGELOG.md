@@ -1,5 +1,11 @@
 # @solufy/evolution-sdk
 
+## 0.1.1
+
+### Patch Changes
+
+- bffe8f7: Fix API response validation
+
 ## 0.1.0
 
 ### Minor Changes
