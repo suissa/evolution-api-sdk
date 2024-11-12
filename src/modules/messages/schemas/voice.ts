@@ -39,7 +39,7 @@ export const VoiceMessageResponseSchema = z
 				mediaKeyTimestamp: z.coerce
 					.number()
 					.transform((value) => new Date(value)),
-				waveform: z.string().base64(),
+				waveform: z.string().base64().nullish(),
 			}),
 		}),
 		messageTimestamp: z.coerce.date(),

@@ -29,7 +29,7 @@ pnpm add @solufy/evolution-sdk
 import { EvolutionClient } from "@solufy/evolution-sdk"
 // const { EvolutionClient } = require("@solufy/evolution-sdk")
 
-const cccccccccc = new EvolutionClient({
+const client = new EvolutionClient({
   serverUrl: "Your server url",
   instance: "Your instance",
   token: "Global api key or instance token"
