@@ -1,5 +1,11 @@
 # @solufy/evolution-sdk
 
+## 0.1.2
+
+### Patch Changes
+
+- d8bcc58: Fix waveform parsing error.
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 {
 	"name": "@solufy/evolution-sdk",
 	"private": false,
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Unofficial SDK for the Evolution Whatsapp API v2",
 	"packageManager": "pnpm@9.10.0",
 	"main": "lib/index.js",
