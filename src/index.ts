@@ -37,7 +37,7 @@ export class EvolutionClient {
 	}
 }
 
-export { EvolutionApiError } from "./api/error";
+export { EvolutionApiError } from "./api/errors";
 export { ChatId, GroupJid, Jid, MessageId } from "./types/tags";
 export { phoneNumberFromJid } from "./utils/phone-numer-from-jid";
 
