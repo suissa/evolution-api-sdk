@@ -42,6 +42,12 @@ const ErrorMessages = [
 		}),
 		"No session found, try restarting your instance",
 	),
+	ErrorMessage(
+		z.object({
+			message: z.array(z.string().includes("AggregateError")),
+		}),
+		"AggregateError",
+	),
 ];
 
 function getErrorMessage(response: unknown) {
