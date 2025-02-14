@@ -1,5 +1,11 @@
 # @solufy/evolution-sdk
 
+## 0.2.0
+
+### Minor Changes
+
+- 155b3de: Improved error messages
+
 ## 0.1.2
 
 ### Patch Changes
