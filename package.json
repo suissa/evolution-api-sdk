@@ -1,7 +1,7 @@
 {
 	"name": "@solufy/evolution-sdk",
 	"private": false,
-	"version": "0.2.0",
+	"version": "0.2.1",
 	"description": "Unofficial SDK for the Evolution Whatsapp API v2",
 	"packageManager": "pnpm@10.9.0",
 	"main": "lib/index.js",
@@ -27,7 +27,13 @@
 		"tsup": "^8.4.0",
 		"typescript": "^5.8.3"
 	},
-	"keywords": ["evolution", "api", "whatsapp", "baileys", "zap"],
+	"keywords": [
+		"evolution",
+		"api",
+		"whatsapp",
+		"baileys",
+		"zap"
+	],
 	"author": {
 		"name": "João Gabriel Tonaco",
 		"url": "https://github.com/joaotonaco"
@@ -42,6 +48,9 @@
 	"homepage": "https://github.com/solufyapp/evolution-sdk#readme",
 	"license": "MIT",
 	"pnpm": {
-		"onlyBuiltDependencies": ["@biomejs/biome", "esbuild"]
+		"onlyBuiltDependencies": [
+			"@biomejs/biome",
+			"esbuild"
+		]
 	}
 }
