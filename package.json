@@ -9,10 +9,9 @@
 	"module": "lib/index.mjs",
 	"scripts": {
 		"release": "pnpm build && changeset publish",
+		"check-types": "tsc --noEmit",
 		"build": "tsup ./src",
-		"lint": "biome check --fix",
-		"lint:staged": "biome check --staged --no-errors-on-unmatched",
-		"prepare": "husky"
+		"lint": "biome check --fix"
 	},
 	"engines": {
 		"node": ">=18.0.0"
@@ -25,7 +24,6 @@
 		"@biomejs/biome": "^1.9.4",
 		"@changesets/cli": "^2.29.2",
 		"@types/node": "^22.14.1",
-		"husky": "^9.1.7",
 		"tsup": "^8.4.0",
 		"typescript": "^5.8.3"
 	},
