@@ -40,7 +40,10 @@ export class ApiService {
 		const data = await response.json();
 
 		if (!response.ok || "error" in data) {
-			throw new EvolutionApiError(data.error || "Unknown Error", data.response);
+			throw new EvolutionApiError(
+				`${this.options.instance} ${data.error || "Unknown Error"}`,
+				data.response,
+			);
 		}
 
 		return data;
