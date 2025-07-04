@@ -30,8 +30,8 @@ import { EvolutionClient } from "evolution-api-sdk"
 
 const client = new EvolutionClient({
   serverUrl: "Your server url",
-  instance: "Your instance",
-  token: "Global api key or instance token"
+  token: "Global api key or instance token",
+  instance: "Your instance" // optional
 })
 ```
 
