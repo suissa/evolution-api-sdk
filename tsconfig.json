@@ -19,5 +19,5 @@
 		}
 	},
 	"include": ["src/**/*", "lib/**/*.d.ts"],
-	"exclude": ["./test/", "./lib/"]
+	"exclude": ["./test/"]
 }
