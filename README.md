@@ -1,6 +1,7 @@
 <h1 align="center">Evolution API SDK for Javascript</h1>
 
 <p align="center">Unofficial SDK for the <a href="https://doc.evolution-api.com/v2" target="_blank">Evolution Whatsapp API</a> (v2).</p>
+
 <p align="center"><em>This is a fork of <a href="https://github.com/solufyapp/evolution-sdk" target="_blank">@solufy/evolution-sdk</a> with additional features.</em></p>
 
 <div align="center">
@@ -35,82 +36,168 @@ const client = new EvolutionClient({
 })
 ```
 
-## Features
+## Usage Examples
+
+### Sending a Text Message
+```ts
+await client.messages.sendText({
+  number: "5511999999999",
+  text: "Hello from the SDK!",
+});
+```
+
+### Sending an Image
+```ts
+await client.messages.sendImage({
+  number: "5511999999999",
+  image: "https://i.imgur.com/REo1ODy.png",
+  caption: "A cute cat",
+});
+```
+
+### Creating a Group
+```ts
+await client.groups.create({
+  subject: "My Awesome Group",
+  participants: ["5511999999999", "5522988888888"],
+});
+```
+
+### Checking if a Number has WhatsApp
+```ts
+const result = await client.chats.check("5511999999999");
+console.log(result);
+// [{ jid: '5511999999999@s.whatsapp.net', exists: true }]
+```
+
+## API Reference
 
 ### Instances
-- **Create, connect, and manage instances**
-  ```ts
-  client.instances.create({ instanceName: "my-instance" });
-  client.instances.connect({ instanceName: "my-instance" });
-  client.instances.connectionState({ instanceName: "my-instance" });
-  client.instances.logout({ instanceName: "my-instance" });
-  client.instances.delete({ instanceName: "my-instance" });
-  client.instances.restart({ instanceName: "my-instance" });
-  client.instances.fetchAll();
-  client.instances.setPresence({ instanceName: "my-instance", presence: "available" });
-  ```
+
+- **`create(options: CreateOptions): Promise<CreateResponse>`**
+  - Creates a new instance.
+- **`connect(options: ConnectOptions): Promise<ConnectResponse>`**
+  - Connects to an instance.
+- **`connectionState(options: ConnectionStateOptions): Promise<ConnectionStateResponse>`**
+  - Gets the connection state of an instance.
+- **`logout(options: LogoutOptions): Promise<LogoutResponse>`**
+  - Logs out of an instance.
+- **`delete(options: DeleteOptions): Promise<DeleteResponse>`**
+  - Deletes an instance.
+- **`restart(options: RestartOptions): Promise<RestartResponse>`**
+  - Restarts an instance.
+- **`fetchAll(): Promise<FetchAllResponse>`**
+  - Fetches all instances.
+- **`setPresence(options: SetPresenceOptions): Promise<SetPresenceResponse>`**
+  - Sets the presence of the instance.
 
 ### Chats
-- **Check numbers, find chats, and manage chat interactions**
-  ```ts
-  client.chats.check("551199999999", "552299999999");
-  client.chats.findAll();
-  client.chats.markAsRead({ number: "551199999999" });
-  client.chats.archive({ number: "551199999999", archive: true });
-  client.chats.deleteMessage({ number: "551199999999", messageId: "message-id", owner: true });
-  client.chats.fetchProfilePicture({ number: "551199999999" });
-  ```
+
+- **`check(...numbers: CheckOptions | CheckOptions[]): Promise<CheckResponse>`**
+  - Checks if a number has WhatsApp.
+- **`findAll(): Promise<FindAllChatsResponse>`**
+  - Gets all chats.
+- **`sendPresence(options: PresenceOptions): Promise<void>`**
+  - Sends a presence to a certain chat.
+- **`markAsRead(options: MarkAsReadOptions): Promise<MarkAsReadResponse>`**
+  - Marks a chat as read.
+- **`archive(options: ArchiveOptions): Promise<ArchiveResponse>`**
+  - Archives a chat.
+- **`deleteMessage(options: DeleteMessageOptions): Promise<DeleteMessageResponse>`**
+  - Deletes a message in a chat.
+- **`fetchProfilePicture(options: FetchProfilePictureOptions): Promise<FetchProfilePictureResponse>`**
+  - Fetches the profile picture of a chat.
+- **`findContact(options: FindContactsOptions): Promise<FindContactsResponse>`**
+  - Finds a contact.
+- **`findMessages(options: FindMessagesOptions): Promise<FindMessagesResponse>`**
+  - Finds messages in a chat.
+- **`findStatusMessage(options: FindStatusMessageOptions): Promise<FindStatusMessageResponse>`**
+  - Finds a status message.
+- **`updateMessage(options: UpdateMessageOptions): Promise<UpdateMessageResponse>`**
+  - Updates a message.
 
 ### Groups
-- **Find and manage groups**
-  ```ts
-  client.groups.findAll();
-  client.groups.findByJid("999999999999999999@g.us");
-  client.groups.findByInviteCode("0000000000000000000000");
-  client.groups.create({ subject: "My Group", participants: ["551199999999"] });
-  ```
+
+- **`findAll(getParticipants: boolean): Promise<FindAllGroupsResponse | FindAllGroupsWithParticipantsResponse>`**
+  - Gets all groups.
+- **`findByInviteCode(inviteCode: string | GroupInviteCode): Promise<FindGroupByInviteCodeResponse>`**
+  - Gets a group by invite code.
+- **`findByJid(groupJid: string | GroupJid): Promise<FindGroupByJidResponse>`**
+  - Gets a group by JID.
+- **`create(options: CreateGroupOptions): Promise<CreateGroupResponse>`**
+  - Creates a new group.
+- **`updatePicture(options: UpdatePictureOptions): Promise<UpdatePictureResponse>`**
+  - Updates the group picture.
+- **`updateSubject(options: UpdateSubjectOptions): Promise<UpdateSubjectResponse>`**
+  - Updates the group subject.
+- **`updateDescription(options: UpdateDescriptionOptions): Promise<UpdateDescriptionResponse>`**
+  - Updates the group description.
+- **`fetchInviteCode(options: FetchInviteCodeOptions): Promise<FetchInviteCodeResponse>`**
+  - Fetches the group invite code.
+- **`acceptInviteCode(options: AcceptInviteCodeOptions): Promise<AcceptInviteCodeResponse>`**
+  - Accepts a group invite code.
+- **`revokeInviteCode(options: RevokeInviteCodeOptions): Promise<RevokeInviteCodeResponse>`**
+  - Revokes the group invite code.
+- **`sendGroupInvite(options: SendGroupInviteOptions): Promise<SendGroupInviteResponse>`**
+  - Sends a group invite.
+- **`findMembers(options: FindMembersOptions): Promise<FindMembersResponse>`**
+  - Finds members of a group.
+- **`updateMembers(options: UpdateMembersOptions): Promise<UpdateMembersResponse>`**
+  - Updates the members of a group.
+- **`updateSetting(options: UpdateSettingOptions): Promise<UpdateSettingResponse>`**
+  - Updates a group setting.
+- **`toggleEphemeral(options: ToggleEphemeralOptions): Promise<ToggleEphemeralResponse>`**
+  - Toggles ephemeral messages in a group.
+- **`leave(options: LeaveOptions): Promise<LeaveResponse>`**
+  - Leaves a group.
 
 ### Messages
-- **Send various types of messages**
-  Available types: **audio**, **contact**, **document**, **image**, **location**, **poll**, **sticker**, **text**, **video**, **voice**, **reaction**, **template**, **status**, and **list**.
-  ```ts
-  client.messages.sendText({
-    number: "+551199999999",
-    text: "Hi!",
-    delay: 1000,
-  });
 
-  client.messages.sendImage({
-    number: "5511999999999",
-    image: "https://i.imgur.com/REo1ODy.png",
-    caption: "A cute cat",
-  });
-
-  client.messages.sendAudio({
-    number: "5511999999999",
-    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-  });
-
-  client.messages.sendVideo({
-    number: "5511999999999",
-    video: "https://www.w3schools.com/html/mov_bbb.mp4",
-    caption: "A video",
-  });
-
-  client.messages.sendReaction({
-    number: "+551199999999",
-    messageId: "message-id",
-    reaction: "👍"
-  });
-  ```
+- **`sendText(options: TextMessageOptions): Promise<TextMessageResponse>`**
+  - Sends a text message.
+- **`sendImage(options: ImageMessageOptions): Promise<ImageMessageResponse>`**
+  - Sends an image message.
+- **`sendVideo(options: VideoMessageOptions): Promise<VideoMessageResponse>`**
+  - Sends a video message.
+- **`sendDocument(options: DocumentMessageOptions): Promise<DocumentMessageResponse>`**
+  - Sends a document message.
+- **`sendAudio(options: AudioMessageOptions): Promise<AudioMessageResponse>`**
+  - Sends an audio message.
+- **`sendVoice(options: VoiceMessageOptions): Promise<VoiceMessageResponse>`**
+  - Sends a voice message.
+- **`sendSticker(options: StickerMessageOptions): Promise<StickerMessageResponse>`**
+  - Sends a sticker message.
+- **`sendLocation(options: LocationMessageOptions): Promise<LocationMessageResponse>`**
+  - Sends a location message.
+- **`sendContact(options: ContactMessageOptions): Promise<ContactMessageResponse>`**
+  - Sends a contact message.
+- **`sendReaction(options: ReactionMessageOptions): Promise<ReactionMessageResponse>`**
+  - Sends a reaction to a message.
+- **`sendTemplate(options: TemplateMessageOptions): Promise<TemplateMessageResponse>`**
+  - Sends a template message.
+- **`sendStatus(options: StatusMessageOptions): Promise<StatusMessageResponse>`**
+  - Sends a status message.
+- **`sendList(options: ListMessageOptions): Promise<ListMessageResponse>`**
+  - Sends a list message.
 
 ### Profile
-- **Manage your profile settings**
-  ```ts
-  client.profile.fetchProfile({ jid: "551199999999@s.whatsapp.net" });
-  client.profile.updateName({ name: "My New Name" });
-  client.profile.updateStatus({ status: "My new status" });
-  ```
+
+- **`fetchBusinessProfile(options: FetchBusinessProfileOptions): Promise<FetchBusinessProfileResponse>`**
+  - Fetches the business profile.
+- **`fetchProfile(options: FetchProfileOptions): Promise<FetchProfileResponse>`**
+  - Fetches the profile.
+- **`updateName(options: UpdateNameOptions): Promise<UpdateNameResponse>`**
+  - Updates the profile name.
+- **`updateStatus(options: UpdateStatusOptions): Promise<UpdateStatusResponse>`**
+  - Updates the profile status.
+- **`updatePicture(options: UpdatePictureOptions): Promise<UpdatePictureResponse>`**
+  - Updates the profile picture.
+- **`removePicture(): Promise<RemovePictureResponse>`**
+  - Removes the profile picture.
+- **`fetchPrivacySettings(): Promise<FetchPrivacySettingsResponse>`**
+  - Fetches the privacy settings.
+- **`updatePrivacySettings(options: UpdatePrivacySettingsOptions): Promise<UpdatePrivacySettingsResponse>`**
+  - Updates the privacy settings.
 
 ### Webhook Usage
 - **Parse incoming webhooks**
@@ -170,18 +257,18 @@ const client = new EvolutionClient({
   ```
 
 ### Webhooks
-- **Set and find webhooks**
-  ```ts
-  client.webhook.set({ url: "https://my-webhook-url.com", enabled: true, webhook_by_events: false, events: [] });
-  client.webhook.find();
-  ```
+
+- **`set(options: SetOptions): Promise<SetResponse>`**
+  - Sets the webhook configuration.
+- **`find(): Promise<FindResponse>`**
+  - Finds the webhook configuration.
 
 ### Settings
-- **Manage instance settings**
-  ```ts
-  client.settings.set({ reject_call: true });
-  client.settings.find();
-  ```
+
+- **`set(options: SetOptions): Promise<SetResponse>`**
+  - Sets the instance settings.
+- **`find(): Promise<FindResponse>`**
+  - Finds the instance settings.
 
 ## API Documentation
 
