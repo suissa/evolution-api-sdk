@@ -12,7 +12,7 @@ export const ClientOptionsSchema = z.object({
 	/**
 	 * Your instance name
 	 */
-	instance: z.string(),
+	instance: z.string().optional(),
 });
 
 export type ClientOptions = z.infer<typeof ClientOptionsSchema>;

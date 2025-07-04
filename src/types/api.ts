@@ -6,4 +6,5 @@ export type APIRequestInit = Omit<
 	params?: Record<string, string | number | boolean | undefined>;
 	headers?: Record<string, string>;
 	body?: object | FormData;
+	isInstanceUrl?: boolean;
 };

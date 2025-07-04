@@ -4,7 +4,11 @@ import type { APIRequestInit } from "@/types/api";
 import { EvolutionApiError } from "./errors";
 
 export class ApiService {
-	constructor(private readonly options: ClientOptions) {}
+	constructor(private options: ClientOptions) {}
+
+	setInstance(instance: string) {
+		this.options.instance = instance;
+	}
 
 	async get<T>(path: string, options: Omit<APIRequestInit, "method"> = {}) {
 		return this.request<T>(path, { ...options, method: "GET" });
@@ -30,11 +34,20 @@ export class ApiService {
 		path: string,
 		options: APIRequestInit = {},
 	): Promise<T> {
+		const { isInstanceUrl = true } = options;
+
+		if (isInstanceUrl && !this.options.instance) {
+			throw new EvolutionApiError("Instance not set", {
+				message: "Please set the instance before making a request.",
+			});
+		}
+
 		const { init, params } = this.makeInit(options);
-		const url = new URL(
-			`/${path}/${this.options.instance}/?${params}`,
-			this.options.serverUrl,
-		);
+
+		const urlPath = isInstanceUrl
+			? `/${path}/${this.options.instance}/`
+			: `/${path}/`;
+		const url = new URL(`${urlPath}?${params}`, this.options.serverUrl);
 
 		const response = await fetch(url, init);
 		const data = await response.json();
@@ -50,7 +63,7 @@ export class ApiService {
 	}
 
 	private makeInit(options: APIRequestInit) {
-		const { params: _, headers, body, ...rest } = options;
+		const { params: _, headers, body, isInstanceUrl, ...rest } = options;
 
 		const paramsInit =
 			options.params &&

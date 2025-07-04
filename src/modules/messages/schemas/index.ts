@@ -16,6 +16,10 @@ export type {
 	ImageMessageResponse,
 } from "./image";
 export type {
+	ListMessageOptions,
+	ListMessageResponse,
+} from "./list";
+export type {
 	LocationMessageOptions,
 	LocationMessageResponse,
 } from "./location";
@@ -24,9 +28,21 @@ export type {
 	PollMessageResponse,
 } from "./poll";
 export type {
+	ReactionMessageOptions,
+	ReactionMessageResponse,
+} from "./reaction";
+export type {
+	StatusMessageOptions,
+	StatusMessageResponse,
+} from "./status";
+export type {
 	StickerMessageOptions,
 	StickerMessageResponse,
 } from "./sticker";
+export type {
+	TemplateMessageOptions,
+	TemplateMessageResponse,
+} from "./template";
 export type {
 	TextMessageOptions,
 	TextMessageResponse,

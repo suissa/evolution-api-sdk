@@ -1,4 +1,19 @@
-# @solufy/evolution-sdk
+# evolution-api-sdk
+
+## 0.3.0
+
+### Minor Changes
+
+- Added `Instance`, `Profile`, `Webhook`, and `Settings` modules.
+- Added missing methods to `Messages`, `Chats`, and `Groups` modules.
+- Added `setInstance` method to `EvolutionClient` to allow setting the instance after initialization.
+- Added types for webhook payloads (`WebhookPayloadSchema`).
+- Added `WebhookEvent` enum for all supported webhook events.
+- Updated `README.md` with more usage examples.
+
+### Patch Changes
+
+- Updated `package.json` with new author and repository information.
 
 ## 0.2.1
 

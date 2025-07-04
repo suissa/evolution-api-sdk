@@ -34,8 +34,16 @@ export const TextMessageResponseSchema = z
 		timestamp: data.messageTimestamp,
 	}));
 
+export const TextMessageReceivedSchema = z.object({
+	conversation: z.string(),
+	extendedTextMessage: z.object({
+		text: z.string(),
+	}),
+});
+
 export type TextMessageOptions = z.infer<typeof TextMessageOptionsSchema>;
 export type TextMessageResponse = z.infer<typeof TextMessageResponseSchema>;
+export type TextMessageReceived = z.infer<typeof TextMessageReceivedSchema>;
 
 export {
 	TextMessageBodySchema as BodySchema,

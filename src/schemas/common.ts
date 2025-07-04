@@ -29,6 +29,14 @@ export const GroupInviteCodeSchema = z
 		"Invalid group invite code",
 	) as unknown as z.ZodType<GroupInviteCode>;
 
+export const MessageIdSchema = z.string();
+
+export const ChatIdSchema = z.union([
+	PhoneNumberSchema,
+	JidSchema,
+	GroupJidSchema,
+]);
+
 export const ApiNumberSchema = z.union([
 	PhoneNumberSchema,
 	JidSchema,

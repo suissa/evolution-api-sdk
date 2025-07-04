@@ -5,8 +5,12 @@ import * as Audio from "./schemas/audio";
 import * as Contact from "./schemas/contact";
 import * as Document from "./schemas/document";
 import * as Image from "./schemas/image";
+import * as List from "./schemas/list";
 import * as Location from "./schemas/location";
+import * as Reaction from "./schemas/reaction";
+import * as Status from "./schemas/status";
 import * as Sticker from "./schemas/sticker";
+import * as Template from "./schemas/template";
 import * as Text from "./schemas/text";
 import * as Video from "./schemas/video";
 import * as Voice from "./schemas/voice";
@@ -129,5 +133,65 @@ export class MessagesModule {
 		const response = await this.api.post(Routes.Message.SendContact, { body });
 
 		return Contact.ResponseSchema.parse(response);
+	}
+
+	/**
+	 * Sends a reaction
+	 * @param options - Reaction message options
+	 */
+	async sendReaction(
+		options: Reaction.ReactionMessageOptions,
+	): Promise<Reaction.ReactionMessageResponse> {
+		const body = Reaction.ReactionBodySchema.parse(options);
+		const response = await this.api.post(Routes.Message.SendReaction, {
+			body,
+		});
+
+		return Reaction.ReactionResponseSchema.parse(response);
+	}
+
+	/**
+	 * Sends a template
+	 * @param options - Template message options
+	 */
+	async sendTemplate(
+		options: Template.TemplateMessageOptions,
+	): Promise<Template.TemplateMessageResponse> {
+		const body = Template.TemplateBodySchema.parse(options);
+		const response = await this.api.post(Routes.Message.SendTemplate, {
+			body,
+		});
+
+		return Template.TemplateResponseSchema.parse(response);
+	}
+
+	/**
+	 * Sends a status
+	 * @param options - Status message options
+	 */
+	async sendStatus(
+		options: Status.StatusMessageOptions,
+	): Promise<Status.StatusMessageResponse> {
+		const body = Status.StatusBodySchema.parse(options);
+		const response = await this.api.post(Routes.Message.SendStatus, {
+			body,
+		});
+
+		return Status.StatusResponseSchema.parse(response);
+	}
+
+	/**
+	 * Sends a list
+	 * @param options - List message options
+	 */
+	async sendList(
+		options: List.ListMessageOptions,
+	): Promise<List.ListMessageResponse> {
+		const body = List.ListBodySchema.parse(options);
+		const response = await this.api.post(Routes.Message.SendList, {
+			body,
+		});
+
+		return List.ListResponseSchema.parse(response);
 	}
 }

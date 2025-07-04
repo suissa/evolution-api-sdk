@@ -47,6 +47,7 @@ export const ImageMessageResponseSchema = z
 					.transform((value) => new Date(value)),
 			}),
 		}),
+		messageType: z.literal("image"),
 		messageTimestamp: z.coerce.date(),
 	})
 	.transform((data) => ({
