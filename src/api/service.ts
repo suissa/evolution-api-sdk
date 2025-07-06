@@ -1,7 +1,7 @@
 import type { ClientOptions } from "@/schemas/client";
 import type { APIRequestInit } from "@/types/api";
 
-import { EvolutionApiError } from "./errors";
+import { EvolutionApiError, extractErrorMessage } from "./errors";
 
 export class ApiService {
 	constructor(private options: ClientOptions) {}
@@ -25,9 +25,14 @@ export class ApiService {
 		const { init, params } = this.makeInit(options);
 
 		const urlPath = isInstanceUrl
-			? `/${path}/${this.options.instance}/`
-			: `/${path}/`;
-		const url = new URL(`${urlPath}?${params}`, this.options.serverUrl);
+			? `/${path}/${this.options.instance}`
+			: `/${path}`;
+		const url = new URL(urlPath, this.options.serverUrl);
+		
+		// Add query parameters if any
+		if (params.toString()) {
+			url.search = params.toString();
+		}
 
 		let response: Response;
 		let data: any;
@@ -44,9 +49,19 @@ export class ApiService {
 		}
 
 		if (!response.ok) {
+			// Extract meaningful error message from the response
+			const errorMessage = extractErrorMessage(data) || 
+				`Request failed with status ${response.status}: ${response.statusText}`;
+			
 			throw new EvolutionApiError(
-				`Request failed with status ${response.status}`,
-				data,
+				errorMessage,
+				{
+					status: response.status,
+					statusText: response.statusText,
+					url: url.toString(),
+					method: init.method,
+					response: data,
+				},
 				response.status,
 			);
 		}

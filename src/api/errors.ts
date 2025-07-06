@@ -18,12 +18,67 @@ export class EvolutionApiError extends Error {
 			Error.captureStackTrace(this, EvolutionApiError);
 		}
 	}
+
+	/**
+	 * Returns a user-friendly string representation of the error
+	 */
+	toString(): string {
+		let result = `${this.name}: ${this.message}`;
+		
+		if (this.statusCode) {
+			result += ` (${this.statusCode})`;
+		}
+		
+		// Add relevant details without showing [Object ...]
+		if (this.details && typeof this.details === 'object') {
+			const details = this.details as Record<string, any>;
+			const relevantDetails: string[] = [];
+			
+			if (details.url) {
+				relevantDetails.push(`URL: ${details.url}`);
+			}
+			
+			if (details.method) {
+				relevantDetails.push(`Method: ${details.method}`);
+			}
+			
+			// Show response details if they exist and are meaningful
+			if (details.response && typeof details.response === 'object') {
+				const response = details.response as Record<string, any>;
+				if (response.error && response.error !== this.message) {
+					relevantDetails.push(`Server Error: ${response.error}`);
+				}
+				if (response.message && response.message !== this.message) {
+					relevantDetails.push(`Server Message: ${response.message}`);
+				}
+			}
+			
+			if (relevantDetails.length > 0) {
+				result += `\n  ${relevantDetails.join('\n  ')}`;
+			}
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Returns a JSON representation suitable for logging
+	 */
+	toJSON(): object {
+		return {
+			name: this.name,
+			message: this.message,
+			statusCode: this.statusCode,
+			details: this.details,
+			stack: this.stack,
+		};
+	}
 }
 
 /**
  * Extracts error message from various Evolution API error response formats
  */
-function extractErrorMessage(response: unknown): string | null {
+export function extractErrorMessage(response: unknown): string | null {
 	if (!response) {
 		return null;
 	}
