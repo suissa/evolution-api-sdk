@@ -18,6 +18,6 @@
 			"@/*": ["./src/*"]
 		}
 	},
-	"exclude": ["./test/"],
-	"include": ["src/**/*"]
+	"include": ["src/**/*", "lib/**/*.d.ts"],
+	"exclude": ["./test/"]
 }

@@ -1,11 +1,21 @@
 // Pure TypeScript interfaces for better IDE support and performance
 
-export interface ProxyConfig {
-	host: string;
-	port: string;
-	protocol: "http" | "https";
-	username?: string;
-	password?: string;
+export interface WebhookConfig {
+	url?: string;
+	byEvents?: boolean;
+	base64?: boolean;
+	headers?: Record<string, string>;
+	events?: string[];
+}
+
+export interface RabbitMQConfig {
+	enabled?: boolean;
+	events?: string[];
+}
+
+export interface SQSConfig {
+	enabled?: boolean;
+	events?: string[];
 }
 
 export interface CreateInstanceRequest {
@@ -14,53 +24,48 @@ export interface CreateInstanceRequest {
 	qrcode?: boolean;
 	number?: string;
 	integration?: string;
-	
-	// Webhook settings (flat fields)
-	webhook?: string;
-	webhook_by_events?: boolean;
-	events?: string[];
-	
+
 	// Call settings
-	reject_call?: boolean;
-	msg_call?: string;
-	
+	rejectCall?: boolean;
+	msgCall?: string;
+
 	// Group and status settings
-	groups_ignore?: boolean;
-	always_online?: boolean;
-	read_messages?: boolean;
-	read_status?: boolean;
-	
-	// WebSocket settings
-	websocket_enabled?: boolean;
-	websocket_events?: string[];
-	
-	// RabbitMQ settings (flat fields)
-	rabbitmq_enabled?: boolean;
-	rabbitmq_events?: string[];
-	
-	// SQS settings (flat fields)
-	sqs_enabled?: boolean;
-	sqs_events?: string[];
-	
-	// Typebot settings
-	typebot_url?: string;
-	typebot?: string;
-	typebot_expire?: number;
-	typebot_keyword_finish?: string;
-	typebot_delay_message?: number;
-	typebot_unknown_message?: string;
-	typebot_listening_from_me?: boolean;
-	
-	// Proxy settings (nested object)
-	proxy?: ProxyConfig;
-	
-	// Chatwoot settings (flat fields)
-	chatwoot_account_id?: number;
-	chatwoot_token?: string;
-	chatwoot_url?: string;
-	chatwoot_sign_msg?: boolean;
-	chatwoot_reopen_conversation?: boolean;
-	chatwoot_conversation_pending?: boolean;
+	groupsIgnore?: boolean;
+	alwaysOnline?: boolean;
+	readMessages?: boolean;
+	readStatus?: boolean;
+	syncFullHistory?: boolean;
+
+	// Proxy settings (flat fields)
+	proxyHost?: string;
+	proxyPort?: string;
+	proxyProtocol?: "http" | "https";
+	proxyUsername?: string;
+	proxyPassword?: string;
+
+	// Webhook settings (nested object)
+	webhook?: WebhookConfig;
+
+	// RabbitMQ settings (nested object)
+	rabbitmq?: RabbitMQConfig;
+
+	// SQS settings (nested object)
+	sqs?: SQSConfig;
+
+	// Chatwoot settings
+	chatwootAccountId?: number;
+	chatwootToken?: string;
+	chatwootUrl?: string;
+	chatwootSignMsg?: boolean;
+	chatwootReopenConversation?: boolean;
+	chatwootConversationPending?: boolean;
+	chatwootImportContacts?: boolean;
+	chatwootNameInbox?: string;
+	chatwootMergeBrazilContacts?: boolean;
+	chatwootImportMessages?: boolean;
+	chatwootDaysLimitImportMessages?: number;
+	chatwootOrganization?: string;
+	chatwootLogo?: string;
 }
 
 export interface InstanceInfo {
@@ -72,13 +77,13 @@ export interface InstanceInfo {
 }
 
 export interface InstanceSettings {
-	reject_call?: boolean;
-	msg_call?: string;
-	groups_ignore?: boolean;
-	always_online?: boolean;
-	read_messages?: boolean;
-	read_status?: boolean;
-	sync_full_history?: boolean;
+	rejectCall?: boolean;
+	msgCall?: string;
+	groupsIgnore?: boolean;
+	alwaysOnline?: boolean;
+	readMessages?: boolean;
+	readStatus?: boolean;
+	syncFullHistory?: boolean;
 }
 
 export interface QRCodeInfo {
@@ -92,7 +97,3 @@ export interface CreateInstanceResponse {
 	settings?: InstanceSettings; // Settings might not always be present
 	qrcode?: QRCodeInfo;
 }
-
-// Backward compatibility aliases
-export type CreateOptions = CreateInstanceRequest;
-export type CreateResponse = CreateInstanceResponse; 
