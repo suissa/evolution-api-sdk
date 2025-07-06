@@ -26,8 +26,7 @@ export class InstanceModule {
 	async connect(
 		options: Connect.ConnectRequest,
 	): Promise<Connect.ConnectResponse> {
-		const response = await this.api.get(Routes.Instance.Connect, {
-			params: options,
+		const response = await this.api.get(Routes.Instance.Connect + "/" + options.instanceName, {
 			isInstanceUrl: false,
 		});
 		return response as Connect.ConnectResponse;
@@ -36,8 +35,7 @@ export class InstanceModule {
 	async connectionState(
 		options: ConnectionState.ConnectionStateRequest,
 	): Promise<ConnectionState.ConnectionStateResponse> {
-		const response = await this.api.get(Routes.Instance.ConnectionState, {
-			params: options,
+		const response = await this.api.get(Routes.Instance.ConnectionState + "/" + options.instanceName, {
 			isInstanceUrl: false,
 		});
 		return response as ConnectionState.ConnectionStateResponse;
@@ -46,8 +44,7 @@ export class InstanceModule {
     async logout(
         options: Logout.LogoutRequest,
     ): Promise<Logout.LogoutResponse> {
-        const response = await this.api.delete(Routes.Instance.Logout, {
-            params: options,
+        const response = await this.api.delete(Routes.Instance.Logout + "/" + options.instanceName, {
             isInstanceUrl: false,
         });
         return response as Logout.LogoutResponse;
@@ -56,8 +53,7 @@ export class InstanceModule {
     async delete(
         options: Delete.DeleteRequest,
     ): Promise<Delete.DeleteResponse> {
-        const response = await this.api.delete(Routes.Instance.Delete, {
-            params: options,
+        const response = await this.api.delete(Routes.Instance.Delete + "/" + options.instanceName, {
             isInstanceUrl: false,
         });
         return response as Delete.DeleteResponse;
@@ -66,8 +62,7 @@ export class InstanceModule {
     async restart(
         options: Restart.RestartRequest,
     ): Promise<Restart.RestartResponse> {
-        const response = await this.api.put(Routes.Instance.Restart, {
-            params: options,
+        const response = await this.api.put(Routes.Instance.Restart + "/" + options.instanceName, {
             isInstanceUrl: false,
         });
         return response as Restart.RestartResponse;
@@ -83,7 +78,7 @@ export class InstanceModule {
 	async setPresence(
 		options: SetPresence.SetPresenceRequest,
 	): Promise<SetPresence.SetPresenceResponse> {
-		const response = await this.api.post(Routes.Instance.SetPresence, {
+		const response = await this.api.post(Routes.Instance.SetPresence + "/" + options.instanceName, {
 			body: options,
 		});
 		return response as SetPresence.SetPresenceResponse;
