@@ -1,21 +1,11 @@
 import { z } from "zod";
 
-const WebhookSchema = z.object({
-	url: z.string().optional(),
-	byEvents: z.boolean().optional(),
-	base64: z.boolean().optional(),
-	headers: z.record(z.string()).optional(),
-	events: z.array(z.string()).optional(),
-}).optional();
-
-const RabbitMQSchema = z.object({
-	enabled: z.boolean().optional(),
-	events: z.array(z.string()).optional(),
-}).optional();
-
-const SQSSchema = z.object({
-	enabled: z.boolean().optional(),
-	events: z.array(z.string()).optional(),
+const ProxySchema = z.object({
+	host: z.string(),
+	port: z.string(),
+	protocol: z.enum(["http", "https"]),
+	username: z.string().optional(),
+	password: z.string().optional(),
 }).optional();
 
 export const CreateBodySchema = z.object({
@@ -24,34 +14,53 @@ export const CreateBodySchema = z.object({
 	qrcode: z.boolean().optional(),
 	number: z.string().optional(),
 	integration: z.string().optional(),
-	rejectCall: z.boolean().optional(),
-	msgCall: z.string().optional(),
-	groupsIgnore: z.boolean().optional(),
-	alwaysOnline: z.boolean().optional(),
-	readMessages: z.boolean().optional(),
-	readStatus: z.boolean().optional(),
-	syncFullHistory: z.boolean().optional(),
-	proxyHost: z.string().optional(),
-	proxyPort: z.string().optional(),
-	proxyProtocol: z.string().optional(),
-	proxyUsername: z.string().optional(),
-	proxyPassword: z.string().optional(),
-	webhook: WebhookSchema,
-	rabbitmq: RabbitMQSchema,
-	sqs: SQSSchema,
-	chatwootAccountId: z.number().optional(),
-	chatwootToken: z.string().optional(),
-	chatwootUrl: z.string().optional(),
-	chatwootSignMsg: z.boolean().optional(),
-	chatwootReopenConversation: z.boolean().optional(),
-	chatwootConversationPending: z.boolean().optional(),
-	chatwootImportContacts: z.boolean().optional(),
-	chatwootNameInbox: z.string().optional(),
-	chatwootMergeBrazilContacts: z.boolean().optional(),
-	chatwootImportMessages: z.boolean().optional(),
-	chatwootDaysLimitImportMessages: z.number().optional(),
-	chatwootOrganization: z.string().optional(),
-	chatwootLogo: z.string().optional(),
+	
+	// Webhook settings (flat fields)
+	webhook: z.string().optional(),
+	webhook_by_events: z.boolean().optional(),
+	events: z.array(z.string()).optional(),
+	
+	// Call settings
+	reject_call: z.boolean().optional(),
+	msg_call: z.string().optional(),
+	
+	// Group and status settings
+	groups_ignore: z.boolean().optional(),
+	always_online: z.boolean().optional(),
+	read_messages: z.boolean().optional(),
+	read_status: z.boolean().optional(),
+	
+	// WebSocket settings
+	websocket_enabled: z.boolean().optional(),
+	websocket_events: z.array(z.string()).optional(),
+	
+	// RabbitMQ settings (flat fields)
+	rabbitmq_enabled: z.boolean().optional(),
+	rabbitmq_events: z.array(z.string()).optional(),
+	
+	// SQS settings (flat fields)
+	sqs_enabled: z.boolean().optional(),
+	sqs_events: z.array(z.string()).optional(),
+	
+	// Typebot settings
+	typebot_url: z.string().optional(),
+	typebot: z.string().optional(),
+	typebot_expire: z.number().optional(),
+	typebot_keyword_finish: z.string().optional(),
+	typebot_delay_message: z.number().optional(),
+	typebot_unknown_message: z.string().optional(),
+	typebot_listening_from_me: z.boolean().optional(),
+	
+	// Proxy settings (nested object)
+	proxy: ProxySchema,
+	
+	// Chatwoot settings (flat fields)
+	chatwoot_account_id: z.number().optional(),
+	chatwoot_token: z.string().optional(),
+	chatwoot_url: z.string().optional(),
+	chatwoot_sign_msg: z.boolean().optional(),
+	chatwoot_reopen_conversation: z.boolean().optional(),
+	chatwoot_conversation_pending: z.boolean().optional(),
 });
 
 export type CreateOptions = z.infer<typeof CreateBodySchema>;

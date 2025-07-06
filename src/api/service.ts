@@ -49,13 +49,37 @@ export class ApiService {
 			: `/${path}/`;
 		const url = new URL(`${urlPath}?${params}`, this.options.serverUrl);
 
-		const response = await fetch(url, init);
-		const data = await response.json();
+		let response: Response;
+		let data: any;
+
+		try {
+			response = await fetch(url, init);
+			data = await response.json();
+		} catch (error) {
+			// Handle network errors or JSON parsing errors
+			const errorMessage = error instanceof Error ? error.message : "Network request failed";
+			throw new EvolutionApiError(
+				`Request failed: ${errorMessage}`,
+				error,
+			);
+		}
 
 		if (!response.ok || "error" in data) {
+			// Create a descriptive error message
+			const statusText = response.status ? `${response.status} ${response.statusText}` : "Unknown Error";
+			const instanceInfo = this.options.instance ? `[${this.options.instance}]` : "";
+			const baseMessage = `${instanceInfo} ${statusText}`.trim();
+
+			// Pass the entire response data for error extraction
 			throw new EvolutionApiError(
-				`${this.options.instance} ${data.error || "Unknown Error"}`,
-				data.response,
+				baseMessage,
+				data || { 
+					statusCode: response.status, 
+					statusText: response.statusText,
+					url: url.toString(),
+					method: init.method || "GET"
+				},
+				response.status,
 			);
 		}
 
