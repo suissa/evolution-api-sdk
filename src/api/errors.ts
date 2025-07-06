@@ -92,23 +92,29 @@ export function extractErrorMessage(response: unknown): string | null {
 	if (typeof response === "object" && response !== null) {
 		const errorObj = response as Record<string, any>;
 
-		// Try different common error message paths
+		// Try different common error message paths, prioritizing Evolution API format
 		const messagePaths = [
+			// Evolution API specific nested structure (most common)
+			errorObj.response?.response?.message?.[0],
+			errorObj.response?.response?.error,
+			errorObj.response?.response?.description,
+			
+			// Evolution API first level nested
+			Array.isArray(errorObj.response?.message) ? errorObj.response.message[0] : null,
+			errorObj.response?.error,
+			errorObj.response?.description,
+			
 			// Direct error message
+			Array.isArray(errorObj.message) ? errorObj.message[0] : errorObj.message,
 			errorObj.error,
-			errorObj.message,
 			errorObj.description,
 			errorObj.detail,
 			
-			// Nested error messages
-			errorObj.response?.error,
-			errorObj.response?.message,
-			errorObj.response?.description,
+			// Other nested error messages
 			errorObj.data?.error,
 			errorObj.data?.message,
 			
-			// Array format messages (common in Evolution API)
-			Array.isArray(errorObj.message) ? errorObj.message[0] : null,
+			// Array format messages (fallback)
 			Array.isArray(errorObj.error) ? errorObj.error[0] : null,
 			Array.isArray(errorObj.errors) ? errorObj.errors[0] : null,
 		];
