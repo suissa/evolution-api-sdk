@@ -4,4 +4,5 @@ export interface APIRequestInit {
 	body?: any; // Accept any object type for body
 	headers?: Record<string, string>;
 	isInstanceUrl?: boolean;
+	instance?: string;
 }

@@ -15,8 +15,13 @@ export class ApiService {
 		options: APIRequestInit = {},
 	): Promise<T> {
 		const { isInstanceUrl = true } = options;
+		let instance = this.options.instance;
+		if (options.instance) {
+			instance = options.instance;
+			delete options.instance;
+		}
 
-		if (isInstanceUrl && !this.options.instance) {
+		if (isInstanceUrl && !instance) {
 			throw new EvolutionApiError("Instance not set", {
 				message: "Please set the instance before making a request.",
 			});
@@ -25,8 +30,8 @@ export class ApiService {
 		const { init, params } = this.makeInit(options);
 
 		const urlPath = isInstanceUrl
-			? `/${path}/${this.options.instance}`
-			: `/${path}`;
+			? `/${path}/${instance}/`
+			: `/${path}/`;
 		const url = new URL(urlPath, this.options.serverUrl);
 		
 		// Add query parameters if any
@@ -55,13 +60,7 @@ export class ApiService {
 			
 			throw new EvolutionApiError(
 				errorMessage,
-				{
-					status: response.status,
-					statusText: response.statusText,
-					url: url.toString(),
-					method: init.method,
-					response: data,
-				},
+				data,
 				response.status,
 			);
 		}
