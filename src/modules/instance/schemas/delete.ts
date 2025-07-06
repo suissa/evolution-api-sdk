@@ -1,18 +1,19 @@
-import { z } from "zod";
+// Pure TypeScript interfaces for better IDE support and performance
 
-export const DeleteParamsSchema = z.object({
-  instanceName: z.string(),
-});
+export interface DeleteRequest {
+  instanceName: string;
+}
 
-export type DeleteOptions = z.infer<typeof DeleteParamsSchema>;
+export interface DeleteInstanceInfo {
+  instanceName: string;
+  status: string;
+}
 
-export const DeleteResponseSchema = z.object({
-  error: z.boolean(),
-  message: z.string(),
-  instance: z.object({
-    instanceName: z.string(),
-    status: z.string(),
-  }),
-});
+export interface DeleteResponse {
+  error: boolean;
+  message: string;
+  instance: DeleteInstanceInfo;
+}
 
-export type DeleteResponse = z.infer<typeof DeleteResponseSchema>; 
+// Backward compatibility aliases
+export type DeleteOptions = DeleteRequest; 

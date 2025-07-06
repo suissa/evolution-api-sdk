@@ -1,18 +1,17 @@
-import { z } from "zod";
-import { ChatIdSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { ChatId } from "@/types/tags";
 
-export const FindContactsBodySchema = z.object({
-  number: ChatIdSchema,
-});
+export interface FindContactsRequest {
+  number: ChatId;
+}
 
-export type FindContactsOptions = z.infer<typeof FindContactsBodySchema>;
+export interface Contact {
+  id: ChatId;
+  name: string;
+  pushname: string;
+}
 
-const ContactSchema = z.object({
-  id: ChatIdSchema,
-  name: z.string(),
-  pushname: z.string(),
-});
+export type FindContactsResponse = Contact[];
 
-export const FindContactsResponseSchema = z.array(ContactSchema);
-
-export type FindContactsResponse = z.infer<typeof FindContactsResponseSchema>; 
+// Backward compatibility aliases
+export type FindContactsOptions = FindContactsRequest; 

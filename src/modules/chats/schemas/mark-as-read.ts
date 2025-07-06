@@ -1,15 +1,14 @@
-import { z } from "zod";
-import { ChatIdSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { ChatId } from "@/types/tags";
 
-export const MarkAsReadBodySchema = z.object({
-  number: ChatIdSchema,
-});
+export interface MarkAsReadRequest {
+  number: ChatId;
+}
 
-export type MarkAsReadOptions = z.infer<typeof MarkAsReadBodySchema>;
+export interface MarkAsReadResponse {
+  status: string;
+  message: string;
+}
 
-export const MarkAsReadResponseSchema = z.object({
-  status: z.string(),
-  message: z.string(),
-});
-
-export type MarkAsReadResponse = z.infer<typeof MarkAsReadResponseSchema>; 
+// Backward compatibility aliases
+export type MarkAsReadOptions = MarkAsReadRequest; 

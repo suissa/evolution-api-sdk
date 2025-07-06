@@ -1,16 +1,15 @@
-import { z } from "zod";
-import { ChatIdSchema, GroupJidSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { ChatId, GroupJid } from "@/types/tags";
 
-export const CreateGroupBodySchema = z.object({
-  subject: z.string(),
-  participants: z.array(ChatIdSchema),
-});
+export interface CreateGroupRequest {
+  subject: string;
+  participants: ChatId[];
+}
 
-export type CreateGroupOptions = z.infer<typeof CreateGroupBodySchema>;
+export interface CreateGroupResponse {
+  status: string;
+  gid: GroupJid;
+}
 
-export const CreateGroupResponseSchema = z.object({
-  status: z.string(),
-  gid: GroupJidSchema,
-});
-
-export type CreateGroupResponse = z.infer<typeof CreateGroupResponseSchema>; 
+// Backward compatibility aliases
+export type CreateGroupOptions = CreateGroupRequest; 

@@ -1,19 +1,19 @@
 import { Routes } from "@/api/routes";
 import type { ApiService } from "@/api/service";
 
-import * as Audio from "./schemas/audio";
-import * as Contact from "./schemas/contact";
-import * as Document from "./schemas/document";
-import * as Image from "./schemas/image";
-import * as List from "./schemas/list";
-import * as Location from "./schemas/location";
-import * as Reaction from "./schemas/reaction";
-import * as Status from "./schemas/status";
-import * as Sticker from "./schemas/sticker";
-import * as Template from "./schemas/template";
-import * as Text from "./schemas/text";
-import * as Video from "./schemas/video";
-import * as Voice from "./schemas/voice";
+import type * as Audio from "./schemas/audio";
+import type * as Contact from "./schemas/contact";
+import type * as Document from "./schemas/document";
+import type * as Image from "./schemas/image";
+import type * as List from "./schemas/list";
+import type * as Location from "./schemas/location";
+import type * as Reaction from "./schemas/reaction";
+import type * as Status from "./schemas/status";
+import type * as Sticker from "./schemas/sticker";
+import type * as Template from "./schemas/template";
+import type * as Text from "./schemas/text";
+import type * as Video from "./schemas/video";
+import type * as Voice from "./schemas/voice";
 
 export class MessagesModule {
 	constructor(private readonly api: ApiService) {}
@@ -25,10 +25,9 @@ export class MessagesModule {
 	async sendText(
 		options: Text.TextMessageOptions,
 	): Promise<Text.TextMessageResponse> {
-		const body = Text.BodySchema.parse(options);
-		const response = await this.api.post(Routes.Message.SendText, { body });
+		const response = await this.api.post(Routes.Message.SendText, { body: options });
 
-		return Text.ResponseSchema.parse(response);
+		return response as Text.TextMessageResponse;
 	}
 
 	/**
@@ -38,10 +37,9 @@ export class MessagesModule {
 	async sendImage(
 		options: Image.ImageMessageOptions,
 	): Promise<Image.ImageMessageResponse> {
-		const body = Image.BodySchema.parse(options);
-		const response = await this.api.post(Routes.Message.SendMedia, { body });
+		const response = await this.api.post(Routes.Message.SendMedia, { body: options });
 
-		return Image.ResponseSchema.parse(response);
+		return response as Image.ImageMessageResponse;
 	}
 
 	/**
@@ -51,10 +49,9 @@ export class MessagesModule {
 	async sendVideo(
 		options: Video.VideoMessageOptions,
 	): Promise<Video.VideoMessageResponse> {
-		const body = Video.BodySchema.parse(options);
-		const response = await this.api.post(Routes.Message.SendMedia, { body });
+		const response = await this.api.post(Routes.Message.SendMedia, { body: options });
 
-		return Video.ResponseSchema.parse(response);
+		return response as Video.VideoMessageResponse;
 	}
 
 	/**
@@ -64,10 +61,9 @@ export class MessagesModule {
 	async sendDocument(
 		options: Document.DocumentMessageOptions,
 	): Promise<Document.DocumentMessageResponse> {
-		const body = Document.BodySchema.parse(options);
-		const response = await this.api.post(Routes.Message.SendMedia, { body });
+		const response = await this.api.post(Routes.Message.SendMedia, { body: options });
 
-		return Document.ResponseSchema.parse(response);
+		return response as Document.DocumentMessageResponse;
 	}
 
 	/**
@@ -77,10 +73,9 @@ export class MessagesModule {
 	async sendAudio(
 		options: Audio.AudioMessageOptions,
 	): Promise<Audio.AudioMessageResponse> {
-		const body = Audio.BodySchema.parse(options);
-		const response = await this.api.post(Routes.Message.SendMedia, { body });
+		const response = await this.api.post(Routes.Message.SendMedia, { body: options });
 
-		return Audio.ResponseSchema.parse(response);
+		return response as Audio.AudioMessageResponse;
 	}
 
 	/**
@@ -90,10 +85,9 @@ export class MessagesModule {
 	async sendVoice(
 		options: Voice.VoiceMessageOptions,
 	): Promise<Voice.VoiceMessageResponse> {
-		const body = Voice.BodySchema.parse(options);
-		const response = await this.api.post(Routes.Message.SendVoice, { body });
+		const response = await this.api.post(Routes.Message.SendVoice, { body: options });
 
-		return Voice.ResponseSchema.parse(response);
+		return response as Voice.VoiceMessageResponse;
 	}
 
 	/**
@@ -103,10 +97,9 @@ export class MessagesModule {
 	async sendSticker(
 		options: Sticker.StickerMessageOptions,
 	): Promise<Sticker.StickerMessageResponse> {
-		const body = Sticker.BodySchema.parse(options);
-		const response = await this.api.post(Routes.Message.SendSticker, { body });
+		const response = await this.api.post(Routes.Message.SendSticker, { body: options });
 
-		return Sticker.ResponseSchema.parse(response);
+		return response as Sticker.StickerMessageResponse;
 	}
 
 	/**
@@ -116,10 +109,9 @@ export class MessagesModule {
 	async sendLocation(
 		options: Location.LocationMessageOptions,
 	): Promise<Location.LocationMessageResponse> {
-		const body = Location.BodySchema.parse(options);
-		const response = await this.api.post(Routes.Message.SendLocation, { body });
+		const response = await this.api.post(Routes.Message.SendLocation, { body: options });
 
-		return Location.ResponseSchema.parse(response);
+		return response as Location.LocationMessageResponse;
 	}
 
 	/**
@@ -129,10 +121,9 @@ export class MessagesModule {
 	async sendContact(
 		options: Contact.ContactMessageOptions,
 	): Promise<Contact.ContactMessageResponse> {
-		const body = Contact.BodySchema.parse(options);
-		const response = await this.api.post(Routes.Message.SendContact, { body });
+		const response = await this.api.post(Routes.Message.SendContact, { body: options });
 
-		return Contact.ResponseSchema.parse(response);
+		return response as Contact.ContactMessageResponse;
 	}
 
 	/**
@@ -142,12 +133,11 @@ export class MessagesModule {
 	async sendReaction(
 		options: Reaction.ReactionMessageOptions,
 	): Promise<Reaction.ReactionMessageResponse> {
-		const body = Reaction.ReactionBodySchema.parse(options);
 		const response = await this.api.post(Routes.Message.SendReaction, {
-			body,
+			body: options,
 		});
 
-		return Reaction.ReactionResponseSchema.parse(response);
+		return response as Reaction.ReactionMessageResponse;
 	}
 
 	/**
@@ -157,12 +147,11 @@ export class MessagesModule {
 	async sendTemplate(
 		options: Template.TemplateMessageOptions,
 	): Promise<Template.TemplateMessageResponse> {
-		const body = Template.TemplateBodySchema.parse(options);
 		const response = await this.api.post(Routes.Message.SendTemplate, {
-			body,
+			body: options,
 		});
 
-		return Template.TemplateResponseSchema.parse(response);
+		return response as Template.TemplateMessageResponse;
 	}
 
 	/**
@@ -172,12 +161,11 @@ export class MessagesModule {
 	async sendStatus(
 		options: Status.StatusMessageOptions,
 	): Promise<Status.StatusMessageResponse> {
-		const body = Status.StatusBodySchema.parse(options);
 		const response = await this.api.post(Routes.Message.SendStatus, {
-			body,
+			body: options,
 		});
 
-		return Status.StatusResponseSchema.parse(response);
+		return response as Status.StatusMessageResponse;
 	}
 
 	/**
@@ -187,11 +175,10 @@ export class MessagesModule {
 	async sendList(
 		options: List.ListMessageOptions,
 	): Promise<List.ListMessageResponse> {
-		const body = List.ListBodySchema.parse(options);
 		const response = await this.api.post(Routes.Message.SendList, {
-			body,
+			body: options,
 		});
 
-		return List.ListResponseSchema.parse(response);
+		return response as List.ListMessageResponse;
 	}
 }

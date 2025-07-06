@@ -1,15 +1,14 @@
-import { z } from "zod";
-import { GroupJidSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { GroupJid } from "@/types/tags";
 
-export const RevokeInviteCodeBodySchema = z.object({
-  groupJid: GroupJidSchema,
-});
+export interface RevokeInviteCodeRequest {
+  groupJid: GroupJid;
+}
 
-export type RevokeInviteCodeOptions = z.infer<typeof RevokeInviteCodeBodySchema>;
+export interface RevokeInviteCodeResponse {
+  status: string;
+  code: string;
+}
 
-export const RevokeInviteCodeResponseSchema = z.object({
-  status: z.string(),
-  code: z.string(),
-});
-
-export type RevokeInviteCodeResponse = z.infer<typeof RevokeInviteCodeResponseSchema>; 
+// Backward compatibility aliases
+export type RevokeInviteCodeOptions = RevokeInviteCodeRequest; 

@@ -1,7 +1,4 @@
-import { z } from "zod";
-
-export const RemovePictureResponseSchema = z.object({
-  status: z.string(),
-});
-
-export type RemovePictureResponse = z.infer<typeof RemovePictureResponseSchema>; 
+// Pure TypeScript interfaces for better IDE support and performance
+export interface RemovePictureResponse {
+  status: string;
+} 

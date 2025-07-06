@@ -1,14 +1,13 @@
-import { z } from "zod";
-import { ChatIdSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { ChatId } from "@/types/tags";
 
-export const FetchProfilePictureBodySchema = z.object({
-  number: ChatIdSchema,
-});
+export interface FetchProfilePictureRequest {
+  number: ChatId;
+}
 
-export type FetchProfilePictureOptions = z.infer<typeof FetchProfilePictureBodySchema>;
+export interface FetchProfilePictureResponse {
+  profilePictureUrl: string;
+}
 
-export const FetchProfilePictureResponseSchema = z.object({
-  profilePictureUrl: z.string().url(),
-});
-
-export type FetchProfilePictureResponse = z.infer<typeof FetchProfilePictureResponseSchema>; 
+// Backward compatibility aliases
+export type FetchProfilePictureOptions = FetchProfilePictureRequest; 

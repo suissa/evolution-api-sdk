@@ -1,14 +1,13 @@
-import { z } from "zod";
-import { GroupJidSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { GroupJid } from "@/types/tags";
 
-export const FetchInviteCodeParamsSchema = z.object({
-  groupJid: GroupJidSchema,
-});
+export interface FetchInviteCodeRequest {
+  groupJid: GroupJid;
+}
 
-export type FetchInviteCodeOptions = z.infer<typeof FetchInviteCodeParamsSchema>;
+export interface FetchInviteCodeResponse {
+    code: string;
+}
 
-export const FetchInviteCodeResponseSchema = z.object({
-    code: z.string(),
-});
-
-export type FetchInviteCodeResponse = z.infer<typeof FetchInviteCodeResponseSchema>; 
+// Backward compatibility aliases
+export type FetchInviteCodeOptions = FetchInviteCodeRequest; 

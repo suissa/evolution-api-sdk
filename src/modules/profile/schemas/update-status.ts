@@ -1,13 +1,11 @@
-import { z } from "zod";
+// Pure TypeScript interfaces for better IDE support and performance
+export interface UpdateStatusRequest {
+  status: string;
+}
 
-export const UpdateStatusBodySchema = z.object({
-  status: z.string(),
-});
+export interface UpdateStatusResponse {
+  status: string;
+}
 
-export type UpdateStatusOptions = z.infer<typeof UpdateStatusBodySchema>;
-
-export const UpdateStatusResponseSchema = z.object({
-  status: z.string(),
-});
-
-export type UpdateStatusResponse = z.infer<typeof UpdateStatusResponseSchema>; 
+// Backward compatibility aliases
+export type UpdateStatusOptions = UpdateStatusRequest; 

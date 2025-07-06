@@ -10,26 +10,6 @@ export class ApiService {
 		this.options.instance = instance;
 	}
 
-	async get<T>(path: string, options: Omit<APIRequestInit, "method"> = {}) {
-		return this.request<T>(path, { ...options, method: "GET" });
-	}
-
-	async post<T>(path: string, options: Omit<APIRequestInit, "method"> = {}) {
-		return this.request<T>(path, { ...options, method: "POST" });
-	}
-
-	async put<T>(path: string, options: Omit<APIRequestInit, "method"> = {}) {
-		return this.request<T>(path, { ...options, method: "PUT" });
-	}
-
-	async patch<T>(path: string, options: Omit<APIRequestInit, "method"> = {}) {
-		return this.request<T>(path, { ...options, method: "PATCH" });
-	}
-
-	async delete<T>(path: string, options: Omit<APIRequestInit, "method"> = {}) {
-		return this.request<T>(path, { ...options, method: "DELETE" });
-	}
-
 	async request<T = unknown>(
 		path: string,
 		options: APIRequestInit = {},
@@ -57,28 +37,16 @@ export class ApiService {
 			data = await response.json();
 		} catch (error) {
 			// Handle network errors or JSON parsing errors
-			const errorMessage = error instanceof Error ? error.message : "Network request failed";
 			throw new EvolutionApiError(
-				`Request failed: ${errorMessage}`,
+				"Network or parsing error",
 				error,
 			);
 		}
 
-		if (!response.ok || "error" in data) {
-			// Create a descriptive error message
-			const statusText = response.status ? `${response.status} ${response.statusText}` : "Unknown Error";
-			const instanceInfo = this.options.instance ? `[${this.options.instance}]` : "";
-			const baseMessage = `${instanceInfo} ${statusText}`.trim();
-
-			// Pass the entire response data for error extraction
+		if (!response.ok) {
 			throw new EvolutionApiError(
-				baseMessage,
-				data || { 
-					statusCode: response.status, 
-					statusText: response.statusText,
-					url: url.toString(),
-					method: init.method || "GET"
-				},
+				`Request failed with status ${response.status}`,
+				data,
 				response.status,
 			);
 		}
@@ -86,27 +54,54 @@ export class ApiService {
 		return data;
 	}
 
-	private makeInit(options: APIRequestInit) {
-		const { params: _, headers, body, isInstanceUrl, ...rest } = options;
-
-		const paramsInit =
-			options.params &&
-			Object.entries(options.params)
-				.filter(([, value]) => Boolean(value))
-				.map(([key, value]) => [key, String(value)]);
-		const params = new URLSearchParams(paramsInit);
-
-		const init: RequestInit & { headers: Record<string, string> } = {
-			...rest,
-			headers: { ...(headers || {}), apikey: this.options.token },
+	private makeInit(options: APIRequestInit): {
+		init: RequestInit;
+		params: URLSearchParams;
+	} {
+		const init: RequestInit = {
+			method: options.method || "GET",
+			headers: {
+				"Content-Type": "application/json",
+				apikey: this.options.token, // Evolution API uses apikey header
+				...this.options.headers,
+				...options.headers,
+			},
 		};
 
-		if (body) {
-			init.headers["Content-Type"] =
-				body instanceof FormData ? "multipart/form-data" : "application/json";
-			init.body = body instanceof FormData ? body : JSON.stringify(body);
+		if (options.body) {
+			init.body = JSON.stringify(options.body);
+		}
+
+		const params = new URLSearchParams();
+		if (options.params) {
+			// Convert any object to URLSearchParams
+			Object.entries(options.params).forEach(([key, value]) => {
+				if (value !== undefined && value !== null) {
+					params.append(key, String(value));
+				}
+			});
 		}
 
 		return { init, params };
+	}
+
+	async get<T = unknown>(path: string, options: Omit<APIRequestInit, "method"> = {}): Promise<T> {
+		return this.request<T>(path, { ...options, method: "GET" });
+	}
+
+	async post<T = unknown>(path: string, options: Omit<APIRequestInit, "method"> = {}): Promise<T> {
+		return this.request<T>(path, { ...options, method: "POST" });
+	}
+
+	async put<T = unknown>(path: string, options: Omit<APIRequestInit, "method"> = {}): Promise<T> {
+		return this.request<T>(path, { ...options, method: "PUT" });
+	}
+
+	async patch<T = unknown>(path: string, options: Omit<APIRequestInit, "method"> = {}): Promise<T> {
+		return this.request<T>(path, { ...options, method: "PATCH" });
+	}
+
+	async delete<T = unknown>(path: string, options: Omit<APIRequestInit, "method"> = {}): Promise<T> {
+		return this.request<T>(path, { ...options, method: "DELETE" });
 	}
 }

@@ -1,13 +1,12 @@
-import { z } from "zod";
+// Pure TypeScript interfaces for better IDE support and performance
 
-export const ConnectionStateParamsSchema = z.object({
-  instanceName: z.string(),
-});
+export interface ConnectionStateRequest {
+  instanceName: string;
+}
 
-export type ConnectionStateOptions = z.infer<typeof ConnectionStateParamsSchema>;
+export interface ConnectionStateResponse {
+  state: "open" | "close" | "connecting";
+}
 
-export const ConnectionStateResponseSchema = z.object({
-  state: z.enum(["open", "close", "connecting"]),
-});
-
-export type ConnectionStateResponse = z.infer<typeof ConnectionStateResponseSchema>; 
+// Backward compatibility aliases
+export type ConnectionStateOptions = ConnectionStateRequest; 

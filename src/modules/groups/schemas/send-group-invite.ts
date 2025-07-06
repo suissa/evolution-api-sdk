@@ -1,16 +1,15 @@
-import { z } from "zod";
-import { GroupJidSchema, JidSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { GroupJid, Jid } from "@/types/tags";
 
-export const SendGroupInviteBodySchema = z.object({
-  groupJid: GroupJidSchema,
-  participantJid: JidSchema,
-});
+export interface SendGroupInviteRequest {
+  groupJid: GroupJid;
+  participantJid: Jid;
+}
 
-export type SendGroupInviteOptions = z.infer<typeof SendGroupInviteBodySchema>;
+export interface SendGroupInviteResponse {
+  status: string;
+  message: string;
+}
 
-export const SendGroupInviteResponseSchema = z.object({
-  status: z.string(),
-  message: z.string(),
-});
-
-export type SendGroupInviteResponse = z.infer<typeof SendGroupInviteResponseSchema>; 
+// Backward compatibility aliases
+export type SendGroupInviteOptions = SendGroupInviteRequest; 

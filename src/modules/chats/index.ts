@@ -1,143 +1,160 @@
 import { Routes } from "@/api/routes";
 import type { ApiService } from "@/api/service";
+import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
 
-import * as Archive from "./schemas/archive";
-import * as Check from "./schemas/check";
-import * as DeleteMessage from "./schemas/delete-message";
-import * as FetchProfilePicture from "./schemas/fetch-profile-picture";
-import * as FindAll from "./schemas/find-all";
-import * as FindContacts from "./schemas/find-contacts";
-import * as FindMessages from "./schemas/find-messages";
-import * as FindStatusMessage from "./schemas/find-status-message";
-import * as MarkAsRead from "./schemas/mark-as-read";
-import * as Presence from "./schemas/presence";
-import * as UpdateMessage from "./schemas/update-message";
+import type * as Archive from "./schemas/archive";
+import type * as Check from "./schemas/check";
+import type * as DeleteMessage from "./schemas/delete-message";
+import type * as FetchProfilePicture from "./schemas/fetch-profile-picture";
+import type * as FindAll from "./schemas/find-all";
+import type * as FindContacts from "./schemas/find-contacts";
+import type * as FindMessages from "./schemas/find-messages";
+import type * as FindStatusMessage from "./schemas/find-status-message";
+import type * as MarkAsRead from "./schemas/mark-as-read";
+import type * as Presence from "./schemas/presence";
+import type * as UpdateMessage from "./schemas/update-message";
 
 export class ChatsModule {
 	constructor(private readonly api: ApiService) {}
 
 	/**
-	 * Checks if a number has WhatsApp
-	 * @param numbers - Number(s) (with country code) to check
+	 * Checks if phone numbers are registered on WhatsApp
+	 * @param numbers - Array of phone numbers to check
 	 */
-	async check(
-		...numbers: Check.CheckOptions | Check.CheckOptions[]
-	): Promise<Check.CheckResponse> {
-		const body = Check.CheckBodySchema.parse(numbers.flat());
-		const response = await this.api.post(Routes.Chats.Check, { body });
+	async check(numbers: string[]): Promise<Check.CheckResponse> {
+		const response = await this.api.post(Routes.Chats.Check, {
+			body: numbers.flat(),
+		});
 
-		return Check.CheckResponseSchema.parse(response);
+		return response as Check.CheckResponse;
 	}
 
 	/**
 	 * Gets all chats
 	 */
 	async findAll(): Promise<FindAll.FindAllChatsResponse> {
-		const response = await this.api.post(Routes.Chats.FindAll);
+		const response = await this.api.get(Routes.Chats.FindAll);
 
-		return FindAll.ResponseSchema.parse(response);
+		return response as FindAll.FindAllChatsResponse;
 	}
 
 	/**
-	 * Sends a presence to a certain chat
+	 * Updates presence status
 	 * @param options - Presence options
 	 */
-	async sendPresence(options: Presence.PresenceOptions) {
-		const body = Presence.BodySchema.parse(options);
-
-		if (options.waitUntilFinish) {
-			await this.api.post(Routes.Chats.SendPresence, { body });
-		} else {
-			this.api.post(Routes.Chats.SendPresence, { body });
-		}
+	async updatePresence(options: Presence.PresenceRequest): Promise<void> {
+		await this.api.post(Routes.Chats.SendPresence, {
+			body: options,
+		});
 	}
 
+	/**
+	 * Marks messages as read
+	 * @param options - Mark as read options
+	 */
 	async markAsRead(
-		options: MarkAsRead.MarkAsReadOptions,
+		options: MarkAsRead.MarkAsReadRequest,
 	): Promise<MarkAsRead.MarkAsReadResponse> {
-		const body = MarkAsRead.MarkAsReadBodySchema.parse(options);
 		const response = await this.api.post(Routes.Chats.MarkAsRead, {
-			body,
+			body: options,
 		});
 
-		return MarkAsRead.MarkAsReadResponseSchema.parse(response);
+		return response as MarkAsRead.MarkAsReadResponse;
 	}
 
-	async archive(
-		options: Archive.ArchiveOptions,
-	): Promise<Archive.ArchiveResponse> {
-		const body = Archive.ArchiveBodySchema.parse(options);
+	/**
+	 * Archives a chat
+	 * @param options - Archive options
+	 */
+	async archive(options: Archive.ArchiveRequest): Promise<Archive.ArchiveResponse> {
 		const response = await this.api.post(Routes.Chats.Archive, {
-			body,
+			body: options,
 		});
 
-		return Archive.ArchiveResponseSchema.parse(response);
+		return response as Archive.ArchiveResponse;
 	}
 
+	/**
+	 * Deletes a message
+	 * @param options - Delete message options
+	 */
 	async deleteMessage(
-		options: DeleteMessage.DeleteMessageOptions,
+		options: DeleteMessage.DeleteMessageRequest,
 	): Promise<DeleteMessage.DeleteMessageResponse> {
-		const body = DeleteMessage.DeleteMessageBodySchema.parse(options);
-		const response = await this.api.post(Routes.Chats.DeleteMessage, {
-			body,
+		const response = await this.api.delete(Routes.Chats.DeleteMessage, {
+			body: options,
 		});
 
-		return DeleteMessage.DeleteMessageResponseSchema.parse(response);
+		return response as DeleteMessage.DeleteMessageResponse;
 	}
 
+	/**
+	 * Fetches profile picture
+	 * @param options - Fetch profile picture options
+	 */
 	async fetchProfilePicture(
-		options: FetchProfilePicture.FetchProfilePictureOptions,
+		options: FetchProfilePicture.FetchProfilePictureRequest,
 	): Promise<FetchProfilePicture.FetchProfilePictureResponse> {
-		const body = FetchProfilePicture.FetchProfilePictureBodySchema.parse(options);
 		const response = await this.api.post(Routes.Chats.FetchProfilePicture, {
-			body,
+			body: options,
 		});
 
-		return FetchProfilePicture.FetchProfilePictureResponseSchema.parse(response);
+		return response as FetchProfilePicture.FetchProfilePictureResponse;
 	}
 
-	async findContact(
-		options: FindContacts.FindContactsOptions,
+	/**
+	 * Finds contacts
+	 * @param options - Find contacts options
+	 */
+	async findContacts(
+		options: FindContacts.FindContactsRequest,
 	): Promise<FindContacts.FindContactsResponse> {
-		const body = FindContacts.FindContactsBodySchema.parse(options);
 		const response = await this.api.post(Routes.Chats.FindContacts, {
-			body,
+			body: options,
 		});
 
-		return FindContacts.FindContactsResponseSchema.parse(response);
+		return response as FindContacts.FindContactsResponse;
 	}
 
+	/**
+	 * Finds messages
+	 * @param options - Find messages options
+	 */
 	async findMessages(
-		options: FindMessages.FindMessagesOptions,
+		options: FindMessages.FindMessagesRequest,
 	): Promise<FindMessages.FindMessagesResponse> {
-		const body = FindMessages.FindMessagesBodySchema.parse(options);
 		const response = await this.api.post(Routes.Chats.FindMessages, {
-			body,
+			body: options,
 		});
 
-		return FindMessages.FindMessagesResponseSchema.parse(response);
+		return response as FindMessages.FindMessagesResponse;
 	}
 
-
+	/**
+	 * Finds status messages
+	 * @param options - Find status message options
+	 */
 	async findStatusMessage(
-		options: FindStatusMessage.FindStatusMessageOptions,
+		options: FindStatusMessage.FindStatusMessageRequest,
 	): Promise<FindStatusMessage.FindStatusMessageResponse> {
-		const body = FindStatusMessage.FindStatusMessageBodySchema.parse(options);
 		const response = await this.api.post(Routes.Chats.FindStatusMessage, {
-			body,
+			body: options,
 		});
 
-		return FindStatusMessage.FindStatusMessageResponseSchema.parse(response);
+		return response as FindStatusMessage.FindStatusMessageResponse;
 	}
 
+	/**
+	 * Updates a message
+	 * @param options - Update message options
+	 */
 	async updateMessage(
-		options: UpdateMessage.UpdateMessageOptions,
+		options: UpdateMessage.UpdateMessageRequest,
 	): Promise<UpdateMessage.UpdateMessageResponse> {
-		const body = UpdateMessage.UpdateMessageBodySchema.parse(options);
-		const response = await this.api.post(Routes.Chats.UpdateMessage, {
-			body,
+		const response = await this.api.put(Routes.Chats.UpdateMessage, {
+			body: options,
 		});
 
-		return UpdateMessage.UpdateMessageResponseSchema.parse(response);
+		return response as UpdateMessage.UpdateMessageResponse;
 	}
 }

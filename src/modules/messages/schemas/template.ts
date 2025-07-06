@@ -1,42 +1,39 @@
-import { z } from "zod";
-import { ChatIdSchema } from "@/schemas/common";
-import { MessageIdSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { ChatId, MessageId } from "@/types/tags";
 
-const ComponentSchema = z.object({
-  type: z.enum(["body", "header", "button"]),
-  sub_type: z.enum(["text", "url", "quick_reply"]).optional(),
-  parameters: z.array(z.object({
-    type: z.enum(["text", "image", "document", "video"]),
-    text: z.string().optional(),
-    image: z.object({ link: z.string().url() }).optional(),
-    document: z.object({ link: z.string().url() }).optional(),
-    video: z.object({ link: z.string().url() }).optional(),
-  })),
-});
+export interface ComponentParameter {
+  type: "text" | "image" | "document" | "video";
+  text?: string;
+  image?: { link: string };
+  document?: { link: string };
+  video?: { link: string };
+}
 
-export const TemplateBodySchema = z.object({
-  number: ChatIdSchema,
-  name: z.string(),
-  language: z.object({
-    code: z.string(),
-  }),
-  components: z.array(ComponentSchema),
-  options: z.object({
-    delay: z.number().optional(),
-    messageId: MessageIdSchema.optional(),
-  }).optional(),
-});
+export interface Component {
+  type: "body" | "header" | "button";
+  sub_type?: "text" | "url" | "quick_reply";
+  parameters: ComponentParameter[];
+}
 
-export type TemplateMessageOptions = z.infer<typeof TemplateBodySchema>;
+export interface TemplateMessageOptions {
+  number: ChatId;
+  name: string;
+  language: {
+    code: string;
+  };
+  components: Component[];
+  options?: {
+    delay?: number;
+    messageId?: MessageId;
+  };
+}
 
-export const TemplateResponseSchema = z.object({
-    key: z.object({
-        remoteJid: ChatIdSchema,
-        fromMe: z.boolean(),
-        id: MessageIdSchema,
-    }),
-    messageTimestamp: z.string(),
-    status: z.string(),
-});
-
-export type TemplateMessageResponse = z.infer<typeof TemplateResponseSchema>; 
+export interface TemplateMessageResponse {
+  key: {
+    remoteJid: ChatId;
+    fromMe: boolean;
+    id: MessageId;
+  };
+  messageTimestamp: string;
+  status: string;
+} 

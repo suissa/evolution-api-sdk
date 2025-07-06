@@ -1,16 +1,15 @@
-import { z } from "zod";
-import { GroupJidSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { GroupJid } from "@/types/tags";
 
-export const ToggleEphemeralBodySchema = z.object({
-  groupJid: GroupJidSchema,
-  duration: z.number(),
-});
+export interface ToggleEphemeralRequest {
+  groupJid: GroupJid;
+  duration: number;
+}
 
-export type ToggleEphemeralOptions = z.infer<typeof ToggleEphemeralBodySchema>;
+export interface ToggleEphemeralResponse {
+  status: string;
+  message: string;
+}
 
-export const ToggleEphemeralResponseSchema = z.object({
-  status: z.string(),
-  message: z.string(),
-});
-
-export type ToggleEphemeralResponse = z.infer<typeof ToggleEphemeralResponseSchema>; 
+// Backward compatibility aliases
+export type ToggleEphemeralOptions = ToggleEphemeralRequest; 

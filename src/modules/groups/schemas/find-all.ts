@@ -1,30 +1,26 @@
-import { z } from "zod";
-
+// Pure TypeScript interfaces for better IDE support and performance
 import {
-	GroupResponseSchema,
+	GroupResponseRaw,
 	GroupResponseSchemaTransform,
-	GroupWithParticipantsResponseSchema,
+	GroupWithParticipantsResponseRaw,
 	GroupWithParticipantsResponseSchemaTransform,
+	GroupResponse,
+	GroupWithParticipantsResponse,
 } from "./common";
 
-export const FindAllGroupsResponseSchema = z
-	.array(GroupResponseSchema)
-	.transform((groups) =>
-		groups.map((group) => GroupResponseSchemaTransform(group)),
-	);
+// Transform functions
+export const FindAllGroupsResponseTransform = (
+	groups: GroupResponseRaw[],
+): GroupResponse[] => groups.map(GroupResponseSchemaTransform);
 
-export const FindAllGroupsWithParticipantsResponseSchema = z
-	.array(GroupWithParticipantsResponseSchema)
-	.transform((groups) =>
-		groups.map((group) => GroupWithParticipantsResponseSchemaTransform(group)),
-	);
+export const FindAllGroupsWithParticipantsResponseTransform = (
+	groups: GroupWithParticipantsResponseRaw[],
+): GroupWithParticipantsResponse[] => groups.map(GroupWithParticipantsResponseSchemaTransform);
 
-export type FindAllGroupsResponse = z.infer<typeof FindAllGroupsResponseSchema>;
-export type FindAllGroupsWithParticipantsResponse = z.infer<
-	typeof FindAllGroupsWithParticipantsResponseSchema
->;
+// Response types
+export type FindAllGroupsResponse = GroupResponse[];
+export type FindAllGroupsWithParticipantsResponse = GroupWithParticipantsResponse[];
 
-export {
-	FindAllGroupsResponseSchema as ResponseSchema,
-	FindAllGroupsWithParticipantsResponseSchema as ResponseWithParticipantsSchema,
-};
+// Backward compatibility aliases
+export const ResponseSchema = { parse: FindAllGroupsResponseTransform };
+export const ResponseWithParticipantsSchema = { parse: FindAllGroupsWithParticipantsResponseTransform };

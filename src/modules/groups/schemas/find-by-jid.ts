@@ -1,17 +1,14 @@
-import type { z } from "zod";
-
+// Pure TypeScript interfaces for better IDE support and performance
 import {
-	GroupWithParticipantsResponseSchema,
 	GroupWithParticipantsResponseSchemaTransform,
+	GroupWithParticipantsResponse,
 } from "./common";
 
-export const FindGroupByJidResponseSchema =
-	GroupWithParticipantsResponseSchema.transform(
-		GroupWithParticipantsResponseSchemaTransform,
-	);
+// Response type (same as GroupWithParticipantsResponse)
+export type FindGroupByJidResponse = GroupWithParticipantsResponse;
 
-export type FindGroupByJidResponse = z.infer<
-	typeof FindGroupByJidResponseSchema
->;
+// Transform function
+export const FindGroupByJidResponseTransform = GroupWithParticipantsResponseSchemaTransform;
 
-export { FindGroupByJidResponseSchema as ResponseSchema };
+// Backward compatibility alias
+export const ResponseSchema = { parse: FindGroupByJidResponseTransform };

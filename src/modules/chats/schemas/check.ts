@@ -1,36 +1,36 @@
+// Pure TypeScript interfaces for better IDE support and performance
 import { parsePhoneNumber } from "libphonenumber-js";
-import { z } from "zod";
-
-import { PhoneNumberSchema } from "@/schemas/common";
 import { Jid } from "@/types/tags";
 
-export const CheckOptionsSchema = z.array(PhoneNumberSchema);
+// Raw response interface from API
+export interface CheckResponseRaw {
+	exists: boolean;
+	jid: string;
+	number: string;
+}
 
-export const CheckBodySchema = CheckOptionsSchema.transform((data) => ({
+// Transformed response interface
+export interface CheckResponseItem {
+	exists: boolean;
+	jid: Jid;
+	number: string;
+}
+
+export type CheckOptions = string[];
+export type CheckResponse = CheckResponseItem[];
+
+// Transform functions
+export const CheckBodyTransform = (data: CheckOptions) => ({
 	numbers: Array.isArray(data) ? data : [data],
-}));
+});
 
-export const CheckResponseSchema = z
-	.array(
-		z.object({
-			exists: z.boolean(),
-			jid: z.string(),
-			number: z.string(),
-		}),
-	)
-	.transform((numbers) =>
-		numbers.map((number) => ({
-			exists: number.exists,
-			jid: Jid(number.jid),
-			number: parsePhoneNumber(number.number).number,
-		})),
-	);
+export const CheckResponseTransform = (numbers: CheckResponseRaw[]): CheckResponse =>
+	numbers.map((number) => ({
+		exists: number.exists,
+		jid: Jid(number.jid),
+		number: parsePhoneNumber(number.number).number,
+	}));
 
-export type CheckOptions = z.infer<typeof CheckOptionsSchema>;
-export type CheckResponse = z.infer<typeof CheckResponseSchema>;
-
-export {
-	CheckBodySchema as BodySchema,
-	CheckOptionsSchema as OptionsSchema,
-	CheckResponseSchema as ResponseSchema,
-};
+// Backward compatibility aliases
+export const BodySchema = { parse: CheckBodyTransform };
+export const ResponseSchema = { parse: CheckResponseTransform };

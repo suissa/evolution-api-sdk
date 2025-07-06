@@ -1,15 +1,14 @@
-import { z } from "zod";
-import { GroupJidSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { GroupJid } from "@/types/tags";
 
-export const LeaveBodySchema = z.object({
-  groupJid: GroupJidSchema,
-});
+export interface LeaveRequest {
+  groupJid: GroupJid;
+}
 
-export type LeaveOptions = z.infer<typeof LeaveBodySchema>;
+export interface LeaveResponse {
+  status: string;
+  message: string;
+}
 
-export const LeaveResponseSchema = z.object({
-  status: z.string(),
-  message: z.string(),
-});
-
-export type LeaveResponse = z.infer<typeof LeaveResponseSchema>; 
+// Backward compatibility aliases
+export type LeaveOptions = LeaveRequest; 

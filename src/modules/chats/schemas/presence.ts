@@ -1,35 +1,36 @@
-import { z } from "zod";
-
-import { ApiNumberSchema } from "@/schemas/common";
-
-export const PresenceOptionsSchema = z.object({
+// Pure TypeScript interfaces for better IDE support and performance
+export interface PresenceRequest {
 	/**
 	 * Chat number or JID to receve the presence
 	 */
-	number: ApiNumberSchema,
+	number: string;
 	/**
 	 * Duration of the presence in millisseconds
 	 */
-	duration: z.number(),
+	duration: number;
 	/**
 	 * Presence state
 	 * - `composing`: typing a message
 	 * - `recording`: recording an audio
 	 */
-	presence: z.enum(["composing", "recording"]),
+	presence: "composing" | "recording";
 	/**
 	 * Whether to wait until the presence is finished (duration)
 	 */
-	waitUntilFinish: z.boolean().optional(),
-});
+	waitUntilFinish?: boolean;
+}
 
-export const PresenceBodySchema = PresenceOptionsSchema.transform(
-	({ waitUntilFinish, duration, ...data }) => ({ ...data, delay: duration }),
-);
+export interface PresenceBody {
+	number: string;
+	presence: "composing" | "recording";
+	delay: number;
+}
 
-export type PresenceOptions = z.infer<typeof PresenceOptionsSchema>;
+// Transform function
+export const PresenceBodyTransform = (
+	{ waitUntilFinish, duration, ...data }: PresenceRequest
+): PresenceBody => ({ ...data, delay: duration });
 
-export {
-	PresenceBodySchema as BodySchema,
-	PresenceOptionsSchema as OptionsSchema,
-};
+// Backward compatibility aliases
+export type PresenceOptions = PresenceRequest;
+export const BodySchema = { parse: PresenceBodyTransform };

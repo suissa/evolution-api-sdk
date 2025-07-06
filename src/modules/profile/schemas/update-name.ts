@@ -1,13 +1,11 @@
-import { z } from "zod";
+// Pure TypeScript interfaces for better IDE support and performance
+export interface UpdateNameRequest {
+  name: string;
+}
 
-export const UpdateNameBodySchema = z.object({
-  name: z.string(),
-});
+export interface UpdateNameResponse {
+  status: string;
+}
 
-export type UpdateNameOptions = z.infer<typeof UpdateNameBodySchema>;
-
-export const UpdateNameResponseSchema = z.object({
-  status: z.string(),
-});
-
-export type UpdateNameResponse = z.infer<typeof UpdateNameResponseSchema>; 
+// Backward compatibility aliases
+export type UpdateNameOptions = UpdateNameRequest; 

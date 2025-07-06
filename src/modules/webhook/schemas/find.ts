@@ -1,10 +1,7 @@
-import { z } from "zod";
-
-export const FindResponseSchema = z.object({
-  webhook: z.string().url(),
-  enabled: z.boolean(),
-  webhook_by_events: z.boolean(),
-  events: z.array(z.string()),
-});
-
-export type FindResponse = z.infer<typeof FindResponseSchema>; 
+// Pure TypeScript interfaces for better IDE support and performance
+export interface FindResponse {
+  webhook: string;
+  enabled: boolean;
+  webhook_by_events: boolean;
+  events: string[];
+} 

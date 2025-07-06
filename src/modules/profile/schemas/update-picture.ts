@@ -1,13 +1,11 @@
-import { z } from "zod";
+// Pure TypeScript interfaces for better IDE support and performance
+export interface UpdatePictureRequest {
+  url: string;
+}
 
-export const UpdatePictureBodySchema = z.object({
-  url: z.string().url(),
-});
+export interface UpdatePictureResponse {
+  status: string;
+}
 
-export type UpdatePictureOptions = z.infer<typeof UpdatePictureBodySchema>;
-
-export const UpdatePictureResponseSchema = z.object({
-  status: z.string(),
-});
-
-export type UpdatePictureResponse = z.infer<typeof UpdatePictureResponseSchema>; 
+// Backward compatibility aliases
+export type UpdatePictureOptions = UpdatePictureRequest; 

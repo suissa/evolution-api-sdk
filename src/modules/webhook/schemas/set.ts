@@ -1,16 +1,14 @@
-import { z } from "zod";
+// Pure TypeScript interfaces for better IDE support and performance
+export interface SetRequest {
+  url: string;
+  enabled: boolean;
+  webhook_by_events: boolean;
+  events: string[];
+}
 
-export const SetBodySchema = z.object({
-  url: z.string().url(),
-  enabled: z.boolean(),
-  webhook_by_events: z.boolean(),
-  events: z.array(z.string()),
-});
+export interface SetResponse {
+  message: string;
+}
 
-export type SetOptions = z.infer<typeof SetBodySchema>;
-
-export const SetResponseSchema = z.object({
-  message: z.string(),
-});
-
-export type SetResponse = z.infer<typeof SetResponseSchema>; 
+// Backward compatibility aliases
+export type SetOptions = SetRequest; 

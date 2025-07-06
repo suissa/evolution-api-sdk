@@ -1,18 +1,23 @@
-import { z } from "zod";
+// Pure TypeScript interfaces for better IDE support and performance
 
-export const ClientOptionsSchema = z.object({
+/**
+ * Configuration options for the Evolution API client
+ */
+export interface ClientOptions {
 	/**
 	 * Your server URL
 	 */
-	serverUrl: z.string().url(),
+	serverUrl: string;
 	/**
 	 * Your instance token or global API key
 	 */
-	token: z.string(),
+	token: string;
 	/**
 	 * Your instance name
 	 */
-	instance: z.string().optional(),
-});
-
-export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
+	instance?: string;
+	/**
+	 * Custom headers to include in requests
+	 */
+	headers?: Record<string, string>;
+}

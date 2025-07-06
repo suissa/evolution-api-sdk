@@ -1,16 +1,15 @@
-import { z } from "zod";
-import { JidSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { Jid } from "@/types/tags";
 
-export const FetchProfileBodySchema = z.object({
-  jid: JidSchema,
-});
+export interface FetchProfileRequest {
+  jid: Jid;
+}
 
-export type FetchProfileOptions = z.infer<typeof FetchProfileBodySchema>;
+export interface FetchProfileResponse {
+  status: string;
+  pushname: string;
+  imgUrl: string;
+}
 
-export const FetchProfileResponseSchema = z.object({
-  status: z.string(),
-  pushname: z.string(),
-  imgUrl: z.string().url(),
-});
-
-export type FetchProfileResponse = z.infer<typeof FetchProfileResponseSchema>; 
+// Backward compatibility aliases
+export type FetchProfileOptions = FetchProfileRequest; 

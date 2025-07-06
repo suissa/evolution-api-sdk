@@ -1,16 +1,16 @@
-import { z } from "zod";
+// Pure TypeScript interfaces for better IDE support and performance
 
-const InstanceSchema = z.object({
-  instance: z.object({
-    instanceName: z.string(),
-    owner: z.string(),
-    profileName: z.string(),
-    profileStatus: z.string(),
-    profilePicUrl: z.string(),
-    status: z.string(),
-  }),
-});
+export interface InstanceDetails {
+  instanceName: string;
+  owner: string;
+  profileName: string;
+  profileStatus: string;
+  profilePicUrl: string;
+  status: string;
+}
 
-export const FetchAllResponseSchema = z.array(InstanceSchema);
+export interface InstanceItem {
+  instance: InstanceDetails;
+}
 
-export type FetchAllResponse = z.infer<typeof FetchAllResponseSchema>; 
+export type FetchAllResponse = InstanceItem[]; 

@@ -1,16 +1,15 @@
-import { z } from "zod";
-import { ChatIdSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { ChatId } from "@/types/tags";
 
-export const ArchiveBodySchema = z.object({
-  number: ChatIdSchema,
-  archive: z.boolean(),
-});
+export interface ArchiveRequest {
+  number: ChatId;
+  archive: boolean;
+}
 
-export type ArchiveOptions = z.infer<typeof ArchiveBodySchema>;
+export interface ArchiveResponse {
+  status: string;
+  message: string;
+}
 
-export const ArchiveResponseSchema = z.object({
-  status: z.string(),
-  message: z.string(),
-});
-
-export type ArchiveResponse = z.infer<typeof ArchiveResponseSchema>; 
+// Backward compatibility aliases
+export type ArchiveOptions = ArchiveRequest; 

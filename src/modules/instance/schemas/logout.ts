@@ -1,18 +1,19 @@
-import { z } from "zod";
+// Pure TypeScript interfaces for better IDE support and performance
 
-export const LogoutParamsSchema = z.object({
-  instanceName: z.string(),
-});
+export interface LogoutRequest {
+  instanceName: string;
+}
 
-export type LogoutOptions = z.infer<typeof LogoutParamsSchema>;
+export interface LogoutInstanceInfo {
+  instanceName: string;
+  status: string;
+}
 
-export const LogoutResponseSchema = z.object({
-  error: z.boolean(),
-  message: z.string(),
-  instance: z.object({
-    instanceName: z.string(),
-    status: z.string(),
-  }),
-});
+export interface LogoutResponse {
+  error: boolean;
+  message: string;
+  instance: LogoutInstanceInfo;
+}
 
-export type LogoutResponse = z.infer<typeof LogoutResponseSchema>; 
+// Backward compatibility aliases
+export type LogoutOptions = LogoutRequest; 

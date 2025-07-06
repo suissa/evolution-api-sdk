@@ -1,11 +1,8 @@
-import { z } from "zod";
-
-export const FindResponseSchema = z.object({
-  reject_call: z.boolean(),
-  groups_ignore: z.boolean(),
-  always_online: z.boolean(),
-  read_messages: z.boolean(),
-  read_status: z.boolean(),
-});
-
-export type FindResponse = z.infer<typeof FindResponseSchema>; 
+// Pure TypeScript interfaces for better IDE support and performance
+export interface FindResponse {
+  reject_call: boolean;
+  groups_ignore: boolean;
+  always_online: boolean;
+  read_messages: boolean;
+  read_status: boolean;
+} 

@@ -1,19 +1,20 @@
-import { z } from "zod";
+// Pure TypeScript interfaces for better IDE support and performance
 
-export const SetPresenceBodySchema = z.object({
-  instanceName: z.string(),
-  presence: z.enum(["unavailable", "available", "composing", "recording", "paused"]),
-});
+export interface SetPresenceRequest {
+  instanceName: string;
+  presence: "unavailable" | "available" | "composing" | "recording" | "paused";
+}
 
-export type SetPresenceOptions = z.infer<typeof SetPresenceBodySchema>;
+export interface SetPresenceData {
+  instance: string;
+  presence: string;
+}
 
-export const SetPresenceResponseSchema = z.object({
-  error: z.boolean(),
-  message: z.string(),
-  data: z.object({
-    instance: z.string(),
-    presence: z.string(),
-  }),
-});
+export interface SetPresenceResponse {
+  error: boolean;
+  message: string;
+  data: SetPresenceData;
+}
 
-export type SetPresenceResponse = z.infer<typeof SetPresenceResponseSchema>; 
+// Backward compatibility aliases
+export type SetPresenceOptions = SetPresenceRequest; 

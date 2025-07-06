@@ -1,31 +1,39 @@
-import { z } from "zod";
-
+// Pure TypeScript interfaces for better IDE support and performance
 import {
-	GroupWithParticipantsResponseSchema,
+	GroupWithParticipantsResponseRaw,
 	GroupWithParticipantsResponseSchemaTransform,
+	GroupWithParticipantsResponse,
 } from "./common";
 
-export const FindGroupByInviteCodeResponseSchema =
-	GroupWithParticipantsResponseSchema.extend({
-		isCommunity: z.boolean(),
-		isCommunityAnnounce: z.boolean(),
-		joinApprovalMode: z.boolean(),
-		memberAddMode: z.boolean(),
-	})
-		.omit({ pictureUrl: true })
-		.transform((group) => ({
-			...GroupWithParticipantsResponseSchemaTransform({
-				...group,
-				pictureUrl: null,
-			}),
-			isCommunity: group.isCommunity,
-			isCommunityAnnounce: group.isCommunityAnnounce,
-			joinApprovalMode: group.joinApprovalMode,
-			memberAddMode: group.memberAddMode,
-		}));
+// Raw response interface from API
+export interface FindGroupByInviteCodeResponseRaw extends GroupWithParticipantsResponseRaw {
+	isCommunity: boolean;
+	isCommunityAnnounce: boolean;
+	joinApprovalMode: boolean;
+	memberAddMode: boolean;
+}
 
-export type FindGroupByInviteCodeResponse = z.infer<
-	typeof FindGroupByInviteCodeResponseSchema
->;
+// Transformed response interface
+export interface FindGroupByInviteCodeResponse extends GroupWithParticipantsResponse {
+	isCommunity: boolean;
+	isCommunityAnnounce: boolean;
+	joinApprovalMode: boolean;
+	memberAddMode: boolean;
+}
 
-export { FindGroupByInviteCodeResponseSchema as ResponseSchema };
+// Transform function
+export const FindGroupByInviteCodeResponseTransform = (
+	group: FindGroupByInviteCodeResponseRaw,
+): FindGroupByInviteCodeResponse => ({
+	...GroupWithParticipantsResponseSchemaTransform({
+		...group,
+		pictureUrl: null,
+	}),
+	isCommunity: group.isCommunity,
+	isCommunityAnnounce: group.isCommunityAnnounce,
+	joinApprovalMode: group.joinApprovalMode,
+	memberAddMode: group.memberAddMode,
+});
+
+// Backward compatibility alias
+export const ResponseSchema = { parse: FindGroupByInviteCodeResponseTransform };

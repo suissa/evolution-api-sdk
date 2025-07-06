@@ -1,19 +1,18 @@
-import { z } from "zod";
-import { GroupJidSchema, JidSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { GroupJid, Jid } from "@/types/tags";
 
-export const UpdateMembersBodySchema = z.object({
-  groupJid: GroupJidSchema,
-  participants: z.array(JidSchema),
-  action: z.enum(["add", "remove", "promote", "demote"]),
-});
+export interface UpdateMembersRequest {
+  groupJid: GroupJid;
+  participants: Jid[];
+  action: "add" | "remove" | "promote" | "demote";
+}
 
-export type UpdateMembersOptions = z.infer<typeof UpdateMembersBodySchema>;
+export interface Participant {
+  id: Jid;
+  status: string;
+}
 
-const ParticipantSchema = z.object({
-  id: JidSchema,
-  status: z.string(),
-});
+export type UpdateMembersResponse = Participant[];
 
-export const UpdateMembersResponseSchema = z.array(ParticipantSchema);
-
-export type UpdateMembersResponse = z.infer<typeof UpdateMembersResponseSchema>; 
+// Backward compatibility aliases
+export type UpdateMembersOptions = UpdateMembersRequest; 

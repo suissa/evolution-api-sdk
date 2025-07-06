@@ -1,93 +1,87 @@
 import { Routes } from "@/api/routes";
 import type { ApiService } from "@/api/service";
 
-import * as FetchBusinessProfile from "./schemas/fetch-business-profile";
-import * as FetchProfile from "./schemas/fetch-profile";
-import * as FetchPrivacySettings from "./schemas/fetch-privacy-settings";
-import * as RemovePicture from "./schemas/remove-picture";
-import * as UpdateName from "./schemas/update-name";
-import * as UpdatePicture from "./schemas/update-picture";
-import * as UpdatePrivacySettings from "./schemas/update-privacy-settings";
-import * as UpdateStatus from "./schemas/update-status";
+import type * as FetchBusinessProfile from "./schemas/fetch-business-profile";
+import type * as FetchPrivacySettings from "./schemas/fetch-privacy-settings";
+import type * as FetchProfile from "./schemas/fetch-profile";
+import type * as RemovePicture from "./schemas/remove-picture";
+import type * as UpdateName from "./schemas/update-name";
+import type * as UpdatePicture from "./schemas/update-picture";
+import type * as UpdatePrivacySettings from "./schemas/update-privacy-settings";
+import type * as UpdateStatus from "./schemas/update-status";
 
 export class ProfileModule {
 	constructor(private readonly api: ApiService) {}
 
 	async fetchBusinessProfile(
-		options: FetchBusinessProfile.FetchBusinessProfileOptions,
+		options: FetchBusinessProfile.FetchBusinessProfileRequest,
 	): Promise<FetchBusinessProfile.FetchBusinessProfileResponse> {
-		const body = FetchBusinessProfile.FetchBusinessProfileBodySchema.parse(options);
 		const response = await this.api.post(Routes.Profile.FetchBusinessProfile, {
-			body,
+			body: options,
 		});
 
-		return FetchBusinessProfile.FetchBusinessProfileResponseSchema.parse(response);
+		return response as FetchBusinessProfile.FetchBusinessProfileResponse;
 	}
 
 	async fetchProfile(
-		options: FetchProfile.FetchProfileOptions,
+		options: FetchProfile.FetchProfileRequest,
 	): Promise<FetchProfile.FetchProfileResponse> {
-		const body = FetchProfile.FetchProfileBodySchema.parse(options);
 		const response = await this.api.post(Routes.Profile.FetchProfile, {
-			body,
+			body: options,
 		});
 
-		return FetchProfile.FetchProfileResponseSchema.parse(response);
+		return response as FetchProfile.FetchProfileResponse;
 	}
 
 	async updateName(
-		options: UpdateName.UpdateNameOptions,
+		options: UpdateName.UpdateNameRequest,
 	): Promise<UpdateName.UpdateNameResponse> {
-		const body = UpdateName.UpdateNameBodySchema.parse(options);
 		const response = await this.api.post(Routes.Profile.UpdateName, {
-			body,
+			body: options,
 		});
 
-		return UpdateName.UpdateNameResponseSchema.parse(response);
+		return response as UpdateName.UpdateNameResponse;
 	}
 
 	async updateStatus(
-		options: UpdateStatus.UpdateStatusOptions,
+		options: UpdateStatus.UpdateStatusRequest,
 	): Promise<UpdateStatus.UpdateStatusResponse> {
-		const body = UpdateStatus.UpdateStatusBodySchema.parse(options);
 		const response = await this.api.post(Routes.Profile.UpdateStatus, {
-			body,
+			body: options,
 		});
 
-		return UpdateStatus.UpdateStatusResponseSchema.parse(response);
+		return response as UpdateStatus.UpdateStatusResponse;
 	}
 
 	async updatePicture(
-		options: UpdatePicture.UpdatePictureOptions,
+		options: UpdatePicture.UpdatePictureRequest,
 	): Promise<UpdatePicture.UpdatePictureResponse> {
-		const body = UpdatePicture.UpdatePictureBodySchema.parse(options);
-		const response = await this.api.put(Routes.Profile.UpdatePicture, {
-			body,
+		const response = await this.api.post(Routes.Profile.UpdatePicture, {
+			body: options,
 		});
 
-		return UpdatePicture.UpdatePictureResponseSchema.parse(response);
+		return response as UpdatePicture.UpdatePictureResponse;
 	}
 
 	async removePicture(): Promise<RemovePicture.RemovePictureResponse> {
 		const response = await this.api.delete(Routes.Profile.RemovePicture);
 
-		return RemovePicture.RemovePictureResponseSchema.parse(response);
+		return response as RemovePicture.RemovePictureResponse;
 	}
 
 	async fetchPrivacySettings(): Promise<FetchPrivacySettings.FetchPrivacySettingsResponse> {
 		const response = await this.api.get(Routes.Profile.FetchPrivacySettings);
 
-		return FetchPrivacySettings.FetchPrivacySettingsResponseSchema.parse(response);
+		return response as FetchPrivacySettings.FetchPrivacySettingsResponse;
 	}
 
 	async updatePrivacySettings(
-		options: UpdatePrivacySettings.UpdatePrivacySettingsOptions,
+		options: UpdatePrivacySettings.UpdatePrivacySettingsRequest,
 	): Promise<UpdatePrivacySettings.UpdatePrivacySettingsResponse> {
-		const body = UpdatePrivacySettings.UpdatePrivacySettingsBodySchema.parse(options);
-		const response = await this.api.put(Routes.Profile.UpdatePrivacySettings, {
-			body,
+		const response = await this.api.post(Routes.Profile.UpdatePrivacySettings, {
+			body: options,
 		});
 
-		return UpdatePrivacySettings.UpdatePrivacySettingsResponseSchema.parse(response);
+		return response as UpdatePrivacySettings.UpdatePrivacySettingsResponse;
 	}
 } 

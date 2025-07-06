@@ -1,98 +1,105 @@
+// Pure TypeScript interfaces for better IDE support and performance
 import { parsePhoneNumber } from "libphonenumber-js";
-import { z } from "zod";
-
-import { PhoneNumberSchema } from "@/schemas/common";
 import { Jid, MessageId } from "@/types/tags";
 import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
-import { BaseMessageOptionsSchema } from "./base";
+import { BaseMessageOptions } from "./base";
 
-export const ContactMessageOptionsSchema = BaseMessageOptionsSchema.extend({
+// Raw response interface from API
+export interface ContactMessageResponseRaw {
+	key: {
+		remoteJid: string;
+		id: string;
+	};
+	message: {
+		contactMessage?: {
+			displayName: string;
+			vcard: string;
+		};
+		contactsArrayMessage?: {
+			contacts: {
+				displayName: string;
+				vcard: string;
+			}[];
+		};
+	};
+	messageTimestamp: string | Date;
+}
+
+// Request interfaces
+export interface Contact {
+	/**
+	 * Contact display name
+	 */
+	fullName: string;
+	/**
+	 * Contact phone number
+	 */
+	phoneNumber: string;
+	/**
+	 * Contact organization
+	 */
+	organization?: string;
+	/**
+	 * Contact email
+	 */
+	email?: string;
+	/**
+	 * Contact website url
+	 */
+	url?: string;
+}
+
+export interface ContactMessageOptions extends BaseMessageOptions {
 	/**
 	 * Contact list
 	 */
-	contacts: z.array(
-		z.object({
-			/**
-			 * Contact display name
-			 */
-			fullName: z.string(),
-			/**
-			 * Contact phone number
-			 */
-			phoneNumber: PhoneNumberSchema,
-			/**
-			 * Contact organization
-			 */
-			organization: z.string().optional(),
-			/**
-			 * Contact email
-			 */
-			email: z.string().email().optional(),
-			/**
-			 * Contact website url
-			 */
-			url: z.string().url().optional(),
-		}),
-	),
+	contacts: Contact[];
+}
+
+export interface ContactMessageBody extends BaseMessageOptions {
+	contact: (Contact & {
+		wuid: string;
+	})[];
+}
+
+// Response interfaces
+export interface ContactMessageResponse {
+	receiver: {
+		phoneNumber: string;
+		jid: Jid;
+	};
+	contacts: {
+		displayName: string;
+		vcard: string;
+	}[];
+	id: MessageId;
+	timestamp: Date;
+}
+
+// Transform functions
+export const ContactMessageBodyTransform = (
+	{ contacts, ...data }: ContactMessageOptions
+): ContactMessageBody => ({
+	...data,
+	contact: contacts.map((contact) => ({
+		...contact,
+		phoneNumber: parsePhoneNumber(contact.phoneNumber).formatInternational(),
+		wuid: contact.phoneNumber.replace(/\D/g, ""),
+	})),
 });
 
-export const ContactMessageBodySchema = ContactMessageOptionsSchema.transform(
-	({ contacts, ...data }) => ({
-		...data,
-		contact: contacts.map((contact) => ({
-			...contact,
-			phoneNumber: parsePhoneNumber(contact.phoneNumber).formatInternational(),
-			wuid: contact.phoneNumber.replace(/\D/g, ""),
-		})),
-	}),
-);
+export const ContactMessageResponseTransform = (data: ContactMessageResponseRaw): ContactMessageResponse => ({
+	receiver: {
+		phoneNumber: phoneNumberFromJid(data.key.remoteJid),
+		jid: Jid(data.key.remoteJid),
+	},
+	contacts: data.message.contactMessage
+		? [data.message.contactMessage]
+		: data.message.contactsArrayMessage?.contacts || [],
+	id: MessageId(data.key.id),
+	timestamp: new Date(data.messageTimestamp),
+});
 
-export const ContactMessageResponseSchema = z
-	.object({
-		key: z.object({
-			remoteJid: z.string(),
-			id: z.string(),
-		}),
-		message: z.union([
-			z.object({
-				contactMessage: z.object({
-					displayName: z.string(),
-					vcard: z.string(),
-				}),
-			}),
-			z.object({
-				contactsArrayMessage: z.object({
-					contacts: z.array(
-						z.object({
-							displayName: z.string(),
-							vcard: z.string(),
-						}),
-					),
-				}),
-			}),
-		]),
-		messageTimestamp: z.coerce.date(),
-	})
-	.transform((data) => ({
-		receiver: {
-			phoneNumber: phoneNumberFromJid(data.key.remoteJid),
-			jid: Jid(data.key.remoteJid),
-		},
-		contacts:
-			"contactMessage" in data.message
-				? [data.message.contactMessage]
-				: data.message.contactsArrayMessage.contacts,
-		id: MessageId(data.key.id),
-		timestamp: data.messageTimestamp,
-	}));
-
-export type ContactMessageOptions = z.infer<typeof ContactMessageOptionsSchema>;
-export type ContactMessageResponse = z.infer<
-	typeof ContactMessageResponseSchema
->;
-
-export {
-	ContactMessageBodySchema as BodySchema,
-	ContactMessageOptionsSchema as OptionsSchema,
-	ContactMessageResponseSchema as ResponseSchema,
-};
+// Backward compatibility aliases
+export const BodySchema = { parse: ContactMessageBodyTransform };
+export const ResponseSchema = { parse: ContactMessageResponseTransform };

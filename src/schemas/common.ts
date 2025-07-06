@@ -1,46 +1,44 @@
+// Pure TypeScript types and utility functions for better IDE support and performance
 import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
-import { z } from "zod";
-
 import type { GroupInviteCode, GroupJid, Jid } from "@/types/tags";
 
-export const PhoneNumberSchema = z
-	.custom<string>((value) => isValidPhoneNumber(value), "Invalid phone number")
-	.transform<string>((phoneNumber) => parsePhoneNumber(phoneNumber).number);
+// Type definitions
+export type PhoneNumber = string;
+export type MessageId = string;
+export type ChatId = PhoneNumber | Jid | GroupJid;
+export type ApiNumber = PhoneNumber | Jid | GroupJid;
+export type Media = string; // URL or base64 string
 
-export const JidSchema = z
-	.string()
-	.endsWith(
-		"@s.whatsapp.net",
-		"Invalid remote JID, should end with @s.whatsapp.net",
-	) as z.ZodType<Jid>;
+// Utility functions
+export const validatePhoneNumber = (value: string): boolean => isValidPhoneNumber(value);
+export const parsePhoneNumberUtil = (phoneNumber: string): string => parsePhoneNumber(phoneNumber).number;
 
-export const GroupJidSchema = z
-	.string()
-	.endsWith(
-		"@g.us",
-		"Invalid group JID, should end with @g.us",
-	) as z.ZodType<GroupJid>;
+export const validateJid = (value: string): boolean => value.endsWith("@s.whatsapp.net");
+export const validateGroupJid = (value: string): boolean => value.endsWith("@g.us");
+export const validateGroupInviteCode = (value: string): boolean => 
+  value.length === 22 && /^[a-zA-Z0-9]{22}$/.test(value);
 
-export const GroupInviteCodeSchema = z
-	.string()
-	.length(22)
-	.regex(
-		/^[a-zA-Z0-9]{22}$/,
-		"Invalid group invite code",
-	) as unknown as z.ZodType<GroupInviteCode>;
+export const validateMedia = (value: string): boolean => {
+  // Check if it's a URL or base64 string
+  try {
+    new URL(value);
+    return true;
+  } catch {
+    // Check if it's a valid base64 string
+    try {
+      return btoa(atob(value)) === value;
+    } catch {
+      return false;
+    }
+  }
+};
 
-export const MessageIdSchema = z.string();
-
-export const ChatIdSchema = z.union([
-	PhoneNumberSchema,
-	JidSchema,
-	GroupJidSchema,
-]);
-
-export const ApiNumberSchema = z.union([
-	PhoneNumberSchema,
-	JidSchema,
-	GroupJidSchema,
-]);
-
-export const mediaSchema = z.union([z.string().url(), z.string().base64()]);
+// Backward compatibility - keeping the schema names but as type aliases
+export type PhoneNumberSchema = PhoneNumber;
+export type JidSchema = Jid;
+export type GroupJidSchema = GroupJid;
+export type GroupInviteCodeSchema = GroupInviteCode;
+export type MessageIdSchema = MessageId;
+export type ChatIdSchema = ChatId;
+export type ApiNumberSchema = ApiNumber;
+export type mediaSchema = Media;

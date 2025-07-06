@@ -1,17 +1,16 @@
-import { z } from "zod";
-import { ChatIdSchema, MessageIdSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { ChatId, MessageId } from "@/types/tags";
 
-export const UpdateMessageBodySchema = z.object({
-  number: ChatIdSchema,
-  messageId: MessageIdSchema,
-  message: z.string(),
-});
+export interface UpdateMessageRequest {
+  number: ChatId;
+  messageId: MessageId;
+  message: string;
+}
 
-export type UpdateMessageOptions = z.infer<typeof UpdateMessageBodySchema>;
+export interface UpdateMessageResponse {
+  status: string;
+  message: string;
+}
 
-export const UpdateMessageResponseSchema = z.object({
-  status: z.string(),
-  message: z.string(),
-});
-
-export type UpdateMessageResponse = z.infer<typeof UpdateMessageResponseSchema>; 
+// Backward compatibility aliases
+export type UpdateMessageOptions = UpdateMessageRequest; 

@@ -1,23 +1,28 @@
-import { z } from "zod";
+// Pure TypeScript interfaces for better IDE support and performance
 
-export const ConnectParamsSchema = z.object({
-  instanceName: z.string(),
-});
+export interface ConnectRequest {
+  instanceName: string;
+}
 
-export type ConnectOptions = z.infer<typeof ConnectParamsSchema>;
+export interface ConnectInstanceInfo {
+  instanceName: string;
+  status: string;
+}
 
-export const ConnectResponseSchema = z.object({
-  instance: z.object({
-    instanceName: z.string(),
-    status: z.string(),
-  }),
-  hash: z.object({
-    apikey: z.string(),
-  }),
-  qrcode: z.object({
-    code: z.string(),
-    base64: z.string().optional(), // The doc doesn't specify, but it's good to have
-  }),
-});
+export interface ConnectHash {
+  apikey: string;
+}
 
-export type ConnectResponse = z.infer<typeof ConnectResponseSchema>; 
+export interface ConnectQRCode {
+  code: string;
+  base64?: string; // The doc doesn't specify, but it's good to have
+}
+
+export interface ConnectResponse {
+  instance: ConnectInstanceInfo;
+  hash: ConnectHash;
+  qrcode: ConnectQRCode;
+}
+
+// Backward compatibility aliases
+export type ConnectOptions = ConnectRequest; 

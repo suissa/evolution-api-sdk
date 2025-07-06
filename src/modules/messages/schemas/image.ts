@@ -1,82 +1,107 @@
-import { z } from "zod";
-
-import { mediaSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { Media } from "@/schemas/common";
 import { Jid, MessageId } from "@/types/tags";
 import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
-import { BaseMessageOptionsSchema } from "./base";
+import { BaseMessageOptions } from "./base";
 
-export const ImageMessageOptionsSchema = BaseMessageOptionsSchema.extend({
+// Raw response interface from API
+export interface ImageMessageResponseRaw {
+	key: {
+		remoteJid: string;
+		id: string;
+	};
+	message: {
+		imageMessage: {
+			url: string;
+			mimetype?: string;
+			fileSha256: string;
+			fileLength: number | string;
+			height: number;
+			width: number;
+			mediaKey: string;
+			caption?: string;
+			fileEncSha256: string;
+			directPath: string;
+			mediaKeyTimestamp: number | string;
+		};
+	};
+	messageType: "image";
+	messageTimestamp: string | Date;
+}
+
+// Request interfaces
+export interface ImageMessageOptions extends BaseMessageOptions {
 	/**
 	 * Image URL or file in base64
 	 */
-	image: mediaSchema,
+	image: Media;
 	/**
 	 * Caption to send with image
 	 */
-	caption: z.string().optional(),
+	caption?: string;
 	/**
 	 * Image mimetype
 	 */
-	mimetype: z.string().optional(),
+	mimetype?: string;
+}
+
+export interface ImageMessageBody extends BaseMessageOptions {
+	media: Media;
+	mediatype: "image";
+	caption?: string;
+	mimetype?: string;
+}
+
+// Response interfaces
+export interface ImageMessageResponse {
+	receiver: {
+		phoneNumber: string;
+		jid: Jid;
+	};
+	media: {
+		url: string;
+		caption?: string;
+		mimetype?: string;
+		length: number;
+		height: number;
+		width: number;
+		sha256: string;
+		encryptedSha256: string;
+		directPath: string;
+		key: string;
+		keyTimestamp: Date;
+	};
+	id: MessageId;
+	timestamp: Date;
+}
+
+// Transform functions
+export const ImageMessageBodyTransform = (
+	{ image, ...data }: ImageMessageOptions
+): ImageMessageBody => ({ ...data, media: image, mediatype: "image" });
+
+export const ImageMessageResponseTransform = (data: ImageMessageResponseRaw): ImageMessageResponse => ({
+	receiver: {
+		phoneNumber: phoneNumberFromJid(data.key.remoteJid),
+		jid: Jid(data.key.remoteJid),
+	},
+	media: {
+		url: data.message.imageMessage.url,
+		caption: data.message.imageMessage.caption,
+		mimetype: data.message.imageMessage.mimetype,
+		length: Number(data.message.imageMessage.fileLength),
+		height: data.message.imageMessage.height,
+		width: data.message.imageMessage.width,
+		sha256: data.message.imageMessage.fileSha256,
+		encryptedSha256: data.message.imageMessage.fileEncSha256,
+		directPath: data.message.imageMessage.directPath,
+		key: data.message.imageMessage.mediaKey,
+		keyTimestamp: new Date(Number(data.message.imageMessage.mediaKeyTimestamp)),
+	},
+	id: MessageId(data.key.id),
+	timestamp: new Date(data.messageTimestamp),
 });
 
-export const ImageMessageBodySchema = ImageMessageOptionsSchema.transform(
-	({ image, ...data }) => ({ ...data, media: image, mediatype: "image" }),
-);
-
-export const ImageMessageResponseSchema = z
-	.object({
-		key: z.object({
-			remoteJid: z.string(),
-			id: z.string(),
-		}),
-		message: z.object({
-			imageMessage: z.object({
-				url: z.string().url(),
-				mimetype: z.string().optional(),
-				fileSha256: z.string().base64(),
-				fileLength: z.coerce.number(),
-				height: z.number(),
-				width: z.number(),
-				mediaKey: z.string().base64(),
-				caption: z.string().optional(),
-				fileEncSha256: z.string().base64(),
-				directPath: z.string(),
-				mediaKeyTimestamp: z.coerce
-					.number()
-					.transform((value) => new Date(value)),
-			}),
-		}),
-		messageType: z.literal("image"),
-		messageTimestamp: z.coerce.date(),
-	})
-	.transform((data) => ({
-		receiver: {
-			phoneNumber: phoneNumberFromJid(data.key.remoteJid),
-			jid: Jid(data.key.remoteJid),
-		},
-		media: {
-			url: data.message.imageMessage.url,
-			caption: data.message.imageMessage.caption,
-			mimetype: data.message.imageMessage.mimetype,
-			length: data.message.imageMessage.fileLength,
-			height: data.message.imageMessage.height,
-			width: data.message.imageMessage.width,
-			sha256: data.message.imageMessage.fileSha256,
-			encryptedSha256: data.message.imageMessage.fileEncSha256,
-			directPath: data.message.imageMessage.directPath,
-			key: data.message.imageMessage.mediaKey,
-			keyTimestamp: data.message.imageMessage.mediaKeyTimestamp,
-		},
-		id: MessageId(data.key.id),
-		timestamp: data.messageTimestamp,
-	}));
-
-export type ImageMessageOptions = z.infer<typeof ImageMessageOptionsSchema>;
-export type ImageMessageResponse = z.infer<typeof ImageMessageResponseSchema>;
-
-export {
-	ImageMessageBodySchema as BodySchema,
-	ImageMessageOptionsSchema as OptionsSchema,
-	ImageMessageResponseSchema as ResponseSchema,
-};
+// Backward compatibility aliases
+export const BodySchema = { parse: ImageMessageBodyTransform };
+export const ResponseSchema = { parse: ImageMessageResponseTransform };

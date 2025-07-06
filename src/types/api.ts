@@ -1,10 +1,7 @@
-export type APIRequestInit = Omit<
-	RequestInit,
-	"method" | "body" | "headers"
-> & {
+export interface APIRequestInit {
 	method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-	params?: Record<string, string | number | boolean | undefined>;
+	params?: any; // Accept any object type for params
+	body?: any; // Accept any object type for body
 	headers?: Record<string, string>;
-	body?: object | FormData;
 	isInstanceUrl?: boolean;
-};
+}

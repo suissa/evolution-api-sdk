@@ -1,13 +1,12 @@
-import { z } from "zod";
-import { ChatIdSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { ChatId } from "@/types/tags";
 
-export const FindMessagesBodySchema = z.object({
-  number: ChatIdSchema,
-  count: z.number().optional(),
-});
+export interface FindMessagesRequest {
+  number: ChatId;
+  count?: number;
+}
 
-export type FindMessagesOptions = z.infer<typeof FindMessagesBodySchema>;
+export type FindMessagesResponse = any[];
 
-export const FindMessagesResponseSchema = z.array(z.any());
-
-export type FindMessagesResponse = z.infer<typeof FindMessagesResponseSchema>; 
+// Backward compatibility aliases
+export type FindMessagesOptions = FindMessagesRequest; 

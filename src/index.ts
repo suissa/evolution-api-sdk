@@ -8,7 +8,7 @@ import {
 	SettingsModule,
 	WebhookModule,
 } from "./modules";
-import { type ClientOptions, ClientOptionsSchema } from "./schemas/client";
+import { type ClientOptions } from "./schemas/client";
 
 export class EvolutionClient {
 	/**
@@ -50,8 +50,6 @@ export class EvolutionClient {
 	 * @param options - Client options
 	 */
 	constructor(public options: ClientOptions) {
-		ClientOptionsSchema.parse(options);
-
 		this.api = new ApiService(options);
 		this.chats = new ChatsModule(this.api);
 		this.groups = new GroupsModule(this.api);

@@ -1,26 +1,23 @@
-import { z } from "zod";
-
 import { Routes } from "@/api/routes";
 import type { ApiService } from "@/api/service";
-import { GroupInviteCodeSchema, GroupJidSchema } from "@/schemas/common";
 import type { GroupInviteCode, GroupJid } from "@/types/tags";
 
-import * as AcceptInviteCode from "./schemas/accept-invite-code";
-import * as Create from "./schemas/create";
-import * as FetchInviteCode from "./schemas/fetch-invite-code";
-import * as FindAll from "./schemas/find-all";
-import * as FindByInviteCode from "./schemas/find-by-invite-code";
-import * as FindByJid from "./schemas/find-by-jid";
-import * as FindMembers from "./schemas/find-members";
-import * as Leave from "./schemas/leave";
-import * as RevokeInviteCode from "./schemas/revoke-invite-code";
-import * as SendGroupInvite from "./schemas/send-group-invite";
-import * as ToggleEphemeral from "./schemas/toggle-ephemeral";
-import * as UpdateDescription from "./schemas/update-description";
-import * as UpdateMembers from "./schemas/update-members";
-import * as UpdatePicture from "./schemas/update-picture";
-import * as UpdateSetting from "./schemas/update-setting";
-import * as UpdateSubject from "./schemas/update-subject";
+import type * as AcceptInviteCode from "./schemas/accept-invite-code";
+import type * as Create from "./schemas/create";
+import type * as FetchInviteCode from "./schemas/fetch-invite-code";
+import type * as FindAll from "./schemas/find-all";
+import type * as FindByInviteCode from "./schemas/find-by-invite-code";
+import type * as FindByJid from "./schemas/find-by-jid";
+import type * as FindMembers from "./schemas/find-members";
+import type * as Leave from "./schemas/leave";
+import type * as RevokeInviteCode from "./schemas/revoke-invite-code";
+import type * as SendGroupInvite from "./schemas/send-group-invite";
+import type * as ToggleEphemeral from "./schemas/toggle-ephemeral";
+import type * as UpdateDescription from "./schemas/update-description";
+import type * as UpdateMembers from "./schemas/update-members";
+import type * as UpdatePicture from "./schemas/update-picture";
+import type * as UpdateSetting from "./schemas/update-setting";
+import type * as UpdateSubject from "./schemas/update-subject";
 
 export class GroupsModule {
 	constructor(private readonly api: ApiService) {}
@@ -40,13 +37,13 @@ export class GroupsModule {
 		| FindAll.FindAllGroupsWithParticipantsResponse
 	> {
 		const response = await this.api.get(Routes.Groups.FindAll, {
-			params: { getParticipants: z.boolean().parse(getParticipants) },
+			params: { getParticipants },
 		});
 
 		if (getParticipants) {
-			return FindAll.ResponseWithParticipantsSchema.parse(response);
+			return response as FindAll.FindAllGroupsWithParticipantsResponse;
 		}
-		return FindAll.ResponseSchema.parse(response);
+		return response as FindAll.FindAllGroupsResponse;
 	}
 
 	/**
@@ -57,10 +54,10 @@ export class GroupsModule {
 		inviteCode: string | GroupInviteCode,
 	): Promise<FindByInviteCode.FindGroupByInviteCodeResponse> {
 		const response = await this.api.get(Routes.Groups.FindByInviteCode, {
-			params: { inviteCode: GroupInviteCodeSchema.parse(inviteCode) },
+			params: { inviteCode: inviteCode as GroupInviteCode },
 		});
 
-		return FindByInviteCode.ResponseSchema.parse(response);
+		return response as FindByInviteCode.FindGroupByInviteCodeResponse;
 	}
 
 	/**
@@ -71,152 +68,139 @@ export class GroupsModule {
 		groupJid: string | GroupJid,
 	): Promise<FindByJid.FindGroupByJidResponse> {
 		const response = await this.api.get(Routes.Groups.FindByJid, {
-			params: { groupJid: GroupJidSchema.parse(groupJid) },
+			params: { groupJid: groupJid as GroupJid },
 		});
 
-		return FindByJid.ResponseSchema.parse(response);
+		return response as FindByJid.FindGroupByJidResponse;
 	}
 
 	async create(
-		options: Create.CreateGroupOptions,
+		options: Create.CreateGroupRequest,
 	): Promise<Create.CreateGroupResponse> {
-		const body = Create.CreateGroupBodySchema.parse(options);
 		const response = await this.api.post(Routes.Groups.Create, {
-			body,
+			body: options,
 		});
 
-		return Create.CreateGroupResponseSchema.parse(response);
+		return response as Create.CreateGroupResponse;
 	}
 
 	async updatePicture(
-		options: UpdatePicture.UpdatePictureOptions,
+		options: UpdatePicture.UpdatePictureRequest,
 	): Promise<UpdatePicture.UpdatePictureResponse> {
-		const body = UpdatePicture.UpdatePictureBodySchema.parse(options);
 		const response = await this.api.post(Routes.Groups.UpdatePicture, {
-			body,
+			body: options,
 		});
 
-		return UpdatePicture.UpdatePictureResponseSchema.parse(response);
+		return response as UpdatePicture.UpdatePictureResponse;
 	}
 
 	async updateSubject(
-		options: UpdateSubject.UpdateSubjectOptions,
+		options: UpdateSubject.UpdateSubjectRequest,
 	): Promise<UpdateSubject.UpdateSubjectResponse> {
-		const body = UpdateSubject.UpdateSubjectBodySchema.parse(options);
 		const response = await this.api.post(Routes.Groups.UpdateSubject, {
-			body,
+			body: options,
 		});
 
-		return UpdateSubject.UpdateSubjectResponseSchema.parse(response);
+		return response as UpdateSubject.UpdateSubjectResponse;
 	}
 
 	async updateDescription(
-		options: UpdateDescription.UpdateDescriptionOptions,
+		options: UpdateDescription.UpdateDescriptionRequest,
 	): Promise<UpdateDescription.UpdateDescriptionResponse> {
-		const body = UpdateDescription.UpdateDescriptionBodySchema.parse(options);
 		const response = await this.api.post(Routes.Groups.UpdateDescription, {
-			body,
+			body: options,
 		});
 
-		return UpdateDescription.UpdateDescriptionResponseSchema.parse(response);
+		return response as UpdateDescription.UpdateDescriptionResponse;
 	}
 
 	async fetchInviteCode(
-		options: FetchInviteCode.FetchInviteCodeOptions,
+		options: FetchInviteCode.FetchInviteCodeRequest,
 	): Promise<FetchInviteCode.FetchInviteCodeResponse> {
-		const params = FetchInviteCode.FetchInviteCodeParamsSchema.parse(options);
 		const response = await this.api.get(Routes.Groups.FetchInviteCode, {
-			params,
+			params: options,
 		});
 
-		return FetchInviteCode.FetchInviteCodeResponseSchema.parse(response);
+		return response as FetchInviteCode.FetchInviteCodeResponse;
 	}
 
 	async acceptInviteCode(
-		options: AcceptInviteCode.AcceptInviteCodeOptions,
+		options: AcceptInviteCode.AcceptInviteCodeRequest,
 	): Promise<AcceptInviteCode.AcceptInviteCodeResponse> {
-		const body = AcceptInviteCode.AcceptInviteCodeBodySchema.parse(options);
 		const response = await this.api.post(Routes.Groups.AcceptInviteCode, {
-			body,
+			body: options,
 		});
 
-		return AcceptInviteCode.AcceptInviteCodeResponseSchema.parse(response);
+		return response as AcceptInviteCode.AcceptInviteCodeResponse;
 	}
 
 	async revokeInviteCode(
-		options: RevokeInviteCode.RevokeInviteCodeOptions,
+		options: RevokeInviteCode.RevokeInviteCodeRequest,
 	): Promise<RevokeInviteCode.RevokeInviteCodeResponse> {
-		const body = RevokeInviteCode.RevokeInviteCodeBodySchema.parse(options);
 		const response = await this.api.post(Routes.Groups.RevokeInviteCode, {
-			body,
+			body: options,
 		});
 
-		return RevokeInviteCode.RevokeInviteCodeResponseSchema.parse(response);
+		return response as RevokeInviteCode.RevokeInviteCodeResponse;
 	}
 
 	async sendGroupInvite(
-		options: SendGroupInvite.SendGroupInviteOptions,
+		options: SendGroupInvite.SendGroupInviteRequest,
 	): Promise<SendGroupInvite.SendGroupInviteResponse> {
-		const body = SendGroupInvite.SendGroupInviteBodySchema.parse(options);
 		const response = await this.api.post(Routes.Groups.SendGroupInvite, {
-			body,
+			body: options,
 		});
 
-		return SendGroupInvite.SendGroupInviteResponseSchema.parse(response);
+		return response as SendGroupInvite.SendGroupInviteResponse;
 	}
 
 	async findMembers(
-		options: FindMembers.FindMembersOptions,
+		options: FindMembers.FindMembersRequest,
 	): Promise<FindMembers.FindMembersResponse> {
-		const params = FindMembers.FindMembersParamsSchema.parse(options);
 		const response = await this.api.get(Routes.Groups.FindMembers, {
-			params,
+			params: options,
 		});
 
-		return FindMembers.FindMembersResponseSchema.parse(response);
+		return response as FindMembers.FindMembersResponse;
 	}
 
 	async updateMembers(
-		options: UpdateMembers.UpdateMembersOptions,
+		options: UpdateMembers.UpdateMembersRequest,
 	): Promise<UpdateMembers.UpdateMembersResponse> {
-		const body = UpdateMembers.UpdateMembersBodySchema.parse(options);
 		const response = await this.api.post(Routes.Groups.UpdateMembers, {
-			body,
+			body: options,
 		});
 
-		return UpdateMembers.UpdateMembersResponseSchema.parse(response);
+		return response as UpdateMembers.UpdateMembersResponse;
 	}
 
 	async updateSetting(
-		options: UpdateSetting.UpdateSettingOptions,
+		options: UpdateSetting.UpdateSettingRequest,
 	): Promise<UpdateSetting.UpdateSettingResponse> {
-		const body = UpdateSetting.UpdateSettingBodySchema.parse(options);
 		const response = await this.api.post(Routes.Groups.UpdateSetting, {
-			body,
+			body: options,
 		});
 
-		return UpdateSetting.UpdateSettingResponseSchema.parse(response);
+		return response as UpdateSetting.UpdateSettingResponse;
 	}
 
 	async toggleEphemeral(
-		options: ToggleEphemeral.ToggleEphemeralOptions,
+		options: ToggleEphemeral.ToggleEphemeralRequest,
 	): Promise<ToggleEphemeral.ToggleEphemeralResponse> {
-		const body = ToggleEphemeral.ToggleEphemeralBodySchema.parse(options);
 		const response = await this.api.post(Routes.Groups.ToggleEphemeral, {
-			body,
+			body: options,
 		});
 
-		return ToggleEphemeral.ToggleEphemeralResponseSchema.parse(response);
+		return response as ToggleEphemeral.ToggleEphemeralResponse;
 	}
 
 	async leave(
-		options: Leave.LeaveOptions,
+		options: Leave.LeaveRequest,
 	): Promise<Leave.LeaveResponse> {
-		const body = Leave.LeaveBodySchema.parse(options);
 		const response = await this.api.post(Routes.Groups.Leave, {
-			body,
+			body: options,
 		});
 
-		return Leave.LeaveResponseSchema.parse(response);
+		return response as Leave.LeaveResponse;
 	}
 }

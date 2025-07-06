@@ -1,16 +1,15 @@
-import { z } from "zod";
-import { GroupJidSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { GroupJid } from "@/types/tags";
 
-export const UpdateSubjectBodySchema = z.object({
-  groupJid: GroupJidSchema,
-  subject: z.string(),
-});
+export interface UpdateSubjectRequest {
+  groupJid: GroupJid;
+  subject: string;
+}
 
-export type UpdateSubjectOptions = z.infer<typeof UpdateSubjectBodySchema>;
+export interface UpdateSubjectResponse {
+  status: string;
+  message: string;
+}
 
-export const UpdateSubjectResponseSchema = z.object({
-  status: z.string(),
-  message: z.string(),
-});
-
-export type UpdateSubjectResponse = z.infer<typeof UpdateSubjectResponseSchema>; 
+// Backward compatibility aliases
+export type UpdateSubjectOptions = UpdateSubjectRequest; 

@@ -1,38 +1,35 @@
-import { z } from "zod";
-import { JidSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { Jid } from "@/types/tags";
 
-export const FetchBusinessProfileBodySchema = z.object({
-  jid: JidSchema,
-});
+export interface FetchBusinessProfileRequest {
+  jid: Jid;
+}
 
-export type FetchBusinessProfileOptions = z.infer<typeof FetchBusinessProfileBodySchema>;
+export interface Address {
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+  countryCode: string;
+}
 
-const AddressSchema = z.object({
-  street: z.string(),
-  city: z.string(),
-  state: z.string(),
-  zip: z.string(),
-  country: z.string(),
-  countryCode: z.string(),
-});
+export interface Category {
+  id: string;
+  localized_display_name: string;
+}
 
-const WebsiteSchema = z.string().url();
+export interface FetchBusinessProfileResponse {
+  jid: Jid;
+  description: string;
+  email: string;
+  websites: string[];
+  latitude: number;
+  longitude: number;
+  address: Address;
+  categories: Category[];
+  isCurrent: boolean;
+}
 
-const CategorySchema = z.object({
-  id: z.string(),
-  localized_display_name: z.string(),
-});
-
-export const FetchBusinessProfileResponseSchema = z.object({
-  jid: JidSchema,
-  description: z.string(),
-  email: z.string().email(),
-  websites: z.array(WebsiteSchema),
-  latitude: z.number(),
-  longitude: z.number(),
-  address: AddressSchema,
-  categories: z.array(CategorySchema),
-  isCurrent: z.boolean(),
-});
-
-export type FetchBusinessProfileResponse = z.infer<typeof FetchBusinessProfileResponseSchema>; 
+// Backward compatibility aliases
+export type FetchBusinessProfileOptions = FetchBusinessProfileRequest; 

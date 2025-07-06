@@ -1,15 +1,14 @@
-import { z } from "zod";
-import { GroupInviteCodeSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { GroupInviteCode } from "@/types/tags";
 
-export const AcceptInviteCodeBodySchema = z.object({
-  inviteCode: GroupInviteCodeSchema,
-});
+export interface AcceptInviteCodeRequest {
+  inviteCode: GroupInviteCode;
+}
 
-export type AcceptInviteCodeOptions = z.infer<typeof AcceptInviteCodeBodySchema>;
+export interface AcceptInviteCodeResponse {
+  status: string;
+  gid: string;
+}
 
-export const AcceptInviteCodeResponseSchema = z.object({
-  status: z.string(),
-  gid: z.string(),
-});
-
-export type AcceptInviteCodeResponse = z.infer<typeof AcceptInviteCodeResponseSchema>; 
+// Backward compatibility aliases
+export type AcceptInviteCodeOptions = AcceptInviteCodeRequest; 

@@ -1,14 +1,11 @@
-import { z } from "zod";
+// Pure TypeScript interfaces for better IDE support and performance
+export type PrivacySetting = "all" | "contacts" | "contact_blacklist" | "none";
 
-const PrivacySettingSchema = z.enum(["all", "contacts", "contact_blacklist", "none"]);
-
-export const FetchPrivacySettingsResponseSchema = z.object({
-  online: PrivacySettingSchema,
-  profile: PrivacySettingSchema,
-  status: PrivacySettingSchema,
-  readreceipts: PrivacySettingSchema,
-  last: PrivacySettingSchema,
-  groupadd: PrivacySettingSchema,
-});
-
-export type FetchPrivacySettingsResponse = z.infer<typeof FetchPrivacySettingsResponseSchema>; 
+export interface FetchPrivacySettingsResponse {
+  online: PrivacySetting;
+  profile: PrivacySetting;
+  status: PrivacySetting;
+  readreceipts: PrivacySetting;
+  last: PrivacySetting;
+  groupadd: PrivacySetting;
+} 

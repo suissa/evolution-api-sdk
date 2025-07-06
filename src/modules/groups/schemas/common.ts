@@ -1,66 +1,89 @@
-import { z } from "zod";
-
+// Pure TypeScript interfaces for better IDE support and performance
 import { GroupJid, Jid } from "@/types/tags";
 import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
 
-export const GroupResponseSchema = z.object({
-	id: z.string(),
-	subject: z.string(),
-	subjectOwner: z.string(),
-	subjectTime: z.coerce.date(),
-	pictureUrl: z.string().url().nullish(),
-	size: z.number(),
-	creation: z.coerce.date(),
-	owner: z.string(),
-	restrict: z.boolean(),
-	announce: z.boolean(),
-});
+// Raw response interfaces from API
+export interface GroupResponseRaw {
+	id: string;
+	subject: string;
+	subjectOwner: string;
+	subjectTime: string | Date;
+	pictureUrl?: string | null;
+	size: number;
+	creation: string | Date;
+	owner: string;
+	restrict: boolean;
+	announce: boolean;
+}
 
-export const ParticipantResponseSchema = z.object({
-	id: z.string(),
-	admin: z.enum(["admin", "superadmin"]).nullish(),
-});
+export interface ParticipantResponseRaw {
+	id: string;
+	admin?: "admin" | "superadmin" | null;
+}
 
-export const GroupWithParticipantsResponseSchema = GroupResponseSchema.extend({
-	participants: z.array(ParticipantResponseSchema),
-});
+export interface GroupWithParticipantsResponseRaw extends GroupResponseRaw {
+	participants: ParticipantResponseRaw[];
+}
 
+// Transformed response interfaces
+export interface GroupResponse {
+	jid: GroupJid;
+	name: string;
+	pictureUrl?: string;
+	size: number;
+	subject: {
+		owner: Jid;
+		time: Date;
+	};
+	owner: {
+		jid: Jid;
+		phoneNumber: string;
+	};
+	createdAt: Date;
+	restrict: boolean;
+	announce: boolean;
+}
+
+export interface ParticipantResponse {
+	id: string;
+	role: "admin" | "superadmin" | "member";
+}
+
+export interface GroupWithParticipantsResponse extends GroupResponse {
+	participants: ParticipantResponse[];
+}
+
+// Transform functions
 export const GroupResponseSchemaTransform = (
-	group: z.infer<typeof GroupResponseSchema>,
-) => ({
+	group: GroupResponseRaw,
+): GroupResponse => ({
 	jid: GroupJid(group.id),
 	name: group.subject,
 	pictureUrl: group.pictureUrl || undefined,
 	size: group.size,
 	subject: {
 		owner: Jid(group.subjectOwner),
-		time: group.subjectTime,
+		time: new Date(group.subjectTime),
 	},
 	owner: {
 		jid: Jid(group.owner),
 		phoneNumber: phoneNumberFromJid(group.owner),
 	},
-	createdAt: group.creation,
+	createdAt: new Date(group.creation),
 	restrict: group.restrict,
 	announce: group.announce,
 });
 
 export const ParticipantResponseSchemaTransform = (
-	participant: z.infer<typeof ParticipantResponseSchema>,
-) => ({
+	participant: ParticipantResponseRaw,
+): ParticipantResponse => ({
 	id: participant.id,
 	role: participant.admin || ("member" as const),
 });
 
 export const GroupWithParticipantsResponseSchemaTransform = (
-	group: z.infer<typeof GroupWithParticipantsResponseSchema>,
-) => ({
+	group: GroupWithParticipantsResponseRaw,
+): GroupWithParticipantsResponse => ({
 	...GroupResponseSchemaTransform(group),
 	participants: group.participants.map(ParticipantResponseSchemaTransform),
 });
-
-export type GroupResponse = z.infer<typeof GroupResponseSchema>;
-export type ParticipantResponse = z.infer<typeof ParticipantResponseSchema>;
-export type GroupWithParticipantsResponse = z.infer<
-	typeof GroupWithParticipantsResponseSchema
->;

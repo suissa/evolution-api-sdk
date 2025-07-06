@@ -1,22 +1,18 @@
-import { z } from "zod";
-import { ChatIdSchema, MessageIdSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { ChatId, MessageId } from "@/types/tags";
 
-export const ReactionBodySchema = z.object({
-  number: ChatIdSchema,
-  messageId: MessageIdSchema,
-  reaction: z.string(), // Can be an emoji
-});
+export interface ReactionMessageOptions {
+  number: ChatId;
+  messageId: MessageId;
+  reaction: string; // Can be an emoji
+}
 
-export type ReactionMessageOptions = z.infer<typeof ReactionBodySchema>;
-
-export const ReactionResponseSchema = z.object({
-    key: z.object({
-        remoteJid: ChatIdSchema,
-        fromMe: z.boolean(),
-        id: MessageIdSchema,
-    }),
-    messageTimestamp: z.string(),
-    status: z.string(),
-});
-
-export type ReactionMessageResponse = z.infer<typeof ReactionResponseSchema>; 
+export interface ReactionMessageResponse {
+  key: {
+    remoteJid: ChatId;
+    fromMe: boolean;
+    id: MessageId;
+  };
+  messageTimestamp: string;
+  status: string;
+} 

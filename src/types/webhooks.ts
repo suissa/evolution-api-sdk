@@ -1,62 +1,50 @@
-import { z } from "zod";
+export interface TextMessage {
+	messageType: "text";
+	conversation: string;
+	extendedTextMessage: {
+		text: string;
+	};
+}
 
-const TextMessageSchema = z.object({
-	messageType: z.literal("text"),
-	conversation: z.string(),
-	extendedTextMessage: z.object({
-		text: z.string(),
-	}),
-});
+export interface ImageMessage {
+	messageType: "image";
+	imageMessage: {
+		url: string;
+		mimetype?: string;
+		caption?: string;
+	};
+}
 
-const ImageMessageSchema = z.object({
-	messageType: z.literal("image"),
-	imageMessage: z.object({
-		url: z.string().url(),
-		mimetype: z.string().optional(),
-		caption: z.string().optional(),
-	}),
-});
+export interface AudioMessage {
+	messageType: "audio";
+	audioMessage: {
+		url: string;
+		mimetype?: string;
+		seconds: number;
+	};
+}
 
-const AudioMessageSchema = z.object({
-	messageType: z.literal("audio"),
-	audioMessage: z.object({
-		url: z.string().url(),
-		mimetype: z.string().optional(),
-		seconds: z.number(),
-	}),
-});
+export type Message = TextMessage | ImageMessage | AudioMessage;
 
-const MessageSchema = z.discriminatedUnion("messageType", [
-	TextMessageSchema,
-	ImageMessageSchema,
-	AudioMessageSchema,
-]);
+export interface MessagesUpsertEvent {
+	event: "messages.upsert";
+	instance: string;
+	data: {
+		key: {
+			remoteJid: string;
+			fromMe: boolean;
+			id: string;
+			participant?: string;
+		};
+		pushName: string;
+		message: Message;
+		messageType: string;
+		messageTimestamp: number;
+		owner: string;
+		source: string;
+	};
+	date: string;
+	webhook: string;
+}
 
-export const MessagesUpsertEventSchema = z.object({
-	event: z.literal("messages.upsert"),
-	instance: z.string(),
-	data: z.object({
-		key: z.object({
-			remoteJid: z.string(),
-			fromMe: z.boolean(),
-			id: z.string(),
-			participant: z.string().optional(),
-		}),
-		pushName: z.string(),
-		message: MessageSchema,
-		messageType: z.string(),
-		messageTimestamp: z.number(),
-		owner: z.string(),
-		source: z.string(),
-	}),
-	date: z.string(),
-	webhook: z.string(),
-});
-
-export type MessagesUpsertEvent = z.infer<typeof MessagesUpsertEventSchema>;
-
-export const WebhookPayloadSchema = z.discriminatedUnion("event", [
-	MessagesUpsertEventSchema,
-]);
-
-export type WebhookPayload = z.infer<typeof WebhookPayloadSchema>; 
+export type WebhookPayload = MessagesUpsertEvent; 

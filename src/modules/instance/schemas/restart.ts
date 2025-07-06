@@ -1,14 +1,13 @@
-import { z } from "zod";
+// Pure TypeScript interfaces for better IDE support and performance
 
-export const RestartParamsSchema = z.object({
-  instanceName: z.string(),
-});
+export interface RestartRequest {
+  instanceName: string;
+}
 
-export type RestartOptions = z.infer<typeof RestartParamsSchema>;
+export interface RestartResponse {
+    success: boolean;
+    message: string;
+}
 
-export const RestartResponseSchema = z.object({
-    success: z.boolean(),
-    message: z.string(),
-});
-
-export type RestartResponse = z.infer<typeof RestartResponseSchema>; 
+// Backward compatibility aliases
+export type RestartOptions = RestartRequest; 

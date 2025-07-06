@@ -1,18 +1,16 @@
-import { z } from "zod";
-import { GroupJidSchema } from "@/schemas/common";
-import { JidSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { GroupJid, Jid } from "@/types/tags";
 
-export const FindMembersParamsSchema = z.object({
-  groupJid: GroupJidSchema,
-});
+export interface FindMembersRequest {
+  groupJid: GroupJid;
+}
 
-export type FindMembersOptions = z.infer<typeof FindMembersParamsSchema>;
+export interface Member {
+  id: Jid;
+  admin: string | null;
+}
 
-const MemberSchema = z.object({
-  id: JidSchema,
-  admin: z.string().nullable(),
-});
+export type FindMembersResponse = Member[];
 
-export const FindMembersResponseSchema = z.array(MemberSchema);
-
-export type FindMembersResponse = z.infer<typeof FindMembersResponseSchema>; 
+// Backward compatibility aliases
+export type FindMembersOptions = FindMembersRequest; 

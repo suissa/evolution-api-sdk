@@ -1,16 +1,15 @@
-import { z } from "zod";
-import { GroupJidSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { GroupJid } from "@/types/tags";
 
-export const UpdatePictureBodySchema = z.object({
-  groupJid: GroupJidSchema,
-  url: z.string().url(),
-});
+export interface UpdatePictureRequest {
+  groupJid: GroupJid;
+  url: string;
+}
 
-export type UpdatePictureOptions = z.infer<typeof UpdatePictureBodySchema>;
+export interface UpdatePictureResponse {
+  status: string;
+  message: string;
+}
 
-export const UpdatePictureResponseSchema = z.object({
-  status: z.string(),
-  message: z.string(),
-});
-
-export type UpdatePictureResponse = z.infer<typeof UpdatePictureResponseSchema>; 
+// Backward compatibility aliases
+export type UpdatePictureOptions = UpdatePictureRequest; 

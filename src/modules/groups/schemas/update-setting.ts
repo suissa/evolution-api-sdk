@@ -1,17 +1,16 @@
-import { z } from "zod";
-import { GroupJidSchema } from "@/schemas/common";
+// Pure TypeScript interfaces for better IDE support and performance
+import type { GroupJid } from "@/types/tags";
 
-export const UpdateSettingBodySchema = z.object({
-  groupJid: GroupJidSchema,
-  setting: z.enum(["announcement", "locked"]),
-  value: z.boolean(),
-});
+export interface UpdateSettingRequest {
+  groupJid: GroupJid;
+  setting: "announcement" | "locked";
+  value: boolean;
+}
 
-export type UpdateSettingOptions = z.infer<typeof UpdateSettingBodySchema>;
+export interface UpdateSettingResponse {
+  status: string;
+  message: string;
+}
 
-export const UpdateSettingResponseSchema = z.object({
-  status: z.string(),
-  message: z.string(),
-});
-
-export type UpdateSettingResponse = z.infer<typeof UpdateSettingResponseSchema>; 
+// Backward compatibility aliases
+export type UpdateSettingOptions = UpdateSettingRequest; 

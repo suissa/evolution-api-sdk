@@ -1,52 +1,52 @@
-import { z } from "zod";
-
+// Pure TypeScript interfaces for better IDE support and performance
 import { Jid, MessageId } from "@/types/tags";
 import { phoneNumberFromJid } from "@/utils/phone-numer-from-jid";
-import { BaseMessageOptionsSchema } from "./base";
+import { BaseMessageOptions } from "./base";
 
-export const TextMessageOptionsSchema = BaseMessageOptionsSchema.extend({
+// Raw response interface from API
+export interface TextMessageResponseRaw {
+	key: {
+		remoteJid: string;
+		id: string;
+	};
+	messageTimestamp: string | Date;
+}
+
+// Request interfaces
+export interface TextMessageOptions extends BaseMessageOptions {
 	/**
 	 * Message text content
 	 */
-	text: z.string(),
+	text: string;
 	/**
 	 * Whether link preview should be shown
 	 */
-	linkPreview: z.boolean().optional(),
+	linkPreview?: boolean;
+}
+
+// Response interfaces
+export interface TextMessageResponse {
+	receiver: {
+		phoneNumber: string;
+		jid: Jid;
+	};
+	messageId: MessageId;
+	timestamp: Date;
+}
+
+export interface TextMessageReceived {
+	conversation: string;
+	extendedTextMessage: {
+		text: string;
+	};
+}
+
+// Transform function
+export const TextMessageResponseTransform = (data: TextMessageResponseRaw): TextMessageResponse => ({
+	receiver: {
+		phoneNumber: phoneNumberFromJid(data.key.remoteJid),
+		jid: Jid(data.key.remoteJid),
+	},
+	messageId: MessageId(data.key.id),
+	timestamp: new Date(data.messageTimestamp),
 });
-
-export const TextMessageBodySchema = TextMessageOptionsSchema;
-
-export const TextMessageResponseSchema = z
-	.object({
-		key: z.object({
-			remoteJid: z.string(),
-			id: z.string(),
-		}),
-		messageTimestamp: z.coerce.date(),
-	})
-	.transform((data) => ({
-		receiver: {
-			phoneNumber: phoneNumberFromJid(data.key.remoteJid),
-			jid: Jid(data.key.remoteJid),
-		},
-		messageId: MessageId(data.key.id),
-		timestamp: data.messageTimestamp,
-	}));
-
-export const TextMessageReceivedSchema = z.object({
-	conversation: z.string(),
-	extendedTextMessage: z.object({
-		text: z.string(),
-	}),
-});
-
-export type TextMessageOptions = z.infer<typeof TextMessageOptionsSchema>;
-export type TextMessageResponse = z.infer<typeof TextMessageResponseSchema>;
-export type TextMessageReceived = z.infer<typeof TextMessageReceivedSchema>;
-
-export {
-	TextMessageBodySchema as BodySchema,
-	TextMessageOptionsSchema as OptionsSchema,
-	TextMessageResponseSchema as ResponseSchema,
-};
