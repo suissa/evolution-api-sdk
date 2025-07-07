@@ -5,7 +5,10 @@ export interface ConnectionStateRequest {
 }
 
 export interface ConnectionStateResponse {
-  state: "open" | "close" | "connecting";
+  instance: {
+    instanceName: string;
+    state: "open" | "close" | "connecting";
+  }
 }
 
 // Backward compatibility aliases
