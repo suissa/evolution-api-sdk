@@ -21,11 +21,7 @@ export interface InstanceDetails {
 	integration: IntegrationDetails;
 }
 
-export interface InstanceItem {
-	instance: InstanceDetails;
-}
-
-export type FetchAllResponse = InstanceItem[]; 
+export type FetchAllResponse = InstanceDetails[]; 
 
 export interface FetchAllRequest {
 	instanceName: string;
