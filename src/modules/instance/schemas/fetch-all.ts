@@ -26,3 +26,7 @@ export interface InstanceItem {
 }
 
 export type FetchAllResponse = InstanceItem[]; 
+
+export interface FetchAllRequest {
+	instanceName: string;
+}

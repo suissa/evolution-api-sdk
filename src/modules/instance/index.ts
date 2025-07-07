@@ -73,8 +73,11 @@ export class InstanceModule {
         return response as Restart.RestartResponse;
     }
 
-	async fetchAll(): Promise<FetchAll.FetchAllResponse> {
+	async fetchAll(
+		options: FetchAll.FetchAllRequest,
+	): Promise<FetchAll.FetchAllResponse> {
 		const response = await this.api.get(Routes.Instance.FetchAll, {
+			params: options,
 			isInstanceUrl: false,
 		});
 		return response as FetchAll.FetchAllResponse;
