@@ -2,7 +2,7 @@
 import type { Jid } from "@/types/tags";
 
 export interface FetchBusinessProfileRequest {
-  jid: Jid;
+  number: string;
 }
 
 export interface Address {

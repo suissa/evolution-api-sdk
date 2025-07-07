@@ -1,8 +1,7 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import type { Jid } from "@/types/tags";
 
 export interface FetchProfileRequest {
-  jid: Jid;
+  number: string;
 }
 
 export interface FetchProfileResponse {
