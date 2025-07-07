@@ -60,7 +60,11 @@ export class ApiService {
 			
 			throw new EvolutionApiError(
 				errorMessage,
-				data,
+				{
+					message: errorMessage,
+					response: data.response.toString(),
+					url: url.toString(),
+				} as unknown as Record<string, any>,
 				response.status,
 			);
 		}
