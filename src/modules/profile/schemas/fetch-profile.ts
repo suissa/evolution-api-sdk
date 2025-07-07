@@ -4,10 +4,19 @@ export interface FetchProfileRequest {
   number: string;
 }
 
-export interface FetchProfileResponse {
+export interface ProfileStatus {
   status: string;
-  pushname: string;
-  imgUrl: string;
+  setAt: string;
+}
+
+export interface FetchProfileResponse {
+  wuid: string;
+  name: string | null;
+  numberExists: boolean;
+  picture?: string;
+  status?: ProfileStatus;
+  isBusiness: boolean;
+  description?: string;
 }
 
 // Backward compatibility aliases

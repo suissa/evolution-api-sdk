@@ -1,34 +1,28 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import type { Jid } from "@/types/tags";
 
 export interface FetchBusinessProfileRequest {
   number: string;
 }
 
-export interface Address {
-  street: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
-  countryCode: string;
+export interface BusinessHoursConfig {
+  day_of_week: "sun" | "mon" | "tue" | "wed" | "thu" | "fri" | "sat";
+  mode: "open_24h" | "specific_hours" | "closed";
+  open_time?: string;
+  close_time?: string;
 }
 
-export interface Category {
-  id: string;
-  localized_display_name: string;
+export interface BusinessHours {
+  timezone: string;
+  business_config: BusinessHoursConfig[];
 }
 
 export interface FetchBusinessProfileResponse {
-  jid: Jid;
+  isBusiness: boolean;
+  wid: string;
   description: string;
-  email: string;
-  websites: string[];
-  latitude: number;
-  longitude: number;
-  address: Address;
-  categories: Category[];
-  isCurrent: boolean;
+  website: string[];
+  category: string;
+  business_hours: BusinessHours;
 }
 
 // Backward compatibility aliases
