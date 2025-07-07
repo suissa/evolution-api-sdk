@@ -55,7 +55,6 @@ export class ApiService {
 
 		if (!response.ok) {
 			// Extract meaningful error message from the response
-			console.log('error data', data);
 			const errorMessage = extractErrorMessage(data) || 
 				`Request failed with status ${response.status}: ${response.statusText}`;
 			
@@ -63,8 +62,9 @@ export class ApiService {
 				errorMessage,
 				{
 					message: errorMessage,
-					response: data.toString(),
+					response: data,
 					url: url.toString(),
+					params: params.toString(),
 				} as unknown as Record<string, any>,
 				response.status,
 			);
