@@ -56,7 +56,7 @@ export class ProfileModule {
 	async updatePicture(
 		options: UpdatePicture.UpdatePictureRequest,
 	): Promise<UpdatePicture.UpdatePictureResponse> {
-		const response = await this.api.put(Routes.Profile.UpdatePicture, {
+		const response = await this.api.post(Routes.Profile.UpdatePicture, {
 			body: options,
 		});
 
