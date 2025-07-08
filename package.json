@@ -1,7 +1,7 @@
 {
 	"name": "evolution-api-sdk",
 	"private": false,
-	"version": "0.5.20",
+	"version": "0.5.21",
 	"description": "Unofficial SDK for the Evolution Whatsapp API v2",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
@@ -31,8 +31,8 @@
 		"zap"
 	],
 	"author": {
-		"name": "João Gabriel Tonaco",
-		"url": "https://github.com/joaotonaco"
+		"name": "Gustavo Salomé Silva",
+		"url": "https://github.com/gusnips"
 	},
 	"repository": {
 		"type": "git",

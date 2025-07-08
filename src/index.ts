@@ -1,3 +1,5 @@
+export * from "./types/webhooks";
+
 import { ApiService } from "./api/service";
 import {
 	ChatsModule,

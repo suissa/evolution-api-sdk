@@ -202,58 +202,54 @@ console.log(result);
 ### Webhook Usage
 - **Parse incoming webhooks**
   ```ts
-  import { WebhookPayloadSchema, WebhookEvent } from "evolution-api-sdk";
+  import {
+	EvolutionWebhookData,
+	EvolutionMessagePayload,
+	WebhookEvent,
+} from "evolution-api-sdk";
 
-  function handleWebhook(payload: unknown) {
-    const result = WebhookPayloadSchema.safeParse(payload);
+function handleWebhook(payload: EvolutionWebhookData) {
+	if (payload.event !== WebhookEvent.MESSAGES_UPSERT) {
+		return;
+	}
 
-    if (!result.success) {
-      console.error("Invalid webhook payload:", result.error);
-      return;
-    }
+	const messagePayload = payload.data as EvolutionMessagePayload;
+	console.log(
+		`New message from ${messagePayload.pushName} in ${messagePayload.key.remoteJid}`,
+	);
 
-    const { data: webhook } = result;
+	const message = messagePayload.message;
+	if (message?.conversation) {
+		console.log("-> Text:", message.conversation);
+	} else if (message?.imageMessage) {
+		console.log("-> Image, url:", message.imageMessage.url);
+	}
+}
 
-    if (webhook.event === WebhookEvent.MessagesUpsert) {
-      const message = webhook.data.message;
-      console.log(`New message from ${webhook.data.pushName} in ${webhook.data.key.remoteJid}`);
-      
-      // Now you can check the message type and handle it accordingly
-      if ("extendedTextMessage" in message) {
-        console.log("-> Text:", message.extendedTextMessage.text);
-      } else if ("imageMessage" in message) {
-        console.log("-> Image, caption:", message.imageMessage.caption);
-      }
-    }
-  }
+// Example of a raw payload you might receive
+const examplePayload: EvolutionWebhookData = {
+	event: WebhookEvent.MESSAGES_UPSERT,
+	instance: "my-instance",
+	data: {
+		key: {
+			remoteJid: "5511999999999@s.whatsapp.net",
+			fromMe: false,
+			id: "3EB0B8A1B2C3D4E5F6A7B8C9D0E1F2A3",
+		},
+		pushName: "Gus",
+		message: {
+			conversation: "Hello from the other side!",
+		},
+		messageType: "conversation",
+		messageTimestamp: 1678886400,
+		source: "whatsapp",
+	},
+	sender: "5511988888888@s.whatsapp.net",
+	date: 1678886400,
+	server_url: "http://localhost:8080",
+};
 
-  // Example of a raw payload you might receive
-  const examplePayload = {
-    event: "messages.upsert",
-    instance: "my-instance",
-    data: {
-      key: {
-        remoteJid: "5511999999999@s.whatsapp.net",
-        fromMe: false,
-        id: "3EB0B8A1B2C3D4E5F6A7B8C9D0E1F2A3",
-      },
-      pushName: "Gus",
-      message: {
-        messageType: "text",
-        extendedTextMessage: {
-          text: "Hello from the other side!",
-        },
-      },
-      messageType: "extendedTextMessage",
-      messageTimestamp: 1678886400,
-      owner: "5511988888888@s.whatsapp.net",
-      source: "whatsapp",
-    },
-    date: "2023-03-15T12:00:00.000Z",
-    webhook: "http://localhost:3000/webhook"
-  };
-
-  handleWebhook(examplePayload);
+handleWebhook(examplePayload);
   ```
 
 ### Webhooks
