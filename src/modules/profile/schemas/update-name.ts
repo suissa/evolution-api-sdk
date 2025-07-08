@@ -4,9 +4,7 @@ export interface UpdateNameRequest {
 }
 
 export interface UpdateNameResponse {
-  update: {
-    success: boolean;
-  }
+  update: "success" | "error";
 }
 
 // Backward compatibility aliases

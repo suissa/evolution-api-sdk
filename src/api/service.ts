@@ -62,10 +62,10 @@ export class ApiService {
 				errorMessage,
 				{
 					message: errorMessage,
-					response: JSON.stringify(data, null, 2),
+					response: JSON.stringify(data),
 					url: url.toString(),
 					params: params.toString(),
-					body: JSON.stringify(options.body, null, 2),
+					body: JSON.stringify(options.body),
 				} as unknown as Record<string, any>,
 				response.status,
 			);
