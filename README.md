@@ -201,7 +201,7 @@ console.log(result);
 
 ### Webhook Usage
 - **Parse incoming webhooks**
-  ```ts
+```ts
   import {
 	EvolutionWebhookData,
 	EvolutionMessagePayload,
@@ -250,7 +250,7 @@ const examplePayload: EvolutionWebhookData = {
 };
 
 handleWebhook(examplePayload);
-  ```
+```
 
 ### Webhooks
 
