@@ -10,8 +10,11 @@ export interface LogoutInstanceInfo {
 }
 
 export interface LogoutResponse {
+  status: "SUCCESS" | "ERROR";
   error: boolean;
-  message: string;
+  response: {
+    message: string;
+  };
   instance: LogoutInstanceInfo;
 }
 
