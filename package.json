@@ -1,7 +1,7 @@
 {
 	"name": "evolution-api-sdk",
 	"private": false,
-	"version": "0.5.19",
+	"version": "0.5.20",
 	"description": "Unofficial SDK for the Evolution Whatsapp API v2",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
@@ -22,7 +22,7 @@
 		"@types/node": "^22.14.1",
 		"tsup": "^8.4.0",
 		"typescript": "^5.8.3"
-	},
+	},	
 	"keywords": [
 		"evolution",
 		"api",

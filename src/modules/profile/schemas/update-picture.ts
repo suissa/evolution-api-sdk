@@ -4,7 +4,9 @@ export interface UpdatePictureRequest {
 }
 
 export interface UpdatePictureResponse {
-  status: string;
+  update: {
+    success: boolean;
+  }
 }
 
 // Backward compatibility aliases
