@@ -202,7 +202,7 @@ console.log(result);
 ### Webhook Usage
 - **Parse incoming webhooks**
 ```ts
-  import {
+import {
 	EvolutionWebhookData,
 	EvolutionMessagePayload,
 	WebhookEvent,
@@ -223,6 +223,8 @@ function handleWebhook(payload: EvolutionWebhookData) {
 		console.log("-> Text:", message.conversation);
 	} else if (message?.imageMessage) {
 		console.log("-> Image, url:", message.imageMessage.url);
+	} else if (message?.audioMessage) {
+		console.log("-> Audio, url:", message.audioMessage.url);
 	}
 }
 

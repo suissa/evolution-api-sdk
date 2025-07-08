@@ -50,10 +50,25 @@ export interface ImageMessage {
 	imageSourceType: string;
 }
 
+export interface AudioMessage {
+	url: string;
+	mimetype: string;
+	fileSha256: string;
+	fileLength: string;
+	seconds: number;
+	ptt: boolean;
+	mediaKey: string;
+	fileEncSha256: string;
+	directPath: string;
+	mediaKeyTimestamp: string;
+	waveform: string;
+}
+
 export type EvolutionMessageContent = {
 	messageContextInfo?: MessageContextInfo;
 	conversation?: string;
 	imageMessage?: ImageMessage;
+	audioMessage?: AudioMessage;
 };
 
 export interface EvolutionContactPayload {
