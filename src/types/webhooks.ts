@@ -71,6 +71,15 @@ export type EvolutionMessageContent = {
 	audioMessage?: AudioMessage;
 };
 
+export interface EvolutionConnectionUpdatePayload {
+	instance: string;
+	wuid?: string;
+	profileName?: string;
+	profilePictureUrl?: string | null;
+	state: string;
+	statusReason: number;
+}
+
 export interface EvolutionContactPayload {
 	remoteJid: string;
 	pushName: string;
@@ -102,7 +111,8 @@ export interface EvolutionWebhookData {
 	data:
 		| EvolutionMessagePayload
 		| EvolutionContactPayload
-		| EvolutionContactPayload[];
+		| EvolutionContactPayload[]
+		| EvolutionConnectionUpdatePayload;
 	sender: string;
 	date?: number;
 	instanceName?: string;

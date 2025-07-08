@@ -201,30 +201,47 @@ console.log(result);
 
 ### Webhook Usage
 - **Parse incoming webhooks**
+
 ```ts
 import {
 	EvolutionWebhookData,
 	EvolutionMessagePayload,
+	EvolutionConnectionUpdatePayload,
 	WebhookEvent,
 } from "evolution-api-sdk";
 
 function handleWebhook(payload: EvolutionWebhookData) {
-	if (payload.event !== WebhookEvent.MESSAGES_UPSERT) {
-		return;
-	}
+	switch (payload.event) {
+		case WebhookEvent.MESSAGES_UPSERT: {
+			const messagePayload = payload.data as EvolutionMessagePayload;
+			console.log(
+				`New message from ${messagePayload.pushName} in ${messagePayload.key.remoteJid}`,
+			);
 
-	const messagePayload = payload.data as EvolutionMessagePayload;
-	console.log(
-		`New message from ${messagePayload.pushName} in ${messagePayload.key.remoteJid}`,
-	);
+			const message = messagePayload.message;
+			if (message?.conversation) {
+				console.log("-> Text:", message.conversation);
+			} else if (message?.imageMessage) {
+				console.log("-> Image, url:", message.imageMessage.url);
+			} else if (message?.audioMessage) {
+				console.log("-> Audio, url:", message.audioMessage.url);
+			}
+			break;
+		}
 
-	const message = messagePayload.message;
-	if (message?.conversation) {
-		console.log("-> Text:", message.conversation);
-	} else if (message?.imageMessage) {
-		console.log("-> Image, url:", message.imageMessage.url);
-	} else if (message?.audioMessage) {
-		console.log("-> Audio, url:", message.audioMessage.url);
+		case WebhookEvent.CONNECTION_UPDATE: {
+			const connectionPayload =
+				payload.data as EvolutionConnectionUpdatePayload;
+			console.log("-> Connection state:", connectionPayload.state);
+			if (connectionPayload.profileName) {
+				console.log("-> Profile name:", connectionPayload.profileName);
+			}
+			break;
+		}
+
+		default:
+			console.log("Unhandled event:", payload.event);
+			break;
 	}
 }
 
