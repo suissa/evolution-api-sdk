@@ -303,10 +303,12 @@ await client.messages.sendLocation({
 // Send contact
 await client.messages.sendContact({
   number: "5511999999999",
-  contact: {
-    fullName: "John Doe",
-    phones: ["5511999999999"],
-  },
+  contact: [
+    {
+      fullName: "John Doe",
+      phones: ["5511999999999"],
+    },
+  ],
 });
 
 // Send reaction

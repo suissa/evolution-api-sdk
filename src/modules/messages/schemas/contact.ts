@@ -6,98 +6,103 @@ import { BaseMessageOptions } from "./base";
 
 // Raw response interface from API
 export interface ContactMessageResponseRaw {
-	key: {
-		remoteJid: string;
-		id: string;
-	};
-	message: {
-		contactMessage?: {
-			displayName: string;
-			vcard: string;
-		};
-		contactsArrayMessage?: {
-			contacts: {
-				displayName: string;
-				vcard: string;
-			}[];
-		};
-	};
-	messageTimestamp: string | Date;
+  key: {
+    remoteJid: string;
+    id: string;
+  };
+  message: {
+    contactMessage?: {
+      displayName: string;
+      vcard: string;
+    };
+    contactsArrayMessage?: {
+      contacts: {
+        displayName: string;
+        vcard: string;
+      }[];
+    };
+  };
+  messageTimestamp: string | Date;
 }
 
 // Request interfaces
 export interface Contact {
-	/**
-	 * Contact display name
-	 */
-	fullName: string;
-	/**
-	 * Contact phone number
-	 */
-	phoneNumber: string;
-	/**
-	 * Contact organization
-	 */
-	organization?: string;
-	/**
-	 * Contact email
-	 */
-	email?: string;
-	/**
-	 * Contact website url
-	 */
-	url?: string;
+  /**
+   * Contact display name
+   */
+  fullName: string;
+  /**
+   * Contact phone number
+   */
+  phoneNumber: string;
+  /**
+   * Contact organization
+   */
+  organization?: string;
+  /**
+   * Contact email
+   */
+  email?: string;
+  /**
+   * Contact website url
+   */
+  url?: string;
 }
 
 export interface ContactMessageOptions extends BaseMessageOptions {
-	/**
-	 * Contact list
-	 */
-	contacts: Contact[];
+  /**
+   * Contact list
+   */
+  contact: Contact[];
 }
 
 export interface ContactMessageBody extends BaseMessageOptions {
-	contact: (Contact & {
-		wuid: string;
-	})[];
+  contact: (Contact & {
+    wuid: string;
+  })[];
 }
 
 // Response interfaces
 export interface ContactMessageResponse {
-	receiver: {
-		phoneNumber: string;
-		jid: Jid;
-	};
-	contacts: {
-		displayName: string;
-		vcard: string;
-	}[];
-	id: MessageId;
-	timestamp: Date;
+  receiver: {
+    phoneNumber: string;
+    jid: Jid;
+  };
+  contacts: {
+    displayName: string;
+    vcard: string;
+  }[];
+  id: MessageId;
+  timestamp: Date;
 }
 
 // Transform functions
-export const ContactMessageBodyTransform = (
-	{ contacts, ...data }: ContactMessageOptions
-): ContactMessageBody => ({
-	...data,
-	contact: contacts.map((contact) => ({
-		...contact,
-		phoneNumber: parsePhoneNumber(contact.phoneNumber).formatInternational(),
-		wuid: contact.phoneNumber.replace(/\D/g, ""),
-	})),
+export const ContactMessageBodyTransform = ({
+  contact,
+  ...data
+}: ContactMessageOptions): ContactMessageBody => ({
+  ...data,
+  contact: contact.map((contactItem) => ({
+    ...contactItem,
+    phoneNumber: parsePhoneNumber(
+      contactItem.phoneNumber
+    ).formatInternational(),
+    wuid: contactItem.phoneNumber.replace(/\D/g, ""),
+  })),
 });
 
-export const ContactMessageResponseTransform = (data: ContactMessageResponseRaw): ContactMessageResponse => ({
-	receiver: {
-		phoneNumber: phoneNumberFromJid(data.key.remoteJid),
-		jid: Jid(data.key.remoteJid),
-	},
-	contacts: data.message.contactMessage
-		? [data.message.contactMessage]
-		: data.message.contactsArrayMessage?.contacts || [],
-	id: MessageId(data.key.id),
-	timestamp: new Date(data.messageTimestamp),
+export const ContactMessageResponseTransform = (
+  data: ContactMessageResponseRaw
+): ContactMessageResponse => ({
+  receiver: {
+    phoneNumber: phoneNumberFromJid(data.key.remoteJid),
+    jid: Jid(data.key.remoteJid),
+  },
+  contacts: data.message.contactMessage
+    ? [data.message.contactMessage]
+    : data.message.contactsArrayMessage?.contacts || [],
+  id: MessageId(data.key.id),
+  timestamp: new Date(data.messageTimestamp),
 });
 
 // Backward compatibility aliases
