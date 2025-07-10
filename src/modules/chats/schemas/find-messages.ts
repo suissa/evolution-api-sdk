@@ -1,5 +1,5 @@
 // Pure TypeScript interfaces for better IDE support and performance
-import type { ChatId } from "@/types/tags";
+import type { Jid } from "@/types/tags";
 import type {
   ContextInfo,
   MessageContent,
@@ -9,7 +9,7 @@ import type {
 export interface FindMessagesRequest {
   where: {
     key: {
-      remoteJid: ChatId;
+      remoteJid: Jid;
     };
   };
 }
@@ -19,7 +19,7 @@ export interface ResponseMessage {
   key: {
     id: string;
     fromMe: boolean;
-    remoteJid: string;
+    remoteJid: Jid;
     senderLid?: string;
   };
   pushName?: string;
