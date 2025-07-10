@@ -41,6 +41,8 @@ const client = new EvolutionClient({
 ### Sending a Text Message
 
 ```ts
+client.setInstance("my-instance-01");
+
 await client.messages.sendText({
   number: "5511999999999",
   text: "Hello from the SDK!",
@@ -123,6 +125,12 @@ await client.instance.create({
 });
 ```
 
+#### Setting the default Instance
+
+```ts
+await client.setInstance("InstanceName");
+```
+
 #### Connect to Instance
 
 ```ts
@@ -177,6 +185,7 @@ const chats = await client.chats.findAll();
 #### Chat Actions
 
 ```ts
+client.setInstance("my-instance-01");
 // Update presence
 await client.chats.updatePresence({
   number: "5511999999999",
