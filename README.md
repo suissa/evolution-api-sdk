@@ -47,6 +47,40 @@ await client.messages.sendText({
 });
 ```
 
+### Using Different Instances
+
+You can override the default instance for any method call:
+
+```ts
+// Send message using a different instance
+await client.messages.sendText(
+  {
+    number: "5511999999999",
+    text: "Hello from another instance!",
+  },
+  { instance: "different-instance-name" }
+);
+
+// Check numbers on a specific instance
+await client.chats.check(["5511999999999"], { instance: "my-instance" });
+
+// Works with all methods across all modules
+await client.groups.create(
+  {
+    subject: "My Group",
+    participants: ["5511999999999"],
+  },
+  { instance: "work-instance" }
+);
+
+await client.profile.updateName(
+  {
+    name: "New Name",
+  },
+  { instance: "personal-instance" }
+);
+```
+
 ### Sending an Image
 
 ```ts
@@ -69,225 +103,446 @@ await client.groups.create({
 ### Checking if a Number has WhatsApp
 
 ```ts
-const result = await client.chats.check("5511999999999");
+const result = await client.chats.check(["5511999999999"]);
 console.log(result);
 // [{ jid: '5511999999999@s.whatsapp.net', exists: true }]
 ```
 
 ## API Reference
 
-### Instances
+> **💡 Pro Tip:** All methods support an optional `{ instance: "instance-name" }` parameter to override the default instance.
 
-- **`create(options: CreateOptions): Promise<CreateResponse>`**
-  - Creates a new instance.
-- **`connect(options: ConnectOptions): Promise<ConnectResponse>`**
-  - Connects to an instance.
-- **`connectionState(options: ConnectionStateOptions): Promise<ConnectionStateResponse>`**
-  - Gets the connection state of an instance.
-- **`logout(options: LogoutOptions): Promise<LogoutResponse>`**
-  - Logs out of an instance.
-- **`delete(options: DeleteOptions): Promise<DeleteResponse>`**
-  - Deletes an instance.
-- **`restart(options: RestartOptions): Promise<RestartResponse>`**
-  - Restarts an instance.
-- **`fetchAll(): Promise<FetchAllResponse>`**
-  - Fetches all instances.
-- **`setPresence(options: SetPresenceOptions): Promise<SetPresenceResponse>`**
-  - Sets the presence of the instance.
+### 🔧 Instance Management
 
-### Chats
-
-- **`check(...numbers: CheckOptions | CheckOptions[]): Promise<CheckResponse>`**
-  - Checks if a number has WhatsApp.
-- **`findAll(): Promise<FindAllChatsResponse>`**
-  - Gets all chats.
-- **`sendPresence(options: PresenceOptions): Promise<void>`**
-  - Sends a presence to a certain chat.
-- **`markAsRead(options: MarkAsReadOptions): Promise<MarkAsReadResponse>`**
-  - Marks a chat as read.
-- **`archive(options: ArchiveOptions): Promise<ArchiveResponse>`**
-  - Archives a chat.
-- **`deleteMessage(options: DeleteMessageOptions): Promise<DeleteMessageResponse>`**
-  - Deletes a message in a chat.
-- **`fetchProfilePicture(options: FetchProfilePictureOptions): Promise<FetchProfilePictureResponse>`**
-  - Fetches the profile picture of a chat.
-- **`findContact(options: FindContactsOptions): Promise<FindContactsResponse>`**
-  - Finds a contact.
-- **`findMessages(options: FindMessagesOptions): Promise<FindMessagesResponse>`**
-  - Finds messages in a chat.
-- **`findStatusMessage(options: FindStatusMessageOptions): Promise<FindStatusMessageResponse>`**
-  - Finds a status message.
-- **`updateMessage(options: UpdateMessageOptions): Promise<UpdateMessageResponse>`**
-  - Updates a message.
-
-### Groups
-
-- **`findAll(getParticipants: boolean): Promise<FindAllGroupsResponse | FindAllGroupsWithParticipantsResponse>`**
-  - Gets all groups.
-- **`findByInviteCode(inviteCode: string | GroupInviteCode): Promise<FindGroupByInviteCodeResponse>`**
-  - Gets a group by invite code.
-- **`findByJid(groupJid: string | GroupJid): Promise<FindGroupByJidResponse>`**
-  - Gets a group by JID.
-- **`create(options: CreateGroupOptions): Promise<CreateGroupResponse>`**
-  - Creates a new group.
-- **`updatePicture(options: UpdatePictureOptions): Promise<UpdatePictureResponse>`**
-  - Updates the group picture.
-- **`updateSubject(options: UpdateSubjectOptions): Promise<UpdateSubjectResponse>`**
-  - Updates the group subject.
-- **`updateDescription(options: UpdateDescriptionOptions): Promise<UpdateDescriptionResponse>`**
-  - Updates the group description.
-- **`fetchInviteCode(options: FetchInviteCodeOptions): Promise<FetchInviteCodeResponse>`**
-  - Fetches the group invite code.
-- **`acceptInviteCode(options: AcceptInviteCodeOptions): Promise<AcceptInviteCodeResponse>`**
-  - Accepts a group invite code.
-- **`revokeInviteCode(options: RevokeInviteCodeOptions): Promise<RevokeInviteCodeResponse>`**
-  - Revokes the group invite code.
-- **`sendGroupInvite(options: SendGroupInviteOptions): Promise<SendGroupInviteResponse>`**
-  - Sends a group invite.
-- **`findMembers(options: FindMembersOptions): Promise<FindMembersResponse>`**
-  - Finds members of a group.
-- **`updateMembers(options: UpdateMembersOptions): Promise<UpdateMembersResponse>`**
-  - Updates the members of a group.
-- **`updateSetting(options: UpdateSettingOptions): Promise<UpdateSettingResponse>`**
-  - Updates a group setting.
-- **`toggleEphemeral(options: ToggleEphemeralOptions): Promise<ToggleEphemeralResponse>`**
-  - Toggles ephemeral messages in a group.
-- **`leave(options: LeaveOptions): Promise<LeaveResponse>`**
-  - Leaves a group.
-
-### Messages
-
-- **`sendText(options: TextMessageOptions): Promise<TextMessageResponse>`**
-  - Sends a text message.
-- **`sendImage(options: ImageMessageOptions): Promise<ImageMessageResponse>`**
-  - Sends an image message.
-- **`sendVideo(options: VideoMessageOptions): Promise<VideoMessageResponse>`**
-  - Sends a video message.
-- **`sendDocument(options: DocumentMessageOptions): Promise<DocumentMessageResponse>`**
-  - Sends a document message.
-- **`sendAudio(options: AudioMessageOptions): Promise<AudioMessageResponse>`**
-  - Sends an audio message.
-- **`sendVoice(options: VoiceMessageOptions): Promise<VoiceMessageResponse>`**
-  - Sends a voice message.
-- **`sendSticker(options: StickerMessageOptions): Promise<StickerMessageResponse>`**
-  - Sends a sticker message.
-- **`sendLocation(options: LocationMessageOptions): Promise<LocationMessageResponse>`**
-  - Sends a location message.
-- **`sendContact(options: ContactMessageOptions): Promise<ContactMessageResponse>`**
-  - Sends a contact message.
-- **`sendReaction(options: ReactionMessageOptions): Promise<ReactionMessageResponse>`**
-  - Sends a reaction to a message.
-- **`sendTemplate(options: TemplateMessageOptions): Promise<TemplateMessageResponse>`**
-  - Sends a template message.
-- **`sendStatus(options: StatusMessageOptions): Promise<StatusMessageResponse>`**
-  - Sends a status message.
-- **`sendList(options: ListMessageOptions): Promise<ListMessageResponse>`**
-  - Sends a list message.
-
-### Profile
-
-- **`fetchBusinessProfile(options: FetchBusinessProfileOptions): Promise<FetchBusinessProfileResponse>`**
-  - Fetches the business profile.
-- **`fetchProfile(options: FetchProfileOptions): Promise<FetchProfileResponse>`**
-  - Fetches the profile.
-- **`updateName(options: UpdateNameOptions): Promise<UpdateNameResponse>`**
-  - Updates the profile name.
-- **`updateStatus(options: UpdateStatusOptions): Promise<UpdateStatusResponse>`**
-  - Updates the profile status.
-- **`updatePicture(options: UpdatePictureOptions): Promise<UpdatePictureResponse>`**
-  - Updates the profile picture.
-- **`removePicture(): Promise<RemovePictureResponse>`**
-  - Removes the profile picture.
-- **`fetchPrivacySettings(): Promise<FetchPrivacySettingsResponse>`**
-  - Fetches the privacy settings.
-- **`updatePrivacySettings(options: UpdatePrivacySettingsOptions): Promise<UpdatePrivacySettingsResponse>`**
-  - Updates the privacy settings.
-
-### Webhook Usage
-
-- **Parse incoming webhooks**
+#### Create Instance
 
 ```ts
-import {
-  WebhookData,
-  MessagePayload,
-  ConnectionUpdatePayload,
-  WebhookEvent,
-} from "evolution-api-sdk";
-
-function handleWebhook(payload: WebhookData) {
-  switch (payload.event) {
-    case WebhookEvent.MESSAGES_UPSERT: {
-      const messagePayload = payload.data as MessagePayload;
-      console.log(
-        `New message from ${messagePayload.pushName} in ${messagePayload.key.remoteJid}`
-      );
-
-      const message = messagePayload.message;
-      if (message?.conversation) {
-        console.log("-> Text:", message.conversation);
-      } else if (message?.imageMessage) {
-        console.log("-> Image, url:", message.imageMessage.url);
-      } else if (message?.audioMessage) {
-        console.log("-> Audio, url:", message.audioMessage.url);
-      }
-      break;
-    }
-
-    case WebhookEvent.CONNECTION_UPDATE: {
-      const connectionPayload = payload.data as ConnectionUpdatePayload;
-      console.log("-> Connection state:", connectionPayload.state);
-      if (connectionPayload.profileName) {
-        console.log("-> Profile name:", connectionPayload.profileName);
-      }
-      break;
-    }
-
-    default:
-      console.log("Unhandled event:", payload.event);
-      break;
-  }
-}
-
-// Example of a raw payload you might receive
-const examplePayload: WebhookData = {
-  event: WebhookEvent.MESSAGES_UPSERT,
-  instance: "my-instance",
-  data: {
-    key: {
-      remoteJid: "5511999999999@s.whatsapp.net",
-      fromMe: false,
-      id: "3EB0B8A1B2C3D4E5F6A7B8C9D0E1F2A3",
-    },
-    pushName: "Gus",
-    message: {
-      conversation: "Hello from the other side!",
-    },
-    messageType: "conversation",
-    messageTimestamp: 1678886400,
-    source: "whatsapp",
-  },
-  sender: "5511988888888@s.whatsapp.net",
-  date: 1678886400,
-  server_url: "http://localhost:8080",
-};
-
-handleWebhook(examplePayload);
+await client.instance.create({
+  instanceName: "my-bot",
+  token: "optional-token",
+});
 ```
 
-### Webhooks
+#### Connect to Instance
 
-- **`set(options: SetOptions): Promise<SetResponse>`**
-  - Sets the webhook configuration.
-- **`find(): Promise<FindResponse>`**
-  - Finds the webhook configuration.
+```ts
+await client.instance.connect({ instanceName: "my-bot" });
+```
 
-### Settings
+#### Get Connection State
 
-- **`set(options: SetOptions): Promise<SetResponse>`**
-  - Sets the instance settings.
-- **`find(): Promise<FindResponse>`**
-  - Finds the instance settings.
+```ts
+const state = await client.instance.connectionState({ instanceName: "my-bot" });
+```
+
+#### Manage Instance
+
+```ts
+// Logout
+await client.instance.logout({ instanceName: "my-bot" });
+
+// Restart
+await client.instance.restart({ instanceName: "my-bot" });
+
+// Delete
+await client.instance.delete({ instanceName: "my-bot" });
+
+// List all instances
+const instances = await client.instance.fetchAll();
+
+// Set presence
+await client.instance.setPresence({
+  instanceName: "my-bot",
+  presence: "available",
+});
+```
+
+---
+
+### 💬 Chat Operations
+
+#### Check WhatsApp Numbers
+
+```ts
+const result = await client.chats.check(["5511999999999", "5522888888888"]);
+// Override instance: client.chats.check(numbers, { instance: "my-instance" })
+```
+
+#### Get All Chats
+
+```ts
+const chats = await client.chats.findAll();
+```
+
+#### Chat Actions
+
+```ts
+// Update presence
+await client.chats.updatePresence({
+  number: "5511999999999",
+  presence: "composing",
+});
+
+// Mark as read
+await client.chats.markAsRead({
+  remoteJid: "5511999999999@s.whatsapp.net",
+  fromMe: false,
+  id: "message-id",
+});
+
+// Archive chat
+await client.chats.archive({
+  remoteJid: "5511999999999@s.whatsapp.net",
+  archive: true,
+});
+```
+
+#### Message Management
+
+```ts
+// Delete message
+await client.chats.deleteMessage({
+  remoteJid: "5511999999999@s.whatsapp.net",
+  fromMe: true,
+  id: "message-id",
+});
+
+// Find messages
+const messages = await client.chats.findMessages({
+  remoteJid: "5511999999999@s.whatsapp.net",
+  limit: 50,
+});
+
+// Update message
+await client.chats.updateMessage({
+  remoteJid: "5511999999999@s.whatsapp.net",
+  fromMe: true,
+  id: "message-id",
+  text: "Updated message",
+});
+```
+
+#### Contact & Profile
+
+```ts
+// Fetch profile picture
+const profilePic = await client.chats.fetchProfilePicture({
+  number: "5511999999999",
+});
+
+// Find contacts
+const contacts = await client.chats.findContacts({
+  where: { name: "John" },
+});
+```
+
+---
+
+### 📱 Messaging
+
+#### Text Messages
+
+```ts
+await client.messages.sendText({
+  number: "5511999999999",
+  text: "Hello! 👋",
+});
+```
+
+#### Media Messages
+
+```ts
+// Send image
+await client.messages.sendImage({
+  number: "5511999999999",
+  image: "https://example.com/image.jpg",
+  caption: "Check this out!",
+});
+
+// Send video
+await client.messages.sendVideo({
+  number: "5511999999999",
+  video: "https://example.com/video.mp4",
+  caption: "Amazing video!",
+});
+
+// Send document
+await client.messages.sendDocument({
+  number: "5511999999999",
+  document: "https://example.com/document.pdf",
+  fileName: "report.pdf",
+});
+
+// Send audio
+await client.messages.sendAudio({
+  number: "5511999999999",
+  audio: "https://example.com/audio.mp3",
+});
+```
+
+#### Interactive Messages
+
+```ts
+// Send location
+await client.messages.sendLocation({
+  number: "5511999999999",
+  latitude: -23.5505,
+  longitude: -46.6333,
+  name: "São Paulo",
+});
+
+// Send contact
+await client.messages.sendContact({
+  number: "5511999999999",
+  contact: {
+    fullName: "John Doe",
+    phones: ["5511999999999"],
+  },
+});
+
+// Send reaction
+await client.messages.sendReaction({
+  reactionMessage: {
+    key: { remoteJid: "5511999999999@s.whatsapp.net", id: "message-id" },
+    text: "👍",
+  },
+});
+```
+
+#### Advanced Messages
+
+```ts
+// Send list
+await client.messages.sendList({
+  number: "5511999999999",
+  title: "Choose an option",
+  description: "Select from the options below",
+  sections: [
+    {
+      title: "Options",
+      rows: [
+        { title: "Option 1", description: "First option" },
+        { title: "Option 2", description: "Second option" },
+      ],
+    },
+  ],
+});
+
+// Send template
+await client.messages.sendTemplate({
+  number: "5511999999999",
+  template: {
+    name: "hello_world",
+    language: { code: "en_US" },
+  },
+});
+```
+
+---
+
+### 👥 Group Management
+
+#### Group Operations
+
+```ts
+// Create group
+await client.groups.create({
+  subject: "My Awesome Group",
+  participants: ["5511999999999", "5522888888888"],
+});
+
+// Get all groups
+const groups = await client.groups.findAll(false); // without participants
+const groupsWithMembers = await client.groups.findAll(true); // with participants
+
+// Find group by invite code
+const group = await client.groups.findByInviteCode("invite-code-here");
+
+// Find group by JID
+const group = await client.groups.findByJid("group-id@g.us");
+```
+
+#### Group Settings
+
+```ts
+// Update group subject
+await client.groups.updateSubject({
+  groupJid: "group-id@g.us",
+  subject: "New Group Name",
+});
+
+// Update group description
+await client.groups.updateDescription({
+  groupJid: "group-id@g.us",
+  description: "New group description",
+});
+
+// Update group picture
+await client.groups.updatePicture({
+  groupJid: "group-id@g.us",
+  image: "https://example.com/group-pic.jpg",
+});
+```
+
+#### Group Members
+
+```ts
+// Add/remove members
+await client.groups.updateMembers({
+  groupJid: "group-id@g.us",
+  action: "add",
+  participants: ["5511999999999"],
+});
+
+// Get group members
+const members = await client.groups.findMembers({
+  groupJid: "group-id@g.us",
+});
+
+// Leave group
+await client.groups.leave({
+  groupJid: "group-id@g.us",
+});
+```
+
+#### Group Invites
+
+```ts
+// Get invite code
+const inviteCode = await client.groups.fetchInviteCode({
+  groupJid: "group-id@g.us",
+});
+
+// Revoke invite code
+await client.groups.revokeInviteCode({
+  groupJid: "group-id@g.us",
+});
+
+// Accept invite
+await client.groups.acceptInviteCode({
+  inviteCode: "invite-code-here",
+});
+```
+
+---
+
+### 👤 Profile Management
+
+#### Profile Information
+
+```ts
+// Get profile
+const profile = await client.profile.fetchProfile({
+  number: "5511999999999",
+});
+
+// Get business profile
+const businessProfile = await client.profile.fetchBusinessProfile({
+  number: "5511999999999",
+});
+```
+
+#### Update Profile
+
+```ts
+// Update name
+await client.profile.updateName({
+  name: "My New Name",
+});
+
+// Update status
+await client.profile.updateStatus({
+  status: "Hey there! I'm using WhatsApp",
+});
+
+// Update picture
+await client.profile.updatePicture({
+  picture: "https://example.com/my-photo.jpg",
+});
+
+// Remove picture
+await client.profile.removePicture();
+```
+
+#### Privacy Settings
+
+```ts
+// Get privacy settings
+const privacy = await client.profile.fetchPrivacySettings();
+
+// Update privacy settings
+await client.profile.updatePrivacySettings({
+  privacySettings: {
+    readReceipts: "all",
+    profile: "contacts",
+    status: "contacts",
+    online: "all",
+    last: "contacts",
+    groupAdd: "contacts",
+  },
+});
+```
+
+---
+
+### ⚙️ Settings & Webhooks
+
+#### Instance Settings
+
+```ts
+// Get settings
+const settings = await client.settings.find();
+
+// Update settings
+await client.settings.set({
+  reject_call: true,
+  msg_call: "Sorry, I can't take calls right now",
+  groups_ignore: false,
+});
+```
+
+#### Webhook Configuration
+
+```ts
+// Get webhook settings
+const webhook = await client.webhook.find();
+
+// Set webhook
+await client.webhook.set({
+  url: "https://your-webhook-url.com/webhook",
+  webhook_by_events: true,
+  events: ["MESSAGES_UPSERT", "CONNECTION_UPDATE"],
+});
+```
+
+---
+
+### 🔄 Instance Override Examples
+
+You can override the default instance for any method:
+
+```ts
+// Send message with different instance
+await client.messages.sendText(
+  {
+    number: "5511999999999",
+    text: "Hello from work bot!",
+  },
+  { instance: "work-instance" }
+);
+
+// Check numbers on personal instance
+await client.chats.check(["5511999999999"], { instance: "personal-bot" });
+
+// Create group on specific instance
+await client.groups.create(
+  {
+    subject: "Team Meeting",
+    participants: ["5511999999999"],
+  },
+  { instance: "team-bot" }
+);
+```
 
 ## API Documentation
 

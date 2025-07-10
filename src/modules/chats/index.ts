@@ -1,5 +1,6 @@
 import { Routes } from "@/api/routes";
 import type { ApiService } from "@/api/service";
+import type { MethodOptions } from "@/types/api";
 
 import type * as Archive from "./schemas/archive";
 import type * as Check from "./schemas/check";
@@ -20,10 +21,15 @@ export class ChatsModule {
   /**
    * Checks if phone numbers are registered on WhatsApp
    * @param numbers - Array of phone numbers to check
+   * @param methodOptions - Method-specific options (instance override)
    */
-  async check(numbers: string[]): Promise<Check.CheckResponse> {
+  async check(
+    numbers: string[],
+    methodOptions?: MethodOptions
+  ): Promise<Check.CheckResponse> {
     const response = await this.api.post(Routes.Chats.Check, {
       body: numbers.flat(),
+      ...methodOptions,
     });
 
     return response as Check.CheckResponse;
@@ -31,9 +37,12 @@ export class ChatsModule {
 
   /**
    * Gets all chats
+   * @param methodOptions - Method-specific options (instance override)
    */
-  async findAll(): Promise<FindAll.FindAllChatsResponse> {
-    const response = await this.api.get(Routes.Chats.FindAll);
+  async findAll(
+    methodOptions?: MethodOptions
+  ): Promise<FindAll.FindAllChatsResponse> {
+    const response = await this.api.get(Routes.Chats.FindAll, methodOptions);
 
     return response as FindAll.FindAllChatsResponse;
   }
@@ -41,22 +50,30 @@ export class ChatsModule {
   /**
    * Updates presence status
    * @param options - Presence options
+   * @param methodOptions - Method-specific options (instance override)
    */
-  async updatePresence(options: Presence.PresenceRequest): Promise<void> {
+  async updatePresence(
+    options: Presence.PresenceRequest,
+    methodOptions?: MethodOptions
+  ): Promise<void> {
     await this.api.post(Routes.Chats.SendPresence, {
       body: options,
+      ...methodOptions,
     });
   }
 
   /**
    * Marks messages as read
    * @param options - Mark as read options
+   * @param methodOptions - Method-specific options (instance override)
    */
   async markAsRead(
-    options: MarkAsRead.MarkAsReadRequest
+    options: MarkAsRead.MarkAsReadRequest,
+    methodOptions?: MethodOptions
   ): Promise<MarkAsRead.MarkAsReadResponse> {
     const response = await this.api.post(Routes.Chats.MarkAsRead, {
       body: options,
+      ...methodOptions,
     });
 
     return response as MarkAsRead.MarkAsReadResponse;
@@ -65,12 +82,15 @@ export class ChatsModule {
   /**
    * Marks messages as unread
    * @param options - Mark as unread options
+   * @param methodOptions - Method-specific options (instance override)
    */
   async markAsUnread(
-    options: MarkAsUnread.MarkAsUnreadRequest
+    options: MarkAsUnread.MarkAsUnreadRequest,
+    methodOptions?: MethodOptions
   ): Promise<MarkAsUnread.MarkAsUnreadResponse> {
     const response = await this.api.post(Routes.Chats.MarkAsUnread, {
       body: options,
+      ...methodOptions,
     });
 
     return response as MarkAsUnread.MarkAsUnreadResponse;
@@ -79,12 +99,15 @@ export class ChatsModule {
   /**
    * Archives a chat
    * @param options - Archive options
+   * @param methodOptions - Method-specific options (instance override)
    */
   async archive(
-    options: Archive.ArchiveRequest
+    options: Archive.ArchiveRequest,
+    methodOptions?: MethodOptions
   ): Promise<Archive.ArchiveResponse> {
     const response = await this.api.post(Routes.Chats.Archive, {
       body: options,
+      ...methodOptions,
     });
 
     return response as Archive.ArchiveResponse;
@@ -93,12 +116,15 @@ export class ChatsModule {
   /**
    * Deletes a message
    * @param options - Delete message options
+   * @param methodOptions - Method-specific options (instance override)
    */
   async deleteMessage(
-    options: DeleteMessage.DeleteMessageRequest
+    options: DeleteMessage.DeleteMessageRequest,
+    methodOptions?: MethodOptions
   ): Promise<DeleteMessage.DeleteMessageResponse> {
     const response = await this.api.delete(Routes.Chats.DeleteMessage, {
       body: options,
+      ...methodOptions,
     });
 
     return response as DeleteMessage.DeleteMessageResponse;
@@ -107,12 +133,15 @@ export class ChatsModule {
   /**
    * Fetches profile picture
    * @param options - Fetch profile picture options
+   * @param methodOptions - Method-specific options (instance override)
    */
   async fetchProfilePicture(
-    options: FetchProfilePicture.FetchProfilePictureRequest
+    options: FetchProfilePicture.FetchProfilePictureRequest,
+    methodOptions?: MethodOptions
   ): Promise<FetchProfilePicture.FetchProfilePictureResponse> {
     const response = await this.api.post(Routes.Chats.FetchProfilePicture, {
       body: options,
+      ...methodOptions,
     });
 
     return response as FetchProfilePicture.FetchProfilePictureResponse;
@@ -121,12 +150,15 @@ export class ChatsModule {
   /**
    * Finds contacts
    * @param options - Find contacts options
+   * @param methodOptions - Method-specific options (instance override)
    */
   async findContacts(
-    options: FindContacts.FindContactsRequest
+    options: FindContacts.FindContactsRequest,
+    methodOptions?: MethodOptions
   ): Promise<FindContacts.FindContactsResponse> {
     const response = await this.api.post(Routes.Chats.FindContacts, {
       body: options,
+      ...methodOptions,
     });
 
     return response as FindContacts.FindContactsResponse;
@@ -135,12 +167,15 @@ export class ChatsModule {
   /**
    * Finds messages
    * @param options - Find messages options
+   * @param methodOptions - Method-specific options (instance override)
    */
   async findMessages(
-    options: FindMessages.FindMessagesRequest
+    options: FindMessages.FindMessagesRequest,
+    methodOptions?: MethodOptions
   ): Promise<FindMessages.FindMessagesResponse> {
     const response = await this.api.post(Routes.Chats.FindMessages, {
       body: options,
+      ...methodOptions,
     });
 
     return response as FindMessages.FindMessagesResponse;
@@ -149,12 +184,15 @@ export class ChatsModule {
   /**
    * Finds status messages
    * @param options - Find status message options
+   * @param methodOptions - Method-specific options (instance override)
    */
   async findStatusMessage(
-    options: FindStatusMessage.FindStatusMessageRequest
+    options: FindStatusMessage.FindStatusMessageRequest,
+    methodOptions?: MethodOptions
   ): Promise<FindStatusMessage.FindStatusMessageResponse> {
     const response = await this.api.post(Routes.Chats.FindStatusMessage, {
       body: options,
+      ...methodOptions,
     });
 
     return response as FindStatusMessage.FindStatusMessageResponse;
@@ -163,12 +201,15 @@ export class ChatsModule {
   /**
    * Updates a message
    * @param options - Update message options
+   * @param methodOptions - Method-specific options (instance override)
    */
   async updateMessage(
-    options: UpdateMessage.UpdateMessageRequest
+    options: UpdateMessage.UpdateMessageRequest,
+    methodOptions?: MethodOptions
   ): Promise<UpdateMessage.UpdateMessageResponse> {
     const response = await this.api.put(Routes.Chats.UpdateMessage, {
       body: options,
+      ...methodOptions,
     });
 
     return response as UpdateMessage.UpdateMessageResponse;

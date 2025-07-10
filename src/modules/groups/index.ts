@@ -1,5 +1,6 @@
 import { Routes } from "@/api/routes";
 import type { ApiService } from "@/api/service";
+import type { MethodOptions } from "@/types/api";
 import type { GroupInviteCode, GroupJid } from "@/types/tags";
 
 import type * as AcceptInviteCode from "./schemas/accept-invite-code";
@@ -20,187 +21,226 @@ import type * as UpdateSetting from "./schemas/update-setting";
 import type * as UpdateSubject from "./schemas/update-subject";
 
 export class GroupsModule {
-	constructor(private readonly api: ApiService) {}
+  constructor(private readonly api: ApiService) {}
 
-	/**
-	 * Gets all groups
-	 * @param getParticipants - Whether to get participants
-	 */
-	async findAll(getParticipants: false): Promise<FindAll.FindAllGroupsResponse>;
-	async findAll(
-		getParticipants: true,
-	): Promise<FindAll.FindAllGroupsWithParticipantsResponse>;
-	async findAll(
-		getParticipants = false,
-	): Promise<
-		| FindAll.FindAllGroupsResponse
-		| FindAll.FindAllGroupsWithParticipantsResponse
-	> {
-		const response = await this.api.get(Routes.Groups.FindAll, {
-			params: { getParticipants },
-		});
+  /**
+   * Gets all groups
+   * @param getParticipants - Whether to get participants
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async findAll(
+    getParticipants: false,
+    methodOptions?: MethodOptions
+  ): Promise<FindAll.FindAllGroupsResponse>;
+  async findAll(
+    getParticipants: true,
+    methodOptions?: MethodOptions
+  ): Promise<FindAll.FindAllGroupsWithParticipantsResponse>;
+  async findAll(
+    getParticipants = false,
+    methodOptions?: MethodOptions
+  ): Promise<
+    | FindAll.FindAllGroupsResponse
+    | FindAll.FindAllGroupsWithParticipantsResponse
+  > {
+    const response = await this.api.get(Routes.Groups.FindAll, {
+      params: { getParticipants },
+      ...methodOptions,
+    });
 
-		if (getParticipants) {
-			return response as FindAll.FindAllGroupsWithParticipantsResponse;
-		}
-		return response as FindAll.FindAllGroupsResponse;
-	}
+    if (getParticipants) {
+      return response as FindAll.FindAllGroupsWithParticipantsResponse;
+    }
+    return response as FindAll.FindAllGroupsResponse;
+  }
 
-	/**
-	 * Gets a group by invite code
-	 * @param inviteCode - The group invite code (not the URL)
-	 */
-	async findByInviteCode(
-		inviteCode: string | GroupInviteCode,
-	): Promise<FindByInviteCode.FindGroupByInviteCodeResponse> {
-		const response = await this.api.get(Routes.Groups.FindByInviteCode, {
-			params: { inviteCode: inviteCode as GroupInviteCode },
-		});
+  /**
+   * Gets a group by invite code
+   * @param inviteCode - The group invite code (not the URL)
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async findByInviteCode(
+    inviteCode: string | GroupInviteCode,
+    methodOptions?: MethodOptions
+  ): Promise<FindByInviteCode.FindGroupByInviteCodeResponse> {
+    const response = await this.api.get(Routes.Groups.FindByInviteCode, {
+      params: { inviteCode: inviteCode as GroupInviteCode },
+      ...methodOptions,
+    });
 
-		return response as FindByInviteCode.FindGroupByInviteCodeResponse;
-	}
+    return response as FindByInviteCode.FindGroupByInviteCodeResponse;
+  }
 
-	/**
-	 * Gets a group by JID
-	 * @param groupJid - The group JID terminated with \@g.us
-	 */
-	async findByJid(
-		groupJid: string | GroupJid,
-	): Promise<FindByJid.FindGroupByJidResponse> {
-		const response = await this.api.get(Routes.Groups.FindByJid, {
-			params: { groupJid: groupJid as GroupJid },
-		});
+  /**
+   * Gets a group by JID
+   * @param groupJid - The group JID terminated with \@g.us
+   * @param methodOptions - Method-specific options (instance override)
+   */
+  async findByJid(
+    groupJid: string | GroupJid,
+    methodOptions?: MethodOptions
+  ): Promise<FindByJid.FindGroupByJidResponse> {
+    const response = await this.api.get(Routes.Groups.FindByJid, {
+      params: { groupJid: groupJid as GroupJid },
+      ...methodOptions,
+    });
 
-		return response as FindByJid.FindGroupByJidResponse;
-	}
+    return response as FindByJid.FindGroupByJidResponse;
+  }
 
-	async create(
-		options: Create.CreateGroupRequest,
-	): Promise<Create.CreateGroupResponse> {
-		const response = await this.api.post(Routes.Groups.Create, {
-			body: options,
-		});
+  async create(
+    options: Create.CreateGroupRequest,
+    methodOptions?: MethodOptions
+  ): Promise<Create.CreateGroupResponse> {
+    const response = await this.api.post(Routes.Groups.Create, {
+      body: options,
+      ...methodOptions,
+    });
 
-		return response as Create.CreateGroupResponse;
-	}
+    return response as Create.CreateGroupResponse;
+  }
 
-	async updatePicture(
-		options: UpdatePicture.UpdatePictureRequest,
-	): Promise<UpdatePicture.UpdatePictureResponse> {
-		const response = await this.api.post(Routes.Groups.UpdatePicture, {
-			body: options,
-		});
+  async updatePicture(
+    options: UpdatePicture.UpdatePictureRequest,
+    methodOptions?: MethodOptions
+  ): Promise<UpdatePicture.UpdatePictureResponse> {
+    const response = await this.api.post(Routes.Groups.UpdatePicture, {
+      body: options,
+      ...methodOptions,
+    });
 
-		return response as UpdatePicture.UpdatePictureResponse;
-	}
+    return response as UpdatePicture.UpdatePictureResponse;
+  }
 
-	async updateSubject(
-		options: UpdateSubject.UpdateSubjectRequest,
-	): Promise<UpdateSubject.UpdateSubjectResponse> {
-		const response = await this.api.post(Routes.Groups.UpdateSubject, {
-			body: options,
-		});
+  async updateSubject(
+    options: UpdateSubject.UpdateSubjectRequest,
+    methodOptions?: MethodOptions
+  ): Promise<UpdateSubject.UpdateSubjectResponse> {
+    const response = await this.api.post(Routes.Groups.UpdateSubject, {
+      body: options,
+      ...methodOptions,
+    });
 
-		return response as UpdateSubject.UpdateSubjectResponse;
-	}
+    return response as UpdateSubject.UpdateSubjectResponse;
+  }
 
-	async updateDescription(
-		options: UpdateDescription.UpdateDescriptionRequest,
-	): Promise<UpdateDescription.UpdateDescriptionResponse> {
-		const response = await this.api.post(Routes.Groups.UpdateDescription, {
-			body: options,
-		});
+  async updateDescription(
+    options: UpdateDescription.UpdateDescriptionRequest,
+    methodOptions?: MethodOptions
+  ): Promise<UpdateDescription.UpdateDescriptionResponse> {
+    const response = await this.api.post(Routes.Groups.UpdateDescription, {
+      body: options,
+      ...methodOptions,
+    });
 
-		return response as UpdateDescription.UpdateDescriptionResponse;
-	}
+    return response as UpdateDescription.UpdateDescriptionResponse;
+  }
 
-	async fetchInviteCode(
-		options: FetchInviteCode.FetchInviteCodeRequest,
-	): Promise<FetchInviteCode.FetchInviteCodeResponse> {
-		const response = await this.api.get(Routes.Groups.FetchInviteCode, {
-			params: options,
-		});
+  async fetchInviteCode(
+    options: FetchInviteCode.FetchInviteCodeRequest,
+    methodOptions?: MethodOptions
+  ): Promise<FetchInviteCode.FetchInviteCodeResponse> {
+    const response = await this.api.get(Routes.Groups.FetchInviteCode, {
+      params: options,
+      ...methodOptions,
+    });
 
-		return response as FetchInviteCode.FetchInviteCodeResponse;
-	}
+    return response as FetchInviteCode.FetchInviteCodeResponse;
+  }
 
-	async acceptInviteCode(
-		options: AcceptInviteCode.AcceptInviteCodeRequest,
-	): Promise<AcceptInviteCode.AcceptInviteCodeResponse> {
-		const response = await this.api.post(Routes.Groups.AcceptInviteCode, {
-			body: options,
-		});
+  async acceptInviteCode(
+    options: AcceptInviteCode.AcceptInviteCodeRequest,
+    methodOptions?: MethodOptions
+  ): Promise<AcceptInviteCode.AcceptInviteCodeResponse> {
+    const response = await this.api.post(Routes.Groups.AcceptInviteCode, {
+      body: options,
+      ...methodOptions,
+    });
 
-		return response as AcceptInviteCode.AcceptInviteCodeResponse;
-	}
+    return response as AcceptInviteCode.AcceptInviteCodeResponse;
+  }
 
-	async revokeInviteCode(
-		options: RevokeInviteCode.RevokeInviteCodeRequest,
-	): Promise<RevokeInviteCode.RevokeInviteCodeResponse> {
-		const response = await this.api.post(Routes.Groups.RevokeInviteCode, {
-			body: options,
-		});
+  async revokeInviteCode(
+    options: RevokeInviteCode.RevokeInviteCodeRequest,
+    methodOptions?: MethodOptions
+  ): Promise<RevokeInviteCode.RevokeInviteCodeResponse> {
+    const response = await this.api.post(Routes.Groups.RevokeInviteCode, {
+      body: options,
+      ...methodOptions,
+    });
 
-		return response as RevokeInviteCode.RevokeInviteCodeResponse;
-	}
+    return response as RevokeInviteCode.RevokeInviteCodeResponse;
+  }
 
-	async sendGroupInvite(
-		options: SendGroupInvite.SendGroupInviteRequest,
-	): Promise<SendGroupInvite.SendGroupInviteResponse> {
-		const response = await this.api.post(Routes.Groups.SendGroupInvite, {
-			body: options,
-		});
+  async sendGroupInvite(
+    options: SendGroupInvite.SendGroupInviteRequest,
+    methodOptions?: MethodOptions
+  ): Promise<SendGroupInvite.SendGroupInviteResponse> {
+    const response = await this.api.post(Routes.Groups.SendGroupInvite, {
+      body: options,
+      ...methodOptions,
+    });
 
-		return response as SendGroupInvite.SendGroupInviteResponse;
-	}
+    return response as SendGroupInvite.SendGroupInviteResponse;
+  }
 
-	async findMembers(
-		options: FindMembers.FindMembersRequest,
-	): Promise<FindMembers.FindMembersResponse> {
-		const response = await this.api.get(Routes.Groups.FindMembers, {
-			params: options,
-		});
+  async findMembers(
+    options: FindMembers.FindMembersRequest,
+    methodOptions?: MethodOptions
+  ): Promise<FindMembers.FindMembersResponse> {
+    const response = await this.api.get(Routes.Groups.FindMembers, {
+      params: options,
+      ...methodOptions,
+    });
 
-		return response as FindMembers.FindMembersResponse;
-	}
+    return response as FindMembers.FindMembersResponse;
+  }
 
-	async updateMembers(
-		options: UpdateMembers.UpdateMembersRequest,
-	): Promise<UpdateMembers.UpdateMembersResponse> {
-		const response = await this.api.post(Routes.Groups.UpdateMembers, {
-			body: options,
-		});
+  async updateMembers(
+    options: UpdateMembers.UpdateMembersRequest,
+    methodOptions?: MethodOptions
+  ): Promise<UpdateMembers.UpdateMembersResponse> {
+    const response = await this.api.post(Routes.Groups.UpdateMembers, {
+      body: options,
+      ...methodOptions,
+    });
 
-		return response as UpdateMembers.UpdateMembersResponse;
-	}
+    return response as UpdateMembers.UpdateMembersResponse;
+  }
 
-	async updateSetting(
-		options: UpdateSetting.UpdateSettingRequest,
-	): Promise<UpdateSetting.UpdateSettingResponse> {
-		const response = await this.api.post(Routes.Groups.UpdateSetting, {
-			body: options,
-		});
+  async updateSetting(
+    options: UpdateSetting.UpdateSettingRequest,
+    methodOptions?: MethodOptions
+  ): Promise<UpdateSetting.UpdateSettingResponse> {
+    const response = await this.api.post(Routes.Groups.UpdateSetting, {
+      body: options,
+      ...methodOptions,
+    });
 
-		return response as UpdateSetting.UpdateSettingResponse;
-	}
+    return response as UpdateSetting.UpdateSettingResponse;
+  }
 
-	async toggleEphemeral(
-		options: ToggleEphemeral.ToggleEphemeralRequest,
-	): Promise<ToggleEphemeral.ToggleEphemeralResponse> {
-		const response = await this.api.post(Routes.Groups.ToggleEphemeral, {
-			body: options,
-		});
+  async toggleEphemeral(
+    options: ToggleEphemeral.ToggleEphemeralRequest,
+    methodOptions?: MethodOptions
+  ): Promise<ToggleEphemeral.ToggleEphemeralResponse> {
+    const response = await this.api.post(Routes.Groups.ToggleEphemeral, {
+      body: options,
+      ...methodOptions,
+    });
 
-		return response as ToggleEphemeral.ToggleEphemeralResponse;
-	}
+    return response as ToggleEphemeral.ToggleEphemeralResponse;
+  }
 
-	async leave(
-		options: Leave.LeaveRequest,
-	): Promise<Leave.LeaveResponse> {
-		const response = await this.api.post(Routes.Groups.Leave, {
-			body: options,
-		});
+  async leave(
+    options: Leave.LeaveRequest,
+    methodOptions?: MethodOptions
+  ): Promise<Leave.LeaveResponse> {
+    const response = await this.api.post(Routes.Groups.Leave, {
+      body: options,
+      ...methodOptions,
+    });
 
-		return response as Leave.LeaveResponse;
-	}
+    return response as Leave.LeaveResponse;
+  }
 }
