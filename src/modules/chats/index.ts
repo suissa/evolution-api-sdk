@@ -10,6 +10,7 @@ import type * as FindContacts from "./schemas/find-contacts";
 import type * as FindMessages from "./schemas/find-messages";
 import type * as FindStatusMessage from "./schemas/find-status-message";
 import type * as MarkAsRead from "./schemas/mark-as-read";
+import type * as MarkAsUnread from "./schemas/mark-as-unread";
 import type * as Presence from "./schemas/presence";
 import type * as UpdateMessage from "./schemas/update-message";
 
@@ -59,6 +60,20 @@ export class ChatsModule {
     });
 
     return response as MarkAsRead.MarkAsReadResponse;
+  }
+
+  /**
+   * Marks messages as unread
+   * @param options - Mark as unread options
+   */
+  async markAsUnread(
+    options: MarkAsUnread.MarkAsUnreadRequest
+  ): Promise<MarkAsUnread.MarkAsUnreadResponse> {
+    const response = await this.api.post(Routes.Chats.MarkAsUnread, {
+      body: options,
+    });
+
+    return response as MarkAsUnread.MarkAsUnreadResponse;
   }
 
   /**
