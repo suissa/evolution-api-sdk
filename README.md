@@ -27,18 +27,19 @@ bun add evolution-api-sdk
 ## Getting Started
 
 ```ts
-import { EvolutionClient } from "evolution-api-sdk"
+import { EvolutionClient } from "evolution-api-sdk";
 
 const client = new EvolutionClient({
   serverUrl: "Your server url",
   token: "Global api key or instance token",
-  instance: "Your instance" // optional
-})
+  instance: "Your instance", // optional
+});
 ```
 
 ## Usage Examples
 
 ### Sending a Text Message
+
 ```ts
 await client.messages.sendText({
   number: "5511999999999",
@@ -47,6 +48,7 @@ await client.messages.sendText({
 ```
 
 ### Sending an Image
+
 ```ts
 await client.messages.sendImage({
   number: "5511999999999",
@@ -56,6 +58,7 @@ await client.messages.sendImage({
 ```
 
 ### Creating a Group
+
 ```ts
 await client.groups.create({
   subject: "My Awesome Group",
@@ -64,6 +67,7 @@ await client.groups.create({
 ```
 
 ### Checking if a Number has WhatsApp
+
 ```ts
 const result = await client.chats.check("5511999999999");
 console.log(result);
@@ -200,72 +204,72 @@ console.log(result);
   - Updates the privacy settings.
 
 ### Webhook Usage
+
 - **Parse incoming webhooks**
 
 ```ts
 import {
-	EvolutionWebhookData,
-	EvolutionMessagePayload,
-	EvolutionConnectionUpdatePayload,
-	WebhookEvent,
+  WebhookData,
+  MessagePayload,
+  ConnectionUpdatePayload,
+  WebhookEvent,
 } from "evolution-api-sdk";
 
-function handleWebhook(payload: EvolutionWebhookData) {
-	switch (payload.event) {
-		case WebhookEvent.MESSAGES_UPSERT: {
-			const messagePayload = payload.data as EvolutionMessagePayload;
-			console.log(
-				`New message from ${messagePayload.pushName} in ${messagePayload.key.remoteJid}`,
-			);
+function handleWebhook(payload: WebhookData) {
+  switch (payload.event) {
+    case WebhookEvent.MESSAGES_UPSERT: {
+      const messagePayload = payload.data as MessagePayload;
+      console.log(
+        `New message from ${messagePayload.pushName} in ${messagePayload.key.remoteJid}`
+      );
 
-			const message = messagePayload.message;
-			if (message?.conversation) {
-				console.log("-> Text:", message.conversation);
-			} else if (message?.imageMessage) {
-				console.log("-> Image, url:", message.imageMessage.url);
-			} else if (message?.audioMessage) {
-				console.log("-> Audio, url:", message.audioMessage.url);
-			}
-			break;
-		}
+      const message = messagePayload.message;
+      if (message?.conversation) {
+        console.log("-> Text:", message.conversation);
+      } else if (message?.imageMessage) {
+        console.log("-> Image, url:", message.imageMessage.url);
+      } else if (message?.audioMessage) {
+        console.log("-> Audio, url:", message.audioMessage.url);
+      }
+      break;
+    }
 
-		case WebhookEvent.CONNECTION_UPDATE: {
-			const connectionPayload =
-				payload.data as EvolutionConnectionUpdatePayload;
-			console.log("-> Connection state:", connectionPayload.state);
-			if (connectionPayload.profileName) {
-				console.log("-> Profile name:", connectionPayload.profileName);
-			}
-			break;
-		}
+    case WebhookEvent.CONNECTION_UPDATE: {
+      const connectionPayload = payload.data as ConnectionUpdatePayload;
+      console.log("-> Connection state:", connectionPayload.state);
+      if (connectionPayload.profileName) {
+        console.log("-> Profile name:", connectionPayload.profileName);
+      }
+      break;
+    }
 
-		default:
-			console.log("Unhandled event:", payload.event);
-			break;
-	}
+    default:
+      console.log("Unhandled event:", payload.event);
+      break;
+  }
 }
 
 // Example of a raw payload you might receive
-const examplePayload: EvolutionWebhookData = {
-	event: WebhookEvent.MESSAGES_UPSERT,
-	instance: "my-instance",
-	data: {
-		key: {
-			remoteJid: "5511999999999@s.whatsapp.net",
-			fromMe: false,
-			id: "3EB0B8A1B2C3D4E5F6A7B8C9D0E1F2A3",
-		},
-		pushName: "Gus",
-		message: {
-			conversation: "Hello from the other side!",
-		},
-		messageType: "conversation",
-		messageTimestamp: 1678886400,
-		source: "whatsapp",
-	},
-	sender: "5511988888888@s.whatsapp.net",
-	date: 1678886400,
-	server_url: "http://localhost:8080",
+const examplePayload: WebhookData = {
+  event: WebhookEvent.MESSAGES_UPSERT,
+  instance: "my-instance",
+  data: {
+    key: {
+      remoteJid: "5511999999999@s.whatsapp.net",
+      fromMe: false,
+      id: "3EB0B8A1B2C3D4E5F6A7B8C9D0E1F2A3",
+    },
+    pushName: "Gus",
+    message: {
+      conversation: "Hello from the other side!",
+    },
+    messageType: "conversation",
+    messageTimestamp: 1678886400,
+    source: "whatsapp",
+  },
+  sender: "5511988888888@s.whatsapp.net",
+  date: 1678886400,
+  server_url: "http://localhost:8080",
 };
 
 handleWebhook(examplePayload);
