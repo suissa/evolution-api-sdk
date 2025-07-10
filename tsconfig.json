@@ -1,23 +1,22 @@
 {
-	"compilerOptions": {
-		"target": "ESNext",
-		"lib": ["DOM", "ESNext"],
-		"module": "commonjs",
-		"rootDir": "./src",
-		"baseUrl": ".",
-		"declaration": true,
-		"sourceMap": true,
-		"outDir": "./lib",
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"noImplicitAny": true,
-		"strictNullChecks": true,
-		"strictFunctionTypes": true,
-		"skipLibCheck": true,
-		"paths": {
-			"@/*": ["./src/*"]
-		}
-	},
-	"include": ["src/**/*"],
-	"exclude": ["./test/",]
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "module": "commonjs",
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "./lib",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*", "lib/**/*"]
 }
