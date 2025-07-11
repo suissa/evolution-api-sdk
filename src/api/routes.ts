@@ -70,6 +70,6 @@ export const Routes = {
     ConnectionState: "instance/connectionState",
     Logout: "instance/logout",
     Delete: "instance/delete",
-    SetPresence: "instance/presence/set",
+    SetPresence: "instance/setPresence",
   },
 };
