@@ -3,7 +3,7 @@ import type { ApiService } from "@/api/service";
 import type { MethodOptions } from "@/types/api";
 
 import type * as Archive from "./schemas/archive";
-import type * as Check from "./schemas/check";
+import * as Check from "./schemas/check";
 import type * as DeleteMessage from "./schemas/delete-message";
 import type * as FetchProfilePicture from "./schemas/fetch-profile-picture";
 import type * as FindAll from "./schemas/find-all";
@@ -24,15 +24,16 @@ export class ChatsModule {
    * @param methodOptions - Method-specific options (instance override)
    */
   async check(
-    numbers: string[],
+    numbers: Check.CheckOptions,
     methodOptions?: MethodOptions
   ): Promise<Check.CheckResponse> {
+    const body = Check.BodySchema.parse(numbers);
     const response = await this.api.post(Routes.Chats.Check, {
-      body: numbers.flat(),
+      body,
       ...methodOptions,
     });
 
-    return response as Check.CheckResponse;
+    return Check.ResponseSchema.parse(response as Check.CheckResponseRaw[]);
   }
 
   /**
