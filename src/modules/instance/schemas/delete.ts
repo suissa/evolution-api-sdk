@@ -10,10 +10,12 @@ export interface DeleteInstanceInfo {
 }
 
 export interface DeleteResponse {
+  status: "SUCCESS" | "ERROR";
   error: boolean;
-  message: string;
-  instance: DeleteInstanceInfo;
+  response: {
+    message: string;
+  };
 }
 
 // Backward compatibility aliases
-export type DeleteOptions = DeleteRequest; 
+export type DeleteOptions = DeleteRequest;
