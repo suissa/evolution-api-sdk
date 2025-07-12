@@ -2,9 +2,12 @@
 import type { ChatId, MessageId } from "@/types/tags";
 
 export interface ReactionMessageOptions {
-  number: ChatId;
-  messageId: MessageId;
-  reaction: string; // Can be an emoji
+  key: {
+    remoteJid: ChatId;
+    fromMe: boolean;
+    id: MessageId;
+  };
+  reaction: string;
 }
 
 export interface ReactionMessageResponse {
@@ -15,4 +18,4 @@ export interface ReactionMessageResponse {
   };
   messageTimestamp: string;
   status: string;
-} 
+}
