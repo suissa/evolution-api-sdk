@@ -18,21 +18,3 @@ export interface CheckResponseItem {
 
 export type CheckOptions = string | string[];
 export type CheckResponse = CheckResponseItem[];
-
-// Transform functions
-export const CheckBodyTransform = (data: CheckOptions) => ({
-  numbers: Array.isArray(data) ? data : [data],
-});
-
-export const CheckResponseTransform = (
-  numbers: CheckResponseRaw[]
-): CheckResponse =>
-  numbers.map((number) => ({
-    exists: number.exists,
-    jid: Jid(number.jid),
-    number: parsePhoneNumber(number.number).number,
-  }));
-
-// Backward compatibility aliases
-export const BodySchema = { parse: CheckBodyTransform };
-export const ResponseSchema = { parse: CheckResponseTransform };
