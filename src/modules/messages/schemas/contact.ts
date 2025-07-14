@@ -53,7 +53,7 @@ export interface ContactMessageOptions extends BaseMessageOptions {
   /**
    * Contact list
    */
-  contact: Contact[];
+  contact: [Contact, ...Contact[]];
 }
 
 export interface ContactMessageBody extends BaseMessageOptions {
