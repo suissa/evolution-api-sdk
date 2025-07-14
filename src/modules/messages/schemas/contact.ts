@@ -88,6 +88,9 @@ export const ContactMessageBodyTransform = ({
       contactItem.phoneNumber
     ).formatInternational(),
     wuid: contactItem.phoneNumber.replace(/\D/g, ""),
+    organization: contactItem.organization || "",
+    email: contactItem.email || "",
+    url: contactItem.url || "",
   })),
 });
 
