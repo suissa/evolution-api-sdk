@@ -39,7 +39,7 @@ export interface AudioMessageOptions extends BaseMessageOptions {
 }
 
 export interface AudioMessageBody extends BaseMessageOptions {
-	media: Media;
+	audio: Media;
 	mediatype: "audio";
 	mimetype?: string;
 }
@@ -68,7 +68,7 @@ export interface AudioMessageResponse {
 // Transform functions
 export const AudioMessageBodyTransform = (
 	{ audio, ...data }: AudioMessageOptions
-): AudioMessageBody => ({ ...data, media: audio, mediatype: "audio" });
+): AudioMessageBody => ({ ...data, audio, mediatype: "audio" });
 
 export const AudioMessageResponseTransform = (data: AudioMessageResponseRaw): AudioMessageResponse => ({
 	receiver: {
