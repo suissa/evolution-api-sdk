@@ -1,7 +1,7 @@
-export type Jid = `${string}@s.whatsapp.net`;
+export type Jid = `${string}@s.whatsapp.net` | string;
 export const Jid = (jid: string) => jid as Jid;
 
-export type GroupJid = `${string}@g.us`;
+export type GroupJid = `${string}@g.us` | string;
 export const GroupJid = (jid: string) => jid as GroupJid;
 
 export type GroupInviteCode = string & { __tag: "GroupInviteCode" };

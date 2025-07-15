@@ -45,6 +45,7 @@ export class MessagesModule {
     options: Image.ImageMessageOptions,
     methodOptions?: MethodOptions
   ): Promise<Image.ImageMessageResponse> {
+    options.mediatype = "image";
     const response = await this.api.post(Routes.Message.SendMedia, {
       body: options,
       ...methodOptions,
@@ -62,6 +63,7 @@ export class MessagesModule {
     options: Video.VideoMessageOptions,
     methodOptions?: MethodOptions
   ): Promise<Video.VideoMessageResponse> {
+    options.mediatype = "video";
     const response = await this.api.post(Routes.Message.SendMedia, {
       body: options,
       ...methodOptions,
@@ -79,6 +81,7 @@ export class MessagesModule {
     options: Document.DocumentMessageOptions,
     methodOptions?: MethodOptions
   ): Promise<Document.DocumentMessageResponse> {
+    options.mediatype = "document";
     const response = await this.api.post(Routes.Message.SendMedia, {
       body: options,
       ...methodOptions,
@@ -96,6 +99,7 @@ export class MessagesModule {
     options: Audio.AudioMessageOptions,
     methodOptions?: MethodOptions
   ): Promise<Audio.AudioMessageResponse> {
+    options.mediatype = "audio";
     const response = await this.api.post(Routes.Message.SendMedia, {
       body: options,
       ...methodOptions,
