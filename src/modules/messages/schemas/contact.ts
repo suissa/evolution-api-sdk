@@ -53,7 +53,7 @@ export interface ContactMessageOptions extends BaseMessageOptions {
   /**
    * Contact list
    */
-  contact: Contact[];
+  contact: [Contact, ...Contact[]];
 }
 
 export interface ContactMessageBody extends BaseMessageOptions {
@@ -88,6 +88,9 @@ export const ContactMessageBodyTransform = ({
       contactItem.phoneNumber
     ).formatInternational(),
     wuid: contactItem.phoneNumber.replace(/\D/g, ""),
+    organization: contactItem.organization || "",
+    email: contactItem.email || "",
+    url: contactItem.url || "",
   })),
 });
 
