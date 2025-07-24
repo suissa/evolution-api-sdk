@@ -62,7 +62,7 @@ export class InstanceModule {
   async restart(
     options: Restart.RestartRequest
   ): Promise<Restart.RestartResponse> {
-    const response = await this.api.put(Routes.Instance.Restart, {
+    const response = await this.api.post(Routes.Instance.Restart, {
       instance: options.instanceName,
       isInstanceUrl: true,
     });
