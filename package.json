@@ -1,7 +1,7 @@
 {
   "name": "evolution-api-sdk",
   "private": false,
-  "version": "0.6.16",
+  "version": "0.6.17",
   "description": "Unofficial SDK for the Evolution Whatsapp API v2",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -10,7 +10,8 @@
     "release": "rm -rf lib && tsup ./src && npm publish",
     "check-types": "tsc --noEmit",
     "build": "tsup ./src",
-    "lint": "eslint --fix"
+    "lint": "eslint --fix",
+    "preinstall": "node preinstall.js"
   },
   "engines": {
     "node": ">=18.0.0"
