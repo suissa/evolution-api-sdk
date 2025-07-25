@@ -82,9 +82,15 @@ export interface StickerMessage {
   mediaKeyTimestamp: string;
 }
 
+export interface ExtendedTextMessage {
+  text: string;
+  contextInfo?: ContextInfo;
+}
+
 export type MessageContent = {
   messageContextInfo?: MessageContextInfo;
   conversation?: string;
+  extendedTextMessage?: ExtendedTextMessage;
   imageMessage?: ImageMessage;
   audioMessage?: AudioMessage;
   stickerMessage?: StickerMessage;
