@@ -555,6 +555,277 @@ await client.groups.create(
 );
 ```
 
+---
+
+### 🔗 Webhook Integration
+
+The SDK provides complete TypeScript support for handling webhooks from the Evolution API.
+
+#### Basic Webhook Setup
+
+```ts
+import express from "express";
+import {
+  WebhookData,
+  WebhookEvent,
+  MessagePayload,
+  ContactPayload,
+  ConnectionUpdatePayload,
+} from "evolution-api-sdk";
+
+const app = express();
+app.use(express.json());
+
+// Webhook endpoint
+app.post("/webhook", async (req, res) => {
+  try {
+    const webhookData: WebhookData = req.body;
+    await processWebhook(webhookData);
+    res.status(200).send("OK");
+  } catch (error) {
+    console.error("Webhook processing error:", error);
+    res.status(500).send("Error");
+  }
+});
+
+app.listen(3000, () => {
+  console.log("Webhook server running on port 3000");
+});
+```
+
+#### Processing Webhook Events
+
+```ts
+async function processWebhook(webhookData: WebhookData): Promise<void> {
+  const { event, instance, data } = webhookData;
+
+  console.log(`[WEBHOOK] Event: ${event} | Instance: ${instance}`);
+
+  switch (event) {
+    case WebhookEvent.MESSAGES_UPSERT:
+      await handleNewMessage(data as MessagePayload, instance);
+      break;
+
+    case WebhookEvent.MESSAGES_UPDATE:
+      await handleMessageUpdate(data as MessagePayload, instance);
+      break;
+
+    case WebhookEvent.CONNECTION_UPDATE:
+      await handleConnectionUpdate(data as ConnectionUpdatePayload);
+      break;
+
+    case WebhookEvent.CONTACTS_UPSERT:
+    case WebhookEvent.CONTACTS_UPDATE:
+      await handleContact(data as ContactPayload, instance);
+      break;
+
+    case WebhookEvent.QRCODE_UPDATED:
+      console.log(`[WEBHOOK] QR Code updated for instance: ${instance}`);
+      break;
+
+    default:
+      console.log(`[WEBHOOK] Unhandled event: ${event}`);
+  }
+}
+```
+
+#### Message Handling Examples
+
+```ts
+async function handleNewMessage(
+  messageData: MessagePayload,
+  instance: string
+): Promise<void> {
+  const { key, message, pushName } = messageData;
+
+  // Skip messages from groups (optional)
+  if (key.remoteJid?.includes("@g.us")) {
+    console.log("Skipping group message");
+    return;
+  }
+
+  // Skip messages sent by bot itself
+  if (key.fromMe) {
+    console.log("Skipping outgoing message");
+    return;
+  }
+
+  const from = key.remoteJid;
+  const messageId = key.id;
+  const contactName = pushName || "Unknown";
+
+  console.log(`Message from ${contactName} (${from}): ${messageId}`);
+
+  // Process different message types
+  if (message?.conversation) {
+    // Text message
+    const text = message.conversation;
+    console.log(`Text: ${text}`);
+
+    // Auto-reply example
+    if (text.toLowerCase() === "hello") {
+      await client.messages.sendText(
+        {
+          number: from.replace("@s.whatsapp.net", ""),
+          text: "Hello! How can I help you?",
+        },
+        { instance }
+      );
+    }
+  } else if (message?.imageMessage) {
+    // Image message
+    console.log(`Received image from ${contactName}`);
+    const imageUrl = message.imageMessage.url;
+    // Process image...
+  } else if (message?.audioMessage) {
+    // Audio message
+    console.log(`Received audio from ${contactName}`);
+    // Process audio...
+  }
+}
+
+async function handleMessageUpdate(
+  messageData: MessagePayload,
+  instance: string
+): Promise<void> {
+  const { key, status } = messageData;
+  console.log(`Message ${key.id} status updated to: ${status}`);
+
+  // Handle read receipts, delivery confirmations, etc.
+  switch (status) {
+    case "delivered":
+      console.log("Message delivered");
+      break;
+    case "read":
+      console.log("Message read by recipient");
+      break;
+  }
+}
+
+async function handleConnectionUpdate(
+  connectionData: ConnectionUpdatePayload
+): Promise<void> {
+  const { instance, state, statusReason } = connectionData;
+
+  console.log(`Instance ${instance} connection state: ${state}`);
+
+  switch (state) {
+    case "open":
+      console.log(`✅ Instance ${instance} connected successfully`);
+      break;
+    case "close":
+      console.log(`❌ Instance ${instance} disconnected (${statusReason})`);
+      break;
+    case "connecting":
+      console.log(`🔄 Instance ${instance} connecting...`);
+      break;
+  }
+}
+
+async function handleContact(
+  contactData: ContactPayload,
+  instance: string
+): Promise<void> {
+  const { remoteJid, pushName, profilePicUrl } = contactData;
+
+  console.log(`Contact update: ${pushName} (${remoteJid})`);
+
+  // Store or update contact information
+  // You might want to save this to your database
+}
+```
+
+#### Advanced Webhook Processing
+
+```ts
+class WebhookProcessor {
+  private messageQueue: MessagePayload[] = [];
+  private processing = false;
+
+  async processWebhook(webhookData: WebhookData): Promise<void> {
+    const { event, data, instance } = webhookData;
+
+    // Add message to queue for batch processing
+    if (event === WebhookEvent.MESSAGES_UPSERT) {
+      this.messageQueue.push(data as MessagePayload);
+      this.processQueue();
+    }
+  }
+
+  private async processQueue(): Promise<void> {
+    if (this.processing || this.messageQueue.length === 0) return;
+
+    this.processing = true;
+
+    try {
+      // Process messages in batches
+      const batch = this.messageQueue.splice(0, 10);
+
+      for (const message of batch) {
+        await this.processMessage(message);
+        // Add delay to avoid rate limiting
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+    } finally {
+      this.processing = false;
+
+      // Continue processing if more messages arrived
+      if (this.messageQueue.length > 0) {
+        setTimeout(() => this.processQueue(), 1000);
+      }
+    }
+  }
+
+  private async processMessage(message: MessagePayload): Promise<void> {
+    // Your message processing logic here
+    console.log(`Processing message: ${message.key.id}`);
+  }
+}
+```
+
+#### Available Webhook Events
+
+The SDK supports all Evolution API webhook events:
+
+- `WebhookEvent.APPLICATION_STARTUP` - API startup
+- `WebhookEvent.QRCODE_UPDATED` - QR code updates
+- `WebhookEvent.CONNECTION_UPDATE` - Connection status changes
+- `WebhookEvent.MESSAGES_SET` - Initial message load
+- `WebhookEvent.MESSAGES_UPSERT` - New messages
+- `WebhookEvent.MESSAGES_UPDATE` - Message status updates
+- `WebhookEvent.MESSAGES_DELETE` - Message deletions
+- `WebhookEvent.SEND_MESSAGE` - Message sending events
+- `WebhookEvent.CONTACTS_SET` - Initial contacts load
+- `WebhookEvent.CONTACTS_UPSERT` - New contacts
+- `WebhookEvent.CONTACTS_UPDATE` - Contact updates
+- `WebhookEvent.PRESENCE_UPDATE` - User presence changes
+- `WebhookEvent.CHATS_SET` - Initial chats load
+- `WebhookEvent.CHATS_UPDATE` - Chat updates
+- `WebhookEvent.CHATS_UPSERT` - New chats
+- `WebhookEvent.CHATS_DELETE` - Chat deletions
+- `WebhookEvent.GROUPS_UPSERT` - New groups
+- `WebhookEvent.GROUPS_UPDATE` - Group updates
+- `WebhookEvent.GROUP_PARTICIPANTS_UPDATE` - Group member changes
+- `WebhookEvent.NEW_TOKEN` - JWT token updates
+
+#### Configure Webhook URL
+
+Don't forget to configure your webhook URL in the Evolution API:
+
+```ts
+// Set your webhook endpoint
+await client.webhook.set({
+  url: "https://your-domain.com/webhook",
+  webhook_by_events: true,
+  events: [
+    "MESSAGES_UPSERT",
+    "MESSAGES_UPDATE",
+    "CONNECTION_UPDATE",
+    "CONTACTS_UPSERT",
+  ],
+});
+```
+
 ## API Documentation
 
 Check the [official API documentation](https://doc.evolution-api.com/v2) for more information about their service.
