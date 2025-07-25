@@ -568,6 +568,7 @@ import express from "express";
 import {
   WebhookData,
   WebhookEvent,
+  WebhookEventSetup,
   MessagePayload,
   ContactPayload,
   ConnectionUpdatePayload,
@@ -808,6 +809,31 @@ The SDK supports all Evolution API webhook events:
 - `WebhookEvent.GROUP_PARTICIPANTS_UPDATE` - Group member changes
 - `WebhookEvent.NEW_TOKEN` - JWT token updates
 
+#### Available Webhook Events to Setup
+
+To setup the WebHook, the constants are these ones:
+
+- `WebhookEventSetup.APPLICATION_STARTUP` - API startup
+- `WebhookEventSetup.QRCODE_UPDATED` - QR code updates
+- `WebhookEventSetup.CONNECTION_UPDATE` - Connection status changes
+- `WebhookEventSetup.MESSAGES_SET` - Initial message load
+- `WebhookEventSetup.MESSAGES_UPSERT` - New messages
+- `WebhookEventSetup.MESSAGES_UPDATE` - Message status updates
+- `WebhookEventSetup.MESSAGES_DELETE` - Message deletions
+- `WebhookEventSetup.SEND_MESSAGE` - Message sending events
+- `WebhookEventSetup.CONTACTS_SET` - Initial contacts load
+- `WebhookEventSetup.CONTACTS_UPSERT` - New contacts
+- `WebhookEventSetup.CONTACTS_UPDATE` - Contact updates
+- `WebhookEventSetup.PRESENCE_UPDATE` - User presence changes
+- `WebhookEventSetup.CHATS_SET` - Initial chats load
+- `WebhookEventSetup.CHATS_UPDATE` - Chat updates
+- `WebhookEventSetup.CHATS_UPSERT` - New chats
+- `WebhookEventSetup.CHATS_DELETE` - Chat deletions
+- `WebhookEventSetup.GROUPS_UPSERT` - New groups
+- `WebhookEventSetup.GROUPS_UPDATE` - Group updates
+- `WebhookEventSetup.GROUP_PARTICIPANTS_UPDATE` - Group member changes
+- `WebhookEventSetup.NEW_TOKEN` - JWT token updates
+
 #### Configure Webhook URL
 
 Don't forget to configure your webhook URL in the Evolution API:
@@ -818,10 +844,10 @@ await client.webhook.set({
   url: "https://your-domain.com/webhook",
   webhook_by_events: true,
   events: [
-    "MESSAGES_UPSERT",
-    "MESSAGES_UPDATE",
-    "CONNECTION_UPDATE",
-    "CONTACTS_UPSERT",
+    WebhookEventSetup.MESSAGES_UPSERT,
+    WebhookEventSetup.MESSAGES_UPDATE,
+    WebhookEventSetup.CONNECTION_UPDATE,
+    WebhookEventSetup.CONTACTS_UPSERT,
   ],
 });
 ```
